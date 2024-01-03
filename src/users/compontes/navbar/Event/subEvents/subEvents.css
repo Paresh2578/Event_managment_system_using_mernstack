@@ -1,0 +1,30 @@
+.card-container {
+    position: relative;
+    /* width: 300px;  */
+    height: 200px; 
+  }
+  
+  .img-text {
+    z-index: 1; /* Ensure text is above the image */
+    position: relative;
+    /* bottom: 10; */
+    top: 0;
+    padding: 10px;
+    background-color: #6372ff;
+    width: 50%;
+    color: white;
+    font-weight: 800;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+  
+  .overlay-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Make the image fill the entire width of its container */
+    height: 100%; /* Make the image fill the entire height of its container */
+    object-fit: cover; 
+  }
