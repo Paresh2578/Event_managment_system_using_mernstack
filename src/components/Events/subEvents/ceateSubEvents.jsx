@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 
 // import "../style.css";
@@ -25,32 +25,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
-const steps = [
-  "Enter Event details",
-  "Enter subEvent details",
-  "Enter coordinator details",
-];
+const steps = ["Enter subEvent details", "Enter coordinator details"];
 
-export default function CreateEvent({ open, setOpen }) {
-  const { enqueueSnackbar } = useSnackbar();
+export default function CeateSubEvents({ open, setOpen }) {
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
-  const [group , setGroup] = useState(false);
-  const [eventData , setEventData] = useState({
-    eventDetails : {name : "", date : "" , posterUrl : ""},
-    subEventDetails : {
-      name : "",
-      category : "",
-      time : "",
-      grupMember : -1,
-      posterUrl : "",
-      coordinatorDetails : {
-        name : "",
-        email : "",
-        mobile : ""
-      }
-    }
-  });
 
   const totalSteps = () => {
     return steps.length;
@@ -115,7 +94,7 @@ export default function CreateEvent({ open, setOpen }) {
           id="alert-dialog-title"
           style={{ padding: "20px 50px 20px 50px" }}
         >
-          {`create new Event`}
+          {`Add new subEvent`}
         </DialogTitle>
         <DialogContent className="d-block">
           <Box sx={{ width: "100%" }}>
@@ -149,10 +128,17 @@ export default function CreateEvent({ open, setOpen }) {
                         <TextField
                           id="outlined-basic"
                           label="Event name"
-                          // onChange={(e)=>setEventData({...eventData , eventDetails : {...eventDetails , name : e.target.value}})}
                           variant="outlined"
                           style={{ marginBottom: "10px", width: "100%" }}
                         />
+
+                        <TextField
+                          id="outlined-basic"
+                          label="Event Catagory"
+                          variant="outlined"
+                          style={{ marginBottom: "10px", width: "100%" }}
+                        />
+
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer
                             components={[
@@ -162,11 +148,46 @@ export default function CreateEvent({ open, setOpen }) {
                               "StaticDatePicker",
                             ]}
                           >
-                            <DemoItem label="Date">
-                              <MobileDatePicker />
+                            <DemoItem label="subEvent time">
+                              <TimePicker />
                             </DemoItem>
                           </DemoContainer>
                         </LocalizationProvider>
+
+                        <div className="row mt-3">
+                          <FormLabel
+                            id="demo-row-radio-buttons-group-label"
+                            className="mt-2 ms-3 col-1"
+                          >
+                            Group
+                          </FormLabel>
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            className="col"
+                          >
+                            <FormControlLabel
+                              value="true"
+                              control={<Radio />}
+                              label="Yes"
+                            />
+                            <FormControlLabel
+                              value="false"
+                              control={<Radio />}
+                              label="No"
+                            />
+                          </RadioGroup>
+                        </div>
+
+                        <TextField
+                          className="mt-2"
+                          id="outlined-basic"
+                          type="number"
+                          label="number of group member"
+                          variant="outlined"
+                        />
+
                         <div className="mt-3">
                           <input
                             accept="image/*"
@@ -188,94 +209,6 @@ export default function CreateEvent({ open, setOpen }) {
                       </>
                     )}
                     {activeStep + 1 == 2 && (
-                      <>
-                        <TextField
-                          id="outlined-basic"
-                          label="Event name"
-                          variant="outlined"
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
-
-                        <TextField
-                          id="outlined-basic"
-                          label="Event Catagory"
-                          variant="outlined"
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer
-                            components={[
-                              "DatePicker",
-                              "MobileDatePicker",
-                              "DesktopDatePicker",
-                              "StaticDatePicker",
-                            ]}
-                          >
-                            <DemoItem label="">
-                              <TimePicker />
-                            </DemoItem>
-                          </DemoContainer>
-                        </LocalizationProvider>
-
-                        <div className="row mt-3 ">
-                          <FormLabel
-                            id="demo-row-radio-buttons-group-label"
-                            className="mt-2 ms-3 me-2 col-1"
-                          >
-                            Group
-                          </FormLabel>
-                          <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            className="col"
-                          >
-                            <FormControlLabel
-                              value={true}
-                              control={<Radio />}
-                              onChange={(e)=>setGroup(e.target.value)}
-                              label="Yes"
-                            />
-                            <FormControlLabel
-                              value={false}
-                              control={<Radio/>}
-                              onChange={(e)=>setGroup(e.target.value)}
-                              label="No"
-                            />
-                          </RadioGroup>
-                        </div>
-
-                      { group && <TextField
-                          className="mt-2"
-                          id="outlined-basic"
-                          type="number"
-                          label="number of group member"
-                          variant="outlined"
-                        />
-                      }
-
-                        <div className="mt-3">
-                          <input
-                            accept="image/*"
-                            // className={classes.input}
-                            // style={{ display: "none" }}
-                            id="raised-button-file"
-                            type="file"
-                          />
-                          {/* <label htmlFor="raised-button-file">
-                          <Button
-                            variant="raised"
-                            component="span"
-                            // className={classes.button}
-                          >
-                            Cover img
-                          </Button>
-                        </label> */}
-                        </div>
-                      </>
-                    )}
-                    {activeStep + 1 == 3 && (
                       <>
                         <TextField
                           id="outlined-basic"

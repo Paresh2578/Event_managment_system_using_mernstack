@@ -1,56 +1,31 @@
-import React , {useState} from "react";
-import { useSnackbar } from "notistack";
-
-// import "../style.css";
+import React, { useState } from "react";
 
 //mui
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
-import Typography from "@mui/material/Typography";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
-const steps = [
-  "Enter Event details",
-  "Enter subEvent details",
-  "Enter coordinator details",
-];
+const steps = ["Edit subEvent details", "Edit coordinator details"];
 
-export default function CreateEvent({ open, setOpen }) {
-  const { enqueueSnackbar } = useSnackbar();
+export default function EditSubEvent({ open, setOpen }) {
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
-  const [group , setGroup] = useState(false);
-  const [eventData , setEventData] = useState({
-    eventDetails : {name : "", date : "" , posterUrl : ""},
-    subEventDetails : {
-      name : "",
-      category : "",
-      time : "",
-      grupMember : -1,
-      posterUrl : "",
-      coordinatorDetails : {
-        name : "",
-        email : "",
-        mobile : ""
-      }
-    }
-  });
 
   const totalSteps = () => {
     return steps.length;
@@ -104,7 +79,7 @@ export default function CreateEvent({ open, setOpen }) {
   };
 
   return (
-    <React.Fragment>
+    <div>
       <Dialog
         open={open}
         // onClose={handleClose}
@@ -115,7 +90,7 @@ export default function CreateEvent({ open, setOpen }) {
           id="alert-dialog-title"
           style={{ padding: "20px 50px 20px 50px" }}
         >
-          {`create new Event`}
+          {`edit Event`}
         </DialogTitle>
         <DialogContent className="d-block">
           <Box sx={{ width: "100%" }}>
@@ -136,8 +111,7 @@ export default function CreateEvent({ open, setOpen }) {
                   </Typography>
                   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Box sx={{ flex: "1 1 auto" }} />
-                    <Button onClick={handleReset}>Reset</Button>
-                    <Button onClick={handleClose}>Create</Button>
+                    <Button onClick={handleClose}>Edit</Button>
                   </Box>
                 </React.Fragment>
               ) : (
@@ -145,49 +119,6 @@ export default function CreateEvent({ open, setOpen }) {
                   <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
                     {/* Step {activeStep + 1} */}
                     {activeStep + 1 == 1 && (
-                      <>
-                        <TextField
-                          id="outlined-basic"
-                          label="Event name"
-                          // onChange={(e)=>setEventData({...eventData , eventDetails : {...eventDetails , name : e.target.value}})}
-                          variant="outlined"
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer
-                            components={[
-                              "DatePicker",
-                              "MobileDatePicker",
-                              "DesktopDatePicker",
-                              "StaticDatePicker",
-                            ]}
-                          >
-                            <DemoItem label="Date">
-                              <MobileDatePicker />
-                            </DemoItem>
-                          </DemoContainer>
-                        </LocalizationProvider>
-                        <div className="mt-3">
-                          <input
-                            accept="image/*"
-                            // className={classes.input}
-                            // style={{ display: "none" }}
-                            id="raised-button-file"
-                            type="file"
-                          />
-                          {/* <label htmlFor="raised-button-file">
-                          <Button
-                            variant="raised"
-                            component="span"
-                            // className={classes.button}
-                          >
-                            Cover img
-                          </Button>
-                        </label> */}
-                        </div>
-                      </>
-                    )}
-                    {activeStep + 1 == 2 && (
                       <>
                         <TextField
                           id="outlined-basic"
@@ -212,16 +143,16 @@ export default function CreateEvent({ open, setOpen }) {
                               "StaticDatePicker",
                             ]}
                           >
-                            <DemoItem label="">
+                            <DemoItem label="subEvent time">
                               <TimePicker />
                             </DemoItem>
                           </DemoContainer>
                         </LocalizationProvider>
 
-                        <div className="row mt-3 ">
+                        <div className="row mt-3">
                           <FormLabel
                             id="demo-row-radio-buttons-group-label"
-                            className="mt-2 ms-3 me-2 col-1"
+                            className="mt-2 ms-3 col-1"
                           >
                             Group
                           </FormLabel>
@@ -232,28 +163,25 @@ export default function CreateEvent({ open, setOpen }) {
                             className="col"
                           >
                             <FormControlLabel
-                              value={true}
+                              value="true"
                               control={<Radio />}
-                              onChange={(e)=>setGroup(e.target.value)}
                               label="Yes"
                             />
                             <FormControlLabel
-                              value={false}
-                              control={<Radio/>}
-                              onChange={(e)=>setGroup(e.target.value)}
+                              value="false"
+                              control={<Radio />}
                               label="No"
                             />
                           </RadioGroup>
                         </div>
 
-                      { group && <TextField
+                        <TextField
                           className="mt-2"
                           id="outlined-basic"
                           type="number"
                           label="number of group member"
                           variant="outlined"
                         />
-                      }
 
                         <div className="mt-3">
                           <input
@@ -275,7 +203,7 @@ export default function CreateEvent({ open, setOpen }) {
                         </div>
                       </>
                     )}
-                    {activeStep + 1 == 3 && (
+                    {activeStep + 1 == 2 && (
                       <>
                         <TextField
                           id="outlined-basic"
@@ -333,6 +261,6 @@ export default function CreateEvent({ open, setOpen }) {
           {/* </div> */}
         </DialogContent>
       </Dialog>
-    </React.Fragment>
+    </div>
   );
 }

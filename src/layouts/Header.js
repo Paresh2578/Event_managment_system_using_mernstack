@@ -34,9 +34,9 @@ const Header = () => {
     <Navbar color="white" light expand="md" className="fix-header">
       <div className="d-flex align-items-center">
         <div className="d-lg-block d-none me-5 pe-3">
-          <Logo />
+          <Logo /> 
         </div>
-        <NavbarBrand href="/">
+        <NavbarBrand to={"/admin/dashboard"}>
           <LogoWhite className="d-lg-none" />
         </NavbarBrand>
         <Button

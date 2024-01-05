@@ -4,16 +4,17 @@ import { useNavigate } from "react-router-dom";
 import "../../../users/compontes/navbar/Event/Events.css";
 
 //componets
-// import CreateEvent from "./CreateEvent";
-// import EditEvent from './EditEvent'
+import CeateSubEvents from "./ceateSubEvents";
+import EditSubEvent from './EditSubEvent'
 
 //mui
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import EventSeatIcon from "@mui/icons-material/EventSeat";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from '@mui/icons-material/Edit';
@@ -34,7 +35,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-import img2 from "../../../users/compontes/navbar/Event/assets/client-1.jpg";
+import img from "../../../users/compontes/navbar/Event/assets/client-1.jpg";
 
 export default function SubEvents() {
   const navigate = useNavigate();
@@ -42,6 +43,9 @@ export default function SubEvents() {
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
   const [editEventOpen , setEditEventOpen] = useState(false);
+    const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
+    const [activeFillter , setActiveFillter]= useState(-1);
+  
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
@@ -58,52 +62,65 @@ export default function SubEvents() {
     };
   }, []);
 
+  const eventFillter = (itemData , index) =>{
+    // const filterData = GalleryData.filter((item)=> item == itemData);
+    // setData(filterData);
+      setActiveFillter(index);
+  }
+
   return (
     <>
-      <div id="Events" className="text-center">
+     <div className="text-center mt-5" style={{ marginTop: "15vh" }}>
         <div className="container">
           <div className="col-md-8 col-md-offset-2 section-title">
-            <h2>Events</h2>
+            <h2>All SubEvents</h2>
             {/* <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
             dapibus leonec.
           </p> */}
           </div>
+
           <div className="row">
+            <div className="col mb-3"><button className={activeFillter != -1 ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter("All" , -1)}}>All</button></div>
+            {
+              category.map((item , index)=> <div  className="col mb-3 "><button className={activeFillter != index ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter(item , index)}}>{item}</button></div>)
+            }
+          </div>
+          
+          <div id="row">
             <div
-              className="col-md-3 col-sm-6 trending__card p-0"
-              
+              className="col-md-4 col-sm-6 trending__card"
             >
               <div>
-                <CardMedia
-                  component="img"
-                  className={`image-container ${
-                    isHovered ? "hovered" : ""
-                  } seller__card`}
-                  onClick={() => navigate("/events/2")}
-                  height="200"
-                  image={img2}
-                  alt="Paella dish"
-                />
+                <div className="card-container">
+                  {/* <p className="img-text">Your Text Goes Here</p> */}
+                  <div className="img-text">
+                    <span className="text-center">
+                      <EventSeatIcon /> 100 Seat
+                    </span>
+                    {/* <p>100</p> */}
+                  </div>
+                  <img
+                    src={img}
+                    style={{height :'200px'}}
+                    alt="Your Alt Text"
+                    className="overlay-image"
+              onClick={()=>navigate('/admin/events/subevent/id')}
+                  />
+                </div>
                 <CardContent>
                   <p style={{ textAlign: "left" }}>
-                    <CalendarMonthIcon htmlColor="#6372ff" />{" "}
-                    <span>January 21, 2021</span>
+                    <CalendarMonthIcon color="#6372ff" /> <span>00:00:00</span>
                   </p>
                   <p>App-A-Thon</p>
-                  <Fab color="secondary" size="small" aria-label="edit" onClick={()=>setEditEventOpen(true)}>
-                    <EditIcon />
-                  </Fab>
-                  <Fab color="error" className="ms-2" size="small" aria-label="Delet">
-                    <DeleteIcon />
-                  </Fab>
+                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<EditIcon size="small" />} ></Button>
+                  <Button color="error" startIcon={<DeleteIcon 
+                    className="ms-2"
+                    size="small" />}>
+                  </Button>
                 </CardContent>
               </div>
             </div>
-            {/* <div
-              className="col-md-3 col-sm-6 team"
-              onClick={() => navigate("event/2")}
-            ></div> */}
           </div>
         </div>
       </div>
@@ -116,8 +133,8 @@ export default function SubEvents() {
       >
         <AddIcon />
       </Fab>
-      {/* <CreateEvent open={open} setOpen={setOpen} />
-      <EditEvent open={editEventOpen} setOpen={setEditEventOpen}/> */}
+     <CeateSubEvents open={open} setOpen={setOpen} />
+      <EditSubEvent open={editEventOpen} setOpen={setEditEventOpen}/>
     </>
   );
 }

@@ -12,6 +12,8 @@ import Login from './auth/login';
 import Dashboard from './components/dashboard/dashboard';
 import Events from './components/Events/Evnets';
 import SubEventAdmin from './components/Events/subEvents/SubEvents'
+import ParticipateUserListing from './components/Events/subEvents/ParticipateUserListing';
+import ProtectedRoute from './ProtectedRoute';
 
 
 
@@ -21,12 +23,11 @@ function App() {
       <Routes>
         <Route index element={<Home/>} />
         <Route path='event/:id' element={<SubEvents/>} />
-        <Route path="admin" element={<FullLayout/>}>
-            
+        <Route path="admin" element={<ProtectedRoute><FullLayout/></ProtectedRoute>}>
             <Route path='dashboard' element={<Dashboard/>}/>
             <Route path='events' element={<Events/>}/>
             <Route path='events/:id' element={<SubEventAdmin/>}/>
-
+            <Route path='events/subevent/:id' element={<ParticipateUserListing/>}/>
         </Route>
         <Route path="/admin/login" element={<Login/>}>
         </Route>

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../../users/compontes/navbar/Event/Events.css";
+import "./Events.css";
 
 //componets
 import CreateEvent from "./CreateEvent";
-import EditEvent from './EditEvent'
+import EditEvent from "./EditEvent";
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -16,8 +17,8 @@ import CardContent from "@mui/material/CardContent";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -41,7 +42,10 @@ export default function Events() {
 
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
-  const [editEventOpen , setEditEventOpen] = useState(false);
+  const [editEventOpen, setEditEventOpen] = useState(false);
+  // const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
+  const [category , setCategory] = useState(["completed" ," uncompleted"]);
+  const [activeFillter , setActiveFillter]= useState(-1);
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
@@ -58,6 +62,12 @@ export default function Events() {
     };
   }, []);
 
+  const eventFillter = (itemData , index) =>{
+    // const filterData = GalleryData.filter((item)=> item == itemData);
+    // setData(filterData);
+      setActiveFillter(index);
+  }
+
   return (
     <>
       <div id="Events" className="text-center">
@@ -68,20 +78,23 @@ export default function Events() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
             dapibus leonec.
           </p> */}
+
           </div>
+          {/* <div className="filterItem"> */}
           <div className="row">
-            <div
-              className="col-md-3 col-sm-6 trending__card p-0"
-              
-            >
+            <div className="col mb-3"><button className={activeFillter != -1 ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter("All" , -1)}}>All</button></div>
+            {
+              category.map((item , index)=> <div  className="col mb-3 "><button className={activeFillter != index ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter(item , index)}}>{item}</button></div>)
+            }
+          </div>
+        {/* </div> */}
+          <div className="row">
+            <div className="col-md-4 col-sm-6 trending__card p-0">
               <div>
                 <CardMedia
                   component="img"
-                  className={`image-container ${
-                    isHovered ? "hovered" : ""
-                  } seller__card`}
-                  onClick={() => navigate("events/2")}
-                  height="200"
+                  onClick={() => navigate("/admin/events/2")}
+                  height="250"
                   image={img2}
                   alt="Paella dish"
                 />
@@ -91,12 +104,11 @@ export default function Events() {
                     <span>January 21, 2021</span>
                   </p>
                   <p>App-A-Thon</p>
-                  <Fab color="secondary" size="small" aria-label="edit" onClick={()=>setEditEventOpen(true)}>
-                    <EditIcon />
-                  </Fab>
-                  <Fab color="error" className="ms-2" size="small" aria-label="Delet">
-                    <DeleteIcon />
-                  </Fab>
+                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<EditIcon size="small" />} ></Button>
+                  <Button color="error" startIcon={<DeleteIcon 
+                    className="ms-2"
+                    size="small" />}>
+                  </Button>
                 </CardContent>
               </div>
             </div>
@@ -117,7 +129,7 @@ export default function Events() {
         <AddIcon />
       </Fab>
       <CreateEvent open={open} setOpen={setOpen} />
-      <EditEvent open={editEventOpen} setOpen={setEditEventOpen}/>
+      <EditEvent open={editEventOpen} setOpen={setEditEventOpen} />
     </>
   );
 }

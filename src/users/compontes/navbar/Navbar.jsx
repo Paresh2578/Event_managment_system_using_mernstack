@@ -15,11 +15,11 @@ export default function Navbar() {
         <i class="fa-solid fa-bars"></i>
     </label>
     <label ></label>
-       <label class="logo">DesignaX</label>
+       <label class="logo">EventX</label>
        <ul>
-           <li><a class="" href="#">home</a></li>
-           <li><a href="#">Events</a></li>
-           <li><Link to="/admin/login">Admin</Link></li>
+           <li><a class="navbar-a" href="#">home</a></li>
+           <li><a href="#" className='navbar-a'>Events</a></li>
+           <li><Link to="/admin/login" className='navbar-a'>Admin</Link></li>
        </ul>
    </nav>
   )

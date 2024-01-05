@@ -18,6 +18,16 @@ export default function Events() {
   const navigate = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
+  const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
+  // const [category , setCategory] = useState(["completed" ," uncompleted"]);
+  const [activeFillter , setActiveFillter]= useState(-1);
+
+
+  const eventFillter = (itemData , index) =>{
+    // const filterData = GalleryData.filter((item)=> item == itemData);
+    // setData(filterData);
+      setActiveFillter(index);
+  }
 
   return (
     <div id="Events" className="text-center">
@@ -29,6 +39,12 @@ export default function Events() {
             dapibus leonec.
           </p> */}
         </div>
+        <div className="row">
+            <div className="col mb-3"><button className={activeFillter != -1 ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter("All" , -1)}}>All</button></div>
+            {
+              category.map((item , index)=> <div  className="col mb-3 "><button className={activeFillter != index ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter(item , index)}}>{item}</button></div>)
+            }
+          </div>
         <div className="row">
           <div className="col-md-3 col-sm-6 trending__card p-0" onClick={()=>navigate('event/2')}>
           <div>
