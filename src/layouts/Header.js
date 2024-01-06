@@ -30,6 +30,11 @@ const Header = () => {
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+
+  const logout = ()=>{
+    localStorage.clear("adminAuth");
+    navigate('/');
+  }
   return (
     <Navbar color="white" light expand="md" className="fix-header">
       <div className="d-flex align-items-center">
@@ -87,7 +92,7 @@ const Header = () => {
             <DropdownItem>My Balance</DropdownItem>
             <DropdownItem>Inbox</DropdownItem> */}
             <DropdownItem 
-             onClick={()=>navigate('/')}
+             onClick={logout}
             >Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
