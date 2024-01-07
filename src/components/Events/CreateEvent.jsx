@@ -155,73 +155,73 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
         setEventDataError({ name: false, date: false, posterUrl: false });
       }
     } else if (activeStep == 1) {
-      if (subEventData.name.length == 0) {
-        setSubEventDataError({
-          name: true,
-          category: false,
-          time: false,
-          grupMember: false,
-          posterUrl: false,
-        });
-        return false;
-      } else if (subEventData.category.length == 0) {
-        setSubEventDataError({
-          name: false,
-          category: true,
-          time: false,
-          grupMember: false,
-          posterUrl: false,
-        });
-        return false;
-      } else if (subEventData.time.length == 0) {
-        setSubEventDataError({
-          name: false,
-          category: false,
-          time: true,
-          grupMember: false,
-          posterUrl: false,
-        });
-        return false;
-      } else if (subEventData.grupMember < 2 && subEventData.isGroup) {
-        setSubEventDataError({
-          name: false,
-          category: false,
-          time: false,
-          grupMember: true,
-          posterUrl: false,
-        });
-        return false;
-      } else if (subEventData.posterUrl.length == 0) {
-        setSubEventDataError({
-          name: false,
-          category: false,
-          time: false,
-          grupMember: false,
-          posterUrl: true,
-        });
-        return false;
-      } else {
-        setSubEventDataError({
-          name: false,
-          category: false,
-          time: false,
-          grupMember: false,
-          posterUrl: false,
-        });
-      }
+      // if (subEventData.name.length == 0) {
+      //   setSubEventDataError({
+      //     name: true,
+      //     category: false,
+      //     time: false,
+      //     grupMember: false,
+      //     posterUrl: false,
+      //   });
+      //   return false;
+      // } else if (subEventData.category.length == 0) {
+      //   setSubEventDataError({
+      //     name: false,
+      //     category: true,
+      //     time: false,
+      //     grupMember: false,
+      //     posterUrl: false,
+      //   });
+      //   return false;
+      // } else if (subEventData.time.length == 0) {
+      //   setSubEventDataError({
+      //     name: false,
+      //     category: false,
+      //     time: true,
+      //     grupMember: false,
+      //     posterUrl: false,
+      //   });
+      //   return false;
+      // } else if (subEventData.grupMember < 2 && subEventData.isGroup) {
+      //   setSubEventDataError({
+      //     name: false,
+      //     category: false,
+      //     time: false,
+      //     grupMember: true,
+      //     posterUrl: false,
+      //   });
+      //   return false;
+      // } else if (subEventData.posterUrl.length == 0) {
+      //   setSubEventDataError({
+      //     name: false,
+      //     category: false,
+      //     time: false,
+      //     grupMember: false,
+      //     posterUrl: true,
+      //   });
+      //   return false;
+      // } else {
+      //   setSubEventDataError({
+      //     name: false,
+      //     category: false,
+      //     time: false,
+      //     grupMember: false,
+      //     posterUrl: false,
+      //   });
+      // }
     } else if (activeStep == 2) {
-      if (coordinatorData.name.length == 0) {
-        setCoordinatorDataError({ name: true, email: false, mobile: false });
-        return false;
-      } else if (coordinatorData.email.length == 0) {
-        setCoordinatorDataError({ name: false, email: true, mobile: false });
-        return false;
-      } else if (coordinatorData.mobile.length < 10) {
-        setCoordinatorDataError({ name: false, email: false, mobile: true });
-        return false;
-      } else {
-        setCoordinatorDataError({ name: false, email: false, mobile: false });
-      }
+      // if (coordinatorData.name.length == 0) {
+      //   setCoordinatorDataError({ name: true, email: false, mobile: false });
+      //   return false;
+      // } else if (coordinatorData.email.length == 0) {
+      //   setCoordinatorDataError({ name: false, email: true, mobile: false });
+      //   return false;
+      // } else if (coordinatorData.mobile.length < 10) {
+      //   setCoordinatorDataError({ name: false, email: false, mobile: true });
+      //   return false;
+      // } else {
+      //   setCoordinatorDataError({ name: false, email: false, mobile: false });
+      // }
     }
 
     return true;
@@ -245,7 +245,7 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
   };
 
  const CreateEvent = ()=>{
-     handleCreateNewEvent()
+     handleCreateNewEvent(eventData)
      handleReset();
      setOpen(false);
  }

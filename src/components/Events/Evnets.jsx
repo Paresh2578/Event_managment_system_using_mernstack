@@ -7,20 +7,14 @@ import "./Events.css";
 //componets
 import CreateEvent from "./CreateEvent";
 import EditEvent from "./EditEvent";
+import EventCard from "./EventCard";
 
 //mui
 import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
+
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
@@ -42,7 +36,7 @@ export default function Events() {
 
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
-  const [editEventOpen, setEditEventOpen] = useState(false);
+ 
   // const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
   const [category , setCategory] = useState(["completed" ," uncompleted"]);
   const [activeFillter , setActiveFillter]= useState(-1);
@@ -58,7 +52,7 @@ export default function Events() {
 
     window.addEventListener("resize", handleWindowResize);
 
-    setEvent([{name : "abc" , date : "mm/dd/yy" , posterUrl : img2}]);
+    setEvent([{name : "florik" , date : "January 21, 2021" , posterUrl : img2} , {name : "florik" , date : "January 21, 2021" , posterUrl : img2}]);
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
@@ -72,8 +66,37 @@ export default function Events() {
   }
 
   const handleCreateNewEvent = (data)=>{
+    console.log(data);
        setEvent([...event , data]);
   }
+
+  const handleEditEvent = (data , index)=>{
+    // setEvent([...event , event[index] = data]);
+    let newEventData = [];
+    
+    event.map((e , i)=>{
+      if(i == index){
+        newEventData.push(data);
+      }else{
+         newEventData.push(e);
+      }
+    })
+
+    setEvent(newEventData);
+ }
+
+ const handleRemoveEvent = (index)=>{
+  let newEventData = [];
+    
+    event.map((e , i)=>{
+      if(i != index){
+        newEventData.push(e);
+      }
+    })
+    setEvent(newEventData);
+ }
+
+  
 
   return (
     <>
@@ -96,30 +119,10 @@ export default function Events() {
           </div>
         {/* </div> */}
           <div className="row">
-            {event && event.map((e)=>(
-              <div className="col-md-4 col-sm-6 trending__card p-0">
-              <div>
-                <CardMedia
-                  component="img"
-                  onClick={() => navigate("/admin/events/2")}
-                  height="200"
-                  image={img2}
-                  alt="Paella dish"
-                />
-                <CardContent>
-                  <p style={{ textAlign: "left" }}>
-                    <CalendarMonthIcon htmlColor="#6372ff" />{" "}
-                    <span>January 21, 2021</span>
-                  </p>
-                  <p>App-A-Thon</p>
-                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<EditIcon size="small" />} ></Button>
-                  <Button color="error" startIcon={<DeleteIcon 
-                    className="ms-2"
-                    size="small" />}>
-                  </Button>
-                </CardContent>
+            {event && event.map((data , index)=>(
+              <div className="col-md-4 col-sm-6 trending__card p-0 me-3 ">
+              <EventCard key={index} data={data} handleEditEvent={handleEditEvent} index={index} handleRemoveEvent={handleRemoveEvent}/>
               </div>
-            </div>
             ))}
             {/* <div
               className="col-md-3 col-sm-6 team"
@@ -138,7 +141,7 @@ export default function Events() {
         <AddIcon />
       </Fab>
       <CreateEvent open={open} setOpen={setOpen} handleCreateNewEvent={handleCreateNewEvent} />
-      <EditEvent open={editEventOpen} setOpen={setEditEventOpen} />
+      
     </>
   );
 }
