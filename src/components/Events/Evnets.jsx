@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "../../users/compontes/navbar/Event/Events.css";
+import "../../users/compontes/Event/Events.css";
 import "./Events.css";
 
 //componets
@@ -35,7 +35,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-import img2 from "../../users/compontes/navbar/Event/assets/client-1.jpg";
+import img2 from "../../users/compontes/Event/assets/client-1.jpg";
 
 export default function Events() {
   const navigate = useNavigate();
@@ -46,6 +46,7 @@ export default function Events() {
   // const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
   const [category , setCategory] = useState(["completed" ," uncompleted"]);
   const [activeFillter , setActiveFillter]= useState(-1);
+  const [event , setEvent] = useState([]);
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
@@ -57,15 +58,21 @@ export default function Events() {
 
     window.addEventListener("resize", handleWindowResize);
 
+    setEvent([{name : "abc" , date : "mm/dd/yy" , posterUrl : img2}]);
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
+
   }, []);
 
   const eventFillter = (itemData , index) =>{
     // const filterData = GalleryData.filter((item)=> item == itemData);
     // setData(filterData);
       setActiveFillter(index);
+  }
+
+  const handleCreateNewEvent = (data)=>{
+       setEvent([...event , data]);
   }
 
   return (
@@ -89,12 +96,13 @@ export default function Events() {
           </div>
         {/* </div> */}
           <div className="row">
-            <div className="col-md-4 col-sm-6 trending__card p-0">
+            {event && event.map((e)=>(
+              <div className="col-md-4 col-sm-6 trending__card p-0">
               <div>
                 <CardMedia
                   component="img"
                   onClick={() => navigate("/admin/events/2")}
-                  height="250"
+                  height="200"
                   image={img2}
                   alt="Paella dish"
                 />
@@ -112,6 +120,7 @@ export default function Events() {
                 </CardContent>
               </div>
             </div>
+            ))}
             {/* <div
               className="col-md-3 col-sm-6 team"
               onClick={() => navigate("event/2")}
@@ -128,7 +137,7 @@ export default function Events() {
       >
         <AddIcon />
       </Fab>
-      <CreateEvent open={open} setOpen={setOpen} />
+      <CreateEvent open={open} setOpen={setOpen} handleCreateNewEvent={handleCreateNewEvent} />
       <EditEvent open={editEventOpen} setOpen={setEditEventOpen} />
     </>
   );

@@ -6,7 +6,7 @@ import '../Events.css'
 
 //compontes
 import RegistreFrom from './registreFrom';
-import Navbar from "../../Navbar";
+import Navbar from "../../Event/Events";
 
 //mui
 import Card from "@mui/material/Card";

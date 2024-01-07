@@ -31,7 +31,7 @@ const Header = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
 
-  const logout = ()=>{
+  const handleLogout = ()=>{
     localStorage.clear("adminAuth");
     navigate('/');
   }
@@ -92,7 +92,7 @@ const Header = () => {
             <DropdownItem>My Balance</DropdownItem>
             <DropdownItem>Inbox</DropdownItem> */}
             <DropdownItem 
-             onClick={logout}
+             onClick={handleLogout}
             >Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>

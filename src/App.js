@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // Components
 import FullLayout from './layouts/FullLayout';
 import Home from './users/compontes/Home';
-import SubEvents from './users/compontes/navbar/Event/subEvents/subEvents'
+import SubEvents from './users/compontes/Event/subEvents/subEvents'
 import Login from './auth/login';
 import Dashboard from './components/dashboard/dashboard';
 import Events from './components/Events/Evnets';

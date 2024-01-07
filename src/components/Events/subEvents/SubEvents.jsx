@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "../../../users/compontes/navbar/Event/Events.css";
+import "../../../users/compontes/Event/Events.css";
 
 //componets
 import CeateSubEvents from "./ceateSubEvents";
@@ -35,7 +35,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-import img from "../../../users/compontes/navbar/Event/assets/client-1.jpg";
+import img from "../../../users/compontes/Event/assets/client-1.jpg";
 
 export default function SubEvents() {
   const navigate = useNavigate();

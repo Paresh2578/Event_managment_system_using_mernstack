@@ -6,10 +6,8 @@ import axios from "axios";
 // import "../style.css";
 
 //utis
-import {
-  FromentDate,
-  normalDateToLocalStringForment,
-} from "../../util/FormentDate";
+import { FromentDate } from "../../util/FormentDate";
+import { formetTime } from "../../util/FormentTime";
 
 //mui
 import Button from "@mui/material/Button";
@@ -43,11 +41,11 @@ const steps = [
   "Enter coordinator details",
 ];
 
-export default function CreateEvent({ open, setOpen }) {
+export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
   const { enqueueSnackbar } = useSnackbar();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
-  const [group, setGroup] = useState(false);
+  // const [group, setGroup] = useState(false);
   const [eventData, setEventData] = useState({
     name: "",
     date: null,
@@ -58,7 +56,8 @@ export default function CreateEvent({ open, setOpen }) {
     name: "",
     category: "",
     time: "",
-    grupMember: -1,
+    grupMember: 2,
+    isGroup: false,
     posterUrl: "",
   });
 
@@ -67,7 +66,12 @@ export default function CreateEvent({ open, setOpen }) {
     email: "",
     mobile: "",
   });
-  const [imgUrlData, setImgUrlData] = useState({
+  const [eventImgToUrlProsess, seteventImgToUrlProsess] = useState({
+    loding: false,
+    error: false,
+    success: false,
+  });
+  const [subEventImgToUrlProsess, setSubEventImgToUrlProsess] = useState({
     loding: false,
     error: false,
     success: false,
@@ -131,15 +135,13 @@ export default function CreateEvent({ open, setOpen }) {
     if (checkValidtionData(activeStep)) {
       const newCompleted = completed;
       newCompleted[activeStep] = true;
-      setCompleted(newCompleted);
+      // setCompleted(activeStep);
       handleNext();
     }
   };
 
   const checkValidtionData = (activeStep) => {
     if (activeStep == 0) {
-      console.log("error check", eventData.name.length);
-
       if (eventData.name.length == 0) {
         setEventDataError({ name: true, date: false, posterUrl: false });
         return false;
@@ -149,6 +151,76 @@ export default function CreateEvent({ open, setOpen }) {
       } else if (eventData.posterUrl.length == 0) {
         setEventDataError({ name: false, date: false, posterUrl: true });
         return false;
+      } else {
+        setEventDataError({ name: false, date: false, posterUrl: false });
+      }
+    } else if (activeStep == 1) {
+      if (subEventData.name.length == 0) {
+        setSubEventDataError({
+          name: true,
+          category: false,
+          time: false,
+          grupMember: false,
+          posterUrl: false,
+        });
+        return false;
+      } else if (subEventData.category.length == 0) {
+        setSubEventDataError({
+          name: false,
+          category: true,
+          time: false,
+          grupMember: false,
+          posterUrl: false,
+        });
+        return false;
+      } else if (subEventData.time.length == 0) {
+        setSubEventDataError({
+          name: false,
+          category: false,
+          time: true,
+          grupMember: false,
+          posterUrl: false,
+        });
+        return false;
+      } else if (subEventData.grupMember < 2 && subEventData.isGroup) {
+        setSubEventDataError({
+          name: false,
+          category: false,
+          time: false,
+          grupMember: true,
+          posterUrl: false,
+        });
+        return false;
+      } else if (subEventData.posterUrl.length == 0) {
+        setSubEventDataError({
+          name: false,
+          category: false,
+          time: false,
+          grupMember: false,
+          posterUrl: true,
+        });
+        return false;
+      } else {
+        setSubEventDataError({
+          name: false,
+          category: false,
+          time: false,
+          grupMember: false,
+          posterUrl: false,
+        });
+      }
+    } else if (activeStep == 2) {
+      if (coordinatorData.name.length == 0) {
+        setCoordinatorDataError({ name: true, email: false, mobile: false });
+        return false;
+      } else if (coordinatorData.email.length == 0) {
+        setCoordinatorDataError({ name: false, email: true, mobile: false });
+        return false;
+      } else if (coordinatorData.mobile.length < 10) {
+        setCoordinatorDataError({ name: false, email: false, mobile: true });
+        return false;
+      } else {
+        setCoordinatorDataError({ name: false, email: false, mobile: false });
       }
     }
 
@@ -158,48 +230,91 @@ export default function CreateEvent({ open, setOpen }) {
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
+    setEventData({ name: "", date: null, posterUrl: "" });
+    setSubEventData({ name: "",category: "",time: "", grupMember: 2, isGroup: false, posterUrl: ""});
+    setCoordinatorData({ name: "", email: "", mobile: "" });
+    setEventDataError({ name: false, date: false, posterUrl: false });
+    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  posterUrl: false});
+    setCoordinatorDataError({ name: false, email: false, mobile: false });
+    seteventImgToUrlProsess({ loding: false, error: false, success: false });
+    setSubEventImgToUrlProsess({ loding: false, error: false, success: false });
   };
 
   const handleClose = () => {
-    handleReset();
     setOpen(false);
   };
 
-  const uploadImg = async (e) => {
-    setImgUrlData((imgUrlData.loding = true));
-    // setImgUrlData((imgUrlData.success = false));
-    // setImgUrlData((imgUrlData.error = false));
+ const CreateEvent = ()=>{
+     handleCreateNewEvent()
+     handleReset();
+     setOpen(false);
+ }
 
-    console.log(imgUrlData);
+  const handleEventImgToUrl = async (e) => {
+    seteventImgToUrlProsess({ loding: true, error: false, success: false });
+
+    console.log(eventImgToUrlProsess);
     const image = e.target.files[0];
 
     const formData = new FormData();
     formData.set("image", image);
 
-    // axios
-    //   .post(
-    //     "https://api.imgbb.com/1/upload?key=c1e87660595242c0175f82bb850d3e15",
-    //     formData
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data.data.display_url);
-    //     setEventData({...eventData , posterUrl : res.data.data.display_url});
-    //     // setImgUploadLoding(false)
-    //     // setImgUrlData((imgUrlData.loding = false));
-    //     // setImgUrlData((imgUrlData.success = true));
-    //     // setImgUrlData((imgUrlData.error = false));
-    //   })
-    //   .catch((error) => {
-    //     // console.log(error);
-    //     // SweetAlrt("post imag fail", "error");
-    //     // setImgUrlData(imgUrlData.loding=false);
-    //     // setImgUrlData(imgUrlData.success=false);
-    //     // setImgUrlData(imgUrlData.error=true);
-    //   });
+    axios
+      .post(
+        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+        // "https://api.imgbb.com/1/upload?key=c1e87660595242c0175f82bb850d3e15",
+        // "https://api.imgbb.com/1/upload?key=c1e87660595242c0175f82bb850d3e5",
+        formData
+      )
+      .then((res) => {
+        console.log(res.data.data.display_url);
+        setEventData({ ...eventData, posterUrl: res.data.data.display_url });
+        // setImgUploadLoding(false)
+        seteventImgToUrlProsess({ loding: false, error: false, success: true });
+      })
+      .catch((error) => {
+        seteventImgToUrlProsess({ loding: false, error: true, success: false });
+      });
 
-    setEventData({ ...eventData, posterUrl: "res.data.data.display_url" });
+    console.log(eventImgToUrlProsess);
+  };
 
-    console.log(imgUrlData);
+  const handleSubEventImgToUrl = async (e) => {
+    setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+
+    const image = e.target.files[0];
+
+    const formData = new FormData();
+    formData.set("image", image);
+
+    axios
+      .post(
+        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+        // "https://api.imgbb.com/1/upload?key=c1e87660595242c0175f82bb850d3e15",
+        formData
+      )
+      .then((res) => {
+        console.log(res.data.data.display_url);
+        setSubEventData({
+          ...subEventData,
+          posterUrl: res.data.data.display_url,
+        });
+        // setImgUploadLoding(false)
+        setSubEventImgToUrlProsess({
+          loding: false,
+          error: false,
+          success: true,
+        });
+      })
+      .catch((error) => {
+        setSubEventImgToUrlProsess({
+          loding: false,
+          error: true,
+          success: false,
+        });
+      });
+
+    // setEventData({ ...eventData, posterUrl: "ssshh" });
   };
 
   return (
@@ -236,7 +351,7 @@ export default function CreateEvent({ open, setOpen }) {
                   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Button onClick={handleReset}>Reset</Button>
-                    <Button onClick={handleClose}>Create</Button>
+                    <Button onClick={CreateEvent}>Create</Button>
                   </Box>
                 </React.Fragment>
               ) : (
@@ -324,8 +439,10 @@ export default function CreateEvent({ open, setOpen }) {
                                 accept="image/*"
                                 id="raised-button-file"
                                 type="file"
-                                className={imgUrlData.loding ? "d-none" : ""}
-                                onChange={(e) => uploadImg(e)}
+                                className={
+                                  eventImgToUrlProsess.loding ? "d-none" : ""
+                                }
+                                onChange={(e) => handleEventImgToUrl(e)}
                               />
                               {eventDataError.posterUrl && (
                                 <Typography className="text-danger ms-3">
@@ -335,15 +452,15 @@ export default function CreateEvent({ open, setOpen }) {
                             </div>
                           </div>
                           <div className="col mt-3">
-                            {!imgUrlData.loding &&
-                              !imgUrlData.error &&
-                              !imgUrlData.success && (
+                            {!eventImgToUrlProsess.loding &&
+                              !eventImgToUrlProsess.error &&
+                              !eventImgToUrlProsess.success && (
                                 <Typography>Not select img</Typography>
                               )}
-                            {imgUrlData.loding && (
+                            {eventImgToUrlProsess.loding && (
                               <CircularProgress size={20} />
                             )}
-                            {imgUrlData.success && (
+                            {eventImgToUrlProsess.success && (
                               <Typography
                                 className="text-success"
                                 style={{ fontSize: "13px" }}
@@ -351,7 +468,7 @@ export default function CreateEvent({ open, setOpen }) {
                                 successfully select img
                               </Typography>
                             )}
-                            {imgUrlData.error && (
+                            {eventImgToUrlProsess.error && (
                               <Typography
                                 className="text-danger"
                                 style={{ fontSize: "13px" }}
@@ -360,28 +477,62 @@ export default function CreateEvent({ open, setOpen }) {
                               </Typography>
                             )}
                           </div>
+                          <div className="d-flex justify-content-center align-items-center">
+                            {eventData.posterUrl && (
+                              <img
+                                className="mt-3 rounded shadow"
+                                style={{ height: "20vh", width: "60%" }}
+                                src={eventData.posterUrl}
+                              ></img>
+                            )}
+                          </div>
                         </div>
                       </>
                     )}
                     {activeStep + 1 == 2 && (
                       <>
-                        <TextField
-                          id="outlined-basic"
-                          label="Event name"
-                          variant="outlined"
-                          value={subEventData.name}
-                          onChange={(e) =>
-                            setSubEventData({
-                              ...subEventData,
-                              name: e.target.value,
-                            })
-                          }
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
+                        {!subEventDataError.name ? (
+                          <TextField
+                            id="outlined-basic"
+                            label="Event name"
+                            variant="outlined"
+                            value={subEventData.name}
+                            onChange={(e) =>
+                              setSubEventData({
+                                ...subEventData,
+                                name: e.target.value,
+                              })
+                            }
+                            style={{ marginBottom: "10px", width: "100%" }}
+                          />
+                        ) : (
+                          <TextField
+                            id="outlined-basic"
+                            label="Event name"
+                            helperText="Enter name"
+                            error
+                            variant="outlined"
+                            value={subEventData.name}
+                            onChange={(e) =>
+                              setSubEventData({
+                                ...subEventData,
+                                name: e.target.value,
+                              })
+                            }
+                            style={{ marginBottom: "10px", width: "100%" }}
+                          />
+                        )}
 
-                        <FormControl className="mb-3" fullWidth>
+                        <FormControl
+                          className={
+                            subEventDataError.category
+                              ? "mb-3 border border-danger"
+                              : "mb-3"
+                          }
+                          fullWidth
+                        >
                           <InputLabel id="demo-simple-select-label" required>
-                          select Category
+                            select Category
                           </InputLabel>
                           <Select
                             labelId="demo-simple-select-label"
@@ -389,7 +540,10 @@ export default function CreateEvent({ open, setOpen }) {
                             value={subEventData.category}
                             label="select Category"
                             onChange={(e) =>
-                              setSubEventData({ ...subEventData, category: e.target.value })
+                              setSubEventData({
+                                ...subEventData,
+                                category: e.target.value,
+                              })
                             }
                           >
                             <MenuItem value={"Civil"}>Civil</MenuItem>
@@ -397,9 +551,10 @@ export default function CreateEvent({ open, setOpen }) {
                             <MenuItem value={"Electrical"}>Electrical</MenuItem>
                             <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
                             <MenuItem value={"Management"}>Management</MenuItem>
-                            <MenuItem value={"Microbiology"}>Microbiology</MenuItem>
+                            <MenuItem value={"Microbiology"}>
+                              Microbiology
+                            </MenuItem>
                             <MenuItem value={"General"}>General</MenuItem>
-                            {/* <MenuItem value={8}>8</MenuItem> */}
                           </Select>
                         </FormControl>
 
@@ -413,7 +568,19 @@ export default function CreateEvent({ open, setOpen }) {
                             ]}
                           >
                             <DemoItem label="">
-                              <TimePicker onChange={(time)=>console.log(time.$d)} />
+                              <TimePicker
+                                value={subEventData.time}
+                                className={
+                                  subEventDataError.time &&
+                                  "border border-1 border-danger"
+                                }
+                                onChange={(time) =>
+                                  setSubEventData({
+                                    ...subEventData,
+                                    time: time.$d,
+                                  })
+                                }
+                              />
                             </DemoItem>
                           </DemoContainer>
                         </LocalizationProvider>
@@ -421,12 +588,19 @@ export default function CreateEvent({ open, setOpen }) {
                         <div className="row mt-3 ">
                           <FormLabel
                             id="demo-row-radio-buttons-group-label"
-                            className="mt-2 ms-3 me-2 col-1"
+                            className="mt-2 ms-3 me-2 col-2"
                           >
-                            Group
+                            Group :
                           </FormLabel>
                           <RadioGroup
                             row
+                            value={subEventData.isGroup}
+                            onChange={(e) =>
+                              setSubEventData({
+                                ...subEventData,
+                                isGroup: e.target.value,
+                              })
+                            }
                             aria-labelledby="demo-row-radio-buttons-group-label"
                             name="row-radio-buttons-group"
                             className="col"
@@ -434,69 +608,214 @@ export default function CreateEvent({ open, setOpen }) {
                             <FormControlLabel
                               value={true}
                               control={<Radio />}
-                              onChange={(e) => setGroup(e.target.value)}
                               label="Yes"
                             />
                             <FormControlLabel
                               value={false}
                               control={<Radio />}
-                              onChange={(e) => setGroup(e.target.value)}
                               label="No"
                             />
                           </RadioGroup>
                         </div>
 
-                        {group && (
-                          <TextField
-                            className="mt-2"
-                            id="outlined-basic"
-                            type="number"
-                            label="number of group member"
-                            variant="outlined"
-                          />
-                        )}
+                        {subEventData.isGroup == "true" &&
+                          !subEventDataError.grupMember && (
+                            <TextField
+                              className="mt-2"
+                              id="outlined-basic"
+                              type="number"
+                              value={subEventData.grupMember}
+                              onChange={(e) =>
+                                setSubEventData({
+                                  ...subEventData,
+                                  grupMember: e.target.value,
+                                })
+                              }
+                              label="number of group member"
+                              variant="outlined"
+                            />
+                          )}
 
-                        <div className="mt-3">
-                          <input
-                            accept="image/*"
-                            // className={classes.input}
-                            // style={{ display: "none" }}
-                            id="raised-button-file"
-                            type="file"
-                          />
-                          {/* <label htmlFor="raised-button-file">
-                          <Button
-                            variant="raised"
-                            component="span"
-                            // className={classes.button}
-                          >
-                            Cover img
-                          </Button>
-                        </label> */}
+                        {subEventData.isGroup == "true" &&
+                          subEventDataError.grupMember && (
+                            <TextField
+                              className="mt-2"
+                              id="outlined-basic"
+                              type="number"
+                              error
+                              helperText="group member must be greate then 1"
+                              value={subEventData.grupMember}
+                              onChange={(e) =>
+                                setSubEventData({
+                                  ...subEventData,
+                                  grupMember: e.target.value,
+                                })
+                              }
+                              label="number of group member"
+                              variant="outlined"
+                            />
+                          )}
+
+                        <div className="row">
+                          <div className="col">
+                            <div
+                              className={
+                                subEventDataError.posterUrl
+                                  ? "mt-3 border border-1 border-danger"
+                                  : "mt-3"
+                              }
+                            >
+                              <input
+                                accept="image/*"
+                                id="raised-button-file"
+                                type="file"
+                                className={
+                                  subEventImgToUrlProsess.loding ? "d-none" : ""
+                                }
+                                onChange={(e) => handleSubEventImgToUrl(e)}
+                              />
+                              {eventDataError.posterUrl && (
+                                <Typography className="text-danger ms-3">
+                                  select img
+                                </Typography>
+                              )}
+                            </div>
+                          </div>
+                          <div className="col mt-3">
+                            {!subEventImgToUrlProsess.loding &&
+                              !subEventImgToUrlProsess.error &&
+                              !subEventImgToUrlProsess.success && (
+                                <Typography>Not select img</Typography>
+                              )}
+                            {subEventImgToUrlProsess.loding && (
+                              <CircularProgress size={20} />
+                            )}
+                            {subEventImgToUrlProsess.success && (
+                              <Typography
+                                className="text-success"
+                                style={{ fontSize: "13px" }}
+                              >
+                                successfully select img
+                              </Typography>
+                            )}
+                            {subEventImgToUrlProsess.error && (
+                              <Typography
+                                className="text-danger"
+                                style={{ fontSize: "13px" }}
+                              >
+                                fail select img
+                              </Typography>
+                            )}
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center">
+                            {subEventData.posterUrl && (
+                              <img
+                                className="mt-3 rounded shadow"
+                                style={{ height: "20vh", width: "60%" }}
+                                src={subEventData.posterUrl}
+                              ></img>
+                            )}
+                          </div>
                         </div>
                       </>
                     )}
                     {activeStep + 1 == 3 && (
                       <>
-                        <TextField
-                          id="outlined-basic"
-                          label="coordinator name"
-                          variant="outlined"
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
-                        <TextField
-                          id="outlined-basic"
-                          label="coordinator Email"
-                          variant="outlined"
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
-                        <TextField
-                          id="outlined-basic"
-                          type="number"
-                          label="coordinator mobile"
-                          variant="outlined"
-                          style={{ marginBottom: "10px", width: "100%" }}
-                        />
+                        {!coordinatorDataError.name ? (
+                          <TextField
+                            id="outlined-basic"
+                            label="coordinator name"
+                            variant="outlined"
+                            style={{ marginBottom: "10px", width: "100%" }}
+                            value={coordinatorData.name}
+                            onChange={(e) =>
+                              setCoordinatorData({
+                                ...coordinatorData,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        ) : (
+                          <TextField
+                            id="outlined-basic"
+                            label="coordinator name"
+                            variant="outlined"
+                            error
+                            helperText="Enter name"
+                            style={{ marginBottom: "10px", width: "100%" }}
+                            value={coordinatorData.name}
+                            onChange={(e) =>
+                              setCoordinatorData({
+                                ...coordinatorData,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        )}
+                        {!coordinatorDataError.email ? (
+                          <TextField
+                            id="outlined-basic"
+                            label="coordinator Email"
+                            variant="outlined"
+                            style={{ marginBottom: "10px", width: "100%" }}
+                            value={coordinatorData.email}
+                            onChange={(e) =>
+                              setCoordinatorData({
+                                ...coordinatorData,
+                                email: e.target.value,
+                              })
+                            }
+                          />
+                        ) : (
+                          <TextField
+                            id="outlined-basic"
+                            label="coordinator Email"
+                            variant="outlined"
+                            error
+                            helperText="Enter email"
+                            style={{ marginBottom: "10px", width: "100%" }}
+                            value={coordinatorData.email}
+                            onChange={(e) =>
+                              setCoordinatorData({
+                                ...coordinatorData,
+                                email: e.target.value,
+                              })
+                            }
+                          />
+                        )}
+                        {!coordinatorDataError.mobile ? (
+                          <TextField
+                            id="outlined-basic"
+                            type="number"
+                            label="coordinator mobile"
+                            variant="outlined"
+                            style={{ marginBottom: "10px", width: "100%" }}
+                            value={coordinatorData.mobile}
+                            onChange={(e) =>
+                              setCoordinatorData({
+                                ...coordinatorData,
+                                mobile: e.target.value,
+                              })
+                            }
+                          />
+                        ) : (
+                          <TextField
+                            id="outlined-basic"
+                            type="number"
+                            label="coordinator mobile"
+                            variant="outlined"
+                            helperText="length must be greter than 10"
+                            error
+                            style={{ marginBottom: "10px", width: "100%" }}
+                            value={coordinatorData.mobile}
+                            onChange={(e) =>
+                              setCoordinatorData({
+                                ...coordinatorData,
+                                mobile: e.target.value,
+                              })
+                            }
+                          />
+                        )}
                       </>
                     )}
                   </Typography>
