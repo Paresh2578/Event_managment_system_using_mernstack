@@ -6,7 +6,7 @@ import '../Events.css'
 
 //compontes
 import RegistreFrom from './registreFrom';
-import Navbar from "../../Event/Events";
+import Navbar from "../../navbar/Navbar";
 
 //mui
 import Card from "@mui/material/Card";
@@ -44,10 +44,6 @@ export default function SubEvents() {
         <div className="container">
           <div className="col-md-8 col-md-offset-2 section-title">
             <h2>All SubEvents</h2>
-            {/* <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
-          </p> */}
           </div>
           <div id="row">
             <div
@@ -55,12 +51,10 @@ export default function SubEvents() {
             >
               <div>
                 <div className="card-container">
-                  {/* <p className="img-text">Your Text Goes Here</p> */}
                   <div className="img-text">
                     <span className="text-center">
                       <EventSeatIcon /> 100 Seat
                     </span>
-                    {/* <p>100</p> */}
                   </div>
                   <img
                     src={img}

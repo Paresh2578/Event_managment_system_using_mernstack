@@ -46,7 +46,7 @@ export default function Events() {
             }
           </div>
         <div className="row">
-          <div className="col-md-3 col-sm-6 trending__card p-0" onClick={()=>navigate('event/2')}>
+          <div className="col-md-3 col-sm-6 trending__card p-0" onClick={()=>navigate('subsevent/2')}>
           <div>
               <CardMedia
                 component="img"

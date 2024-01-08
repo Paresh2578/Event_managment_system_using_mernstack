@@ -37,7 +37,6 @@ export default function Events() {
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
  
-  // const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
   const [category , setCategory] = useState(["completed" ," uncompleted"]);
   const [activeFillter , setActiveFillter]= useState(-1);
   const [event , setEvent] = useState([]);
@@ -60,8 +59,6 @@ export default function Events() {
   }, []);
 
   const eventFillter = (itemData , index) =>{
-    // const filterData = GalleryData.filter((item)=> item == itemData);
-    // setData(filterData);
       setActiveFillter(index);
   }
 
@@ -104,30 +101,19 @@ export default function Events() {
         <div className="container">
           <div className="col-md-8 col-md-offset-2 section-title">
             <h2>Events</h2>
-            {/* <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
-          </p> */}
-
           </div>
-          {/* <div className="filterItem"> */}
           <div className="row">
             <div className="col mb-3"><button className={activeFillter != -1 ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter("All" , -1)}}>All</button></div>
             {
               category.map((item , index)=> <div  className="col mb-3 "><button className={activeFillter != index ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter(item , index)}}>{item}</button></div>)
             }
           </div>
-        {/* </div> */}
           <div className="row">
             {event && event.map((data , index)=>(
               <div className="col-md-4 col-sm-6 trending__card p-0 me-3 ">
               <EventCard key={index} data={data} handleEditEvent={handleEditEvent} index={index} handleRemoveEvent={handleRemoveEvent}/>
               </div>
             ))}
-            {/* <div
-              className="col-md-3 col-sm-6 team"
-              onClick={() => navigate("event/2")}
-            ></div> */}
           </div>
         </div>
       </div>

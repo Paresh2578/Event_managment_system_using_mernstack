@@ -22,7 +22,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={<Home/>} />
-        <Route path='event/:id' element={<SubEvents/>} />
+        <Route path='subsevent/:id' element={<SubEvents/>} />
         <Route path="admin" element={<ProtectedRoute><FullLayout/></ProtectedRoute>}>
             <Route path='dashboard' element={<Dashboard/>}/>
             <Route path='events' element={<Events/>}/>

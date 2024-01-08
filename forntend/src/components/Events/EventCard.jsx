@@ -5,21 +5,14 @@ import { useNavigate } from "react-router-dom";
 import EditEvent from './EditEvent';
 
 //mui
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
+import {Button , CardContent , CardMedia} from "@mui/material"
+import {CalendarMonth , Edit , Delete} from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
 
 export default function EventCard({data  , handleEditEvent , index , handleRemoveEvent}) {
   const navigate =useNavigate();
 
   const [editEventOpen, setEditEventOpen] = useState(false);
-
-
- 
 
   return (
     <>
@@ -35,12 +28,12 @@ export default function EventCard({data  , handleEditEvent , index , handleRemov
                 />
                 <CardContent>
                   <p style={{ textAlign: "left" }}>
-                    <CalendarMonthIcon htmlColor="#6372ff" />{" "}
+                    <CalendarMonth htmlColor="#6372ff" />{" "}
                     <span>{data.date}</span>
                   </p>
                   <p>{data.name}</p>
-                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<EditIcon size="small" />} ></Button>
-                  <Button color="error" startIcon={<DeleteIcon 
+                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<Edit size="small" />} ></Button>
+                  <Button color="error" startIcon={<Delete
                     className="ms-2"
                     size="small" 
                     onClick={()=>handleRemoveEvent(index)}

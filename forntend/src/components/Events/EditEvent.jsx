@@ -37,7 +37,7 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
   });
 
   const handleCancle = () => {
-    
+    eventData(data);
     setOpen(false);
   };
 
@@ -57,7 +57,7 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
     } else {
       setEventDataError({ name: false, date: false, posterUrl: false });
       handleEditEvent(eventData , index)
-      setEventData({name : "" ,date : "" , posterUrl : ""});
+      setEventData(data);
      seteventImgToUrlProsess({loding: false,
       error: false,
       success: false,});
@@ -65,7 +65,6 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
       setOpen(false);
     }
 
-     console.log(eventData);
   }
 
   const handleEventImgToUrl = async (e) => {

@@ -6,6 +6,7 @@ import "../../../users/compontes/Event/Events.css";
 //componets
 import CeateSubEvents from "./ceateSubEvents";
 import EditSubEvent from './EditSubEvent'
+import SubEventCard from './subEventCard';
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -40,9 +41,9 @@ import img from "../../../users/compontes/Event/assets/client-1.jpg";
 export default function SubEvents() {
   const navigate = useNavigate();
 
-  const [isHovered, setIsHovered] = useState(false);
+  const [subEvent , setSubEvent] = useState([]);
   const [open, setOpen] = useState(false);
-  const [editEventOpen , setEditEventOpen] = useState(false);
+  
     const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
     const [activeFillter , setActiveFillter]= useState(-1);
   
@@ -51,11 +52,24 @@ export default function SubEvents() {
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
 
   useEffect(() => {
+
+    // setSubEvent([{
+    //   name: "app-thon",
+    //   category: "Computer",
+    //   time: "10:20",
+    //   seats : 10,
+    //   grupMember: 4,
+    //   isGroup: 'true',
+    //   posterUrl: img,
+    // }]);
+
     const handleWindowResize = () => {
       setWindowSize([window.innerWidth]);
     };
 
     window.addEventListener("resize", handleWindowResize);
+
+    
 
     return () => {
       window.removeEventListener("resize", handleWindowResize);
@@ -67,6 +81,39 @@ export default function SubEvents() {
     // setData(filterData);
       setActiveFillter(index);
   }
+
+  // handleCreateSubEvent
+  const handleCreateSubEvent = (data)=>{
+       console.log(data);
+       setSubEvent([...subEvent , {...data , time : data.time.toDateString()}]);
+  }
+
+  const handleEditSubEvent = (data , index)=>{
+    // setEvent([...event , event[index] = data]);
+    let temp = [];
+    
+    subEvent.map((e , i)=>{
+      if(i == index){
+        temp.push(data);
+      }else{
+         temp.push(e);
+      }
+    })
+
+    setSubEvent(temp);
+ }
+
+ const handleRemoveSubEvent = (index)=>{
+  let newEventData = [];
+    
+    subEvent.map((e , i)=>{
+      if(i != index){
+        newEventData.push(e);
+      }
+    })
+    setSubEvent(newEventData);
+ }
+
 
   return (
     <>
@@ -88,39 +135,11 @@ export default function SubEvents() {
           </div>
           
           <div id="row">
-            <div
-              className="col-md-4 col-sm-6 trending__card"
-            >
-              <div>
-                <div className="card-container">
-                  {/* <p className="img-text">Your Text Goes Here</p> */}
-                  <div className="img-text">
-                    <span className="text-center">
-                      <EventSeatIcon /> 100 Seat
-                    </span>
-                    {/* <p>100</p> */}
-                  </div>
-                  <img
-                    src={img}
-                    style={{height :'200px'}}
-                    alt="Your Alt Text"
-                    className="overlay-image"
-              onClick={()=>navigate('/admin/events/subevent/id')}
-                  />
-                </div>
-                <CardContent>
-                  <p style={{ textAlign: "left" }}>
-                    <CalendarMonthIcon color="#6372ff" /> <span>00:00:00</span>
-                  </p>
-                  <p>App-A-Thon</p>
-                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<EditIcon size="small" />} ></Button>
-                  <Button color="error" startIcon={<DeleteIcon 
-                    className="ms-2"
-                    size="small" />}>
-                  </Button>
-                </CardContent>
+          {subEvent && subEvent.map((data , index)=>(
+              <div className="col-md-4 col-sm-6 trending__card p-0 me-3 ">
+              <SubEventCard key={index} data={data} handleEditSubEvent={handleEditSubEvent} index={index} handleRemoveSubEvent={handleRemoveSubEvent}/>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -133,8 +152,7 @@ export default function SubEvents() {
       >
         <AddIcon />
       </Fab>
-     <CeateSubEvents open={open} setOpen={setOpen} />
-      <EditSubEvent open={editEventOpen} setOpen={setEditEventOpen}/>
+     <CeateSubEvents open={open} setOpen={setOpen}  handleCreateSubEvent={handleCreateSubEvent}/>
     </>
   );
 }
