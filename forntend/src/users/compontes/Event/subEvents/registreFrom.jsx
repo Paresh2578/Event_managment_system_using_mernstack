@@ -73,6 +73,13 @@ export default function RegistreFrom({
                  label={`member ${index+1} Email`}
                  variant="outlined"
                />
+               <br />
+               <TextField
+                 id="outlined-basic"
+                 style={{ marginBottom: "10px", width: "100%" }}
+                 label={`member ${index+1} mobile No.`}
+                 variant="outlined"
+               />
              </>
               ))}
             </>
@@ -98,6 +105,13 @@ export default function RegistreFrom({
                 label="Email"
                 variant="outlined"
               />
+              <br />
+               <TextField
+                 id="outlined-basic"
+                 style={{ marginBottom: "10px", width: "100%" }}
+                 label={`member ${index+1} mobile No.`}
+                 variant="outlined"
+               />
             </>
           )}
           <br />
