@@ -7,9 +7,30 @@ import axios from "axios";
 
 //utis
 import { FromentDate } from "../../util/FormentDate";
+import { URL } from "../../util/URL";
 
 //mui
-import {CircularProgress , InputLabel , Select , MenuItem , FormControlLabel ,  FormControl , FormLabel , RadioGroup ,Radio , Typography ,StepButton , Step , Stepper , Box ,TextField , DialogTitle , DialogContent ,Button , Dialog} from "@mui/material";
+import {
+  CircularProgress,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  Typography,
+  StepButton,
+  Step,
+  Stepper,
+  Box,
+  TextField,
+  DialogTitle,
+  DialogContent,
+  Button,
+  Dialog,
+} from "@mui/material";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -22,29 +43,34 @@ const steps = [
   "Enter coordinator details",
 ];
 
-export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
+export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
+  let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
+
+  const [createEventLoding, setCreateEventLoding] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
+
   // const [group, setGroup] = useState(false);
   const [eventData, setEventData] = useState({
     name: "",
     date: null,
-    posterUrl: "",
+    eventPosterUrl: "",
   });
 
   const [subEventData, setSubEventData] = useState({
-    name: "",
+    subEventname: "",
     category: "",
     time: "",
-    seats : 10,
+    seats: 10,
     grupMember: 2,
     isGroup: false,
     posterUrl: "",
   });
 
   const [coordinatorData, setCoordinatorData] = useState({
-    name: "",
+    coordinatorName: "",
     email: "",
     mobile: "",
   });
@@ -69,7 +95,7 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
     name: false,
     category: false,
     time: false,
-    seats : false,
+    seats: false,
     grupMember: false,
     posterUrl: false,
   });
@@ -131,22 +157,21 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
       } else if (eventData.date == null || eventData.date.length == 0) {
         setEventDataError({ name: false, date: true, posterUrl: false });
         return false;
-      } else if (eventData.posterUrl.length == 0) {
+      } else if (eventData.eventPosterUrl.length == 0) {
         setEventDataError({ name: false, date: false, posterUrl: true });
         return false;
       } else {
         setEventDataError({ name: false, date: false, posterUrl: false });
       }
     } else if (activeStep == 1) {
-      if (subEventData.name.length == 0) {
+      if (subEventData.subEventname.length == 0) {
         setSubEventDataError({
           name: true,
           category: false,
           time: false,
-          seats : false,
+          seats: false,
           grupMember: false,
           posterUrl: false,
-
         });
         return false;
       } else if (subEventData.category.length == 0) {
@@ -154,7 +179,7 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
           name: false,
           category: true,
           time: false,
-          seats : false,
+          seats: false,
           grupMember: false,
           posterUrl: false,
         });
@@ -164,23 +189,22 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
           name: false,
           category: false,
           time: true,
-          seats : false,
+          seats: false,
           grupMember: false,
           posterUrl: false,
         });
         return false;
-      }else if (subEventData.seats < 10) {
+      } else if (subEventData.seats < 10) {
         setSubEventDataError({
           name: false,
           category: false,
           time: false,
-          seats : true,
+          seats: true,
           grupMember: false,
           posterUrl: false,
         });
         return false;
-      }
-       else if (subEventData.grupMember < 2 && subEventData.isGroup) {
+      } else if (subEventData.grupMember < 2 && subEventData.isGroup) {
         setSubEventDataError({
           name: false,
           category: false,
@@ -208,18 +232,18 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
         });
       }
     } else if (activeStep == 2) {
-      // if (coordinatorData.name.length == 0) {
-      //   setCoordinatorDataError({ name: true, email: false, mobile: false });
-      //   return false;
-      // } else if (coordinatorData.email.length == 0) {
-      //   setCoordinatorDataError({ name: false, email: true, mobile: false });
-      //   return false;
-      // } else if (coordinatorData.mobile.length < 10) {
-      //   setCoordinatorDataError({ name: false, email: false, mobile: true });
-      //   return false;
-      // } else {
-      //   setCoordinatorDataError({ name: false, email: false, mobile: false });
-      // }
+      if (coordinatorData.coordinatorName.length == 0) {
+        setCoordinatorDataError({ name: true, email: false, mobile: false });
+        return false;
+      } else if (coordinatorData.email.length == 0) {
+        setCoordinatorDataError({ name: false, email: true, mobile: false });
+        return false;
+      } else if (coordinatorData.mobile.length < 10) {
+        setCoordinatorDataError({ name: false, email: false, mobile: true });
+        return false;
+      } else {
+        setCoordinatorDataError({ name: false, email: false, mobile: false });
+      }
     }
 
     return true;
@@ -229,10 +253,23 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
     setActiveStep(0);
     setCompleted({});
     setEventData({ name: "", date: null, posterUrl: "" });
-    setSubEventData({ name: "",category: "",time: "", grupMember: 2, isGroup: false, posterUrl: ""});
-    setCoordinatorData({ name: "", email: "", mobile: "" });
+    setSubEventData({
+      subEventname: "",
+      category: "",
+      time: "",
+      grupMember: 2,
+      isGroup: false,
+      posterUrl: "",
+    });
+    setCoordinatorData({ coordinatorName: "", email: "", mobile: "" });
     setEventDataError({ name: false, date: false, posterUrl: false });
-    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  posterUrl: false});
+    setSubEventDataError({
+      name: false,
+      category: false,
+      time: false,
+      grupMember: false,
+      posterUrl: false,
+    });
     setCoordinatorDataError({ name: false, email: false, mobile: false });
     seteventImgToUrlProsess({ loding: false, error: false, success: false });
     setSubEventImgToUrlProsess({ loding: false, error: false, success: false });
@@ -243,11 +280,50 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
     setOpen(false);
   };
 
- const CreateEvent = ()=>{
-     handleCreateNewEvent(eventData)
-     handleReset();
-     setOpen(false);
- }
+  const CreateEvent = async () => {
+    let createEventData = {
+      coordinatorName: coordinatorData.coordinatorName, //
+      email: coordinatorData.email,
+      mobile: coordinatorData.mobile,
+      subEventname: subEventData.subEventname,
+      category: subEventData.category,
+      time: subEventData.time,
+      seats: subEventData.seats,
+      groupMember: subEventData.grupMember,
+      isGroup: subEventData.isGroup,
+      subEventPosterUrl: subEventData.posterUrl, //
+      name: eventData.name,
+      date: eventData.date,
+      eventPosterUrl: eventData.eventPosterUrl, //
+    };
+
+    try {
+      setCreateEventLoding(true);
+      let result = await fetch(`${URL}/event/create`, {
+        method: "POST",
+        body: JSON.stringify(createEventData),
+        headers: {
+          "content-type": "application/json",
+          "Authorization":
+            adminAuth.token
+        },
+      });
+      result = await result.json();
+      setCreateEventLoding(false);
+      if (result.success) {
+      handleCreateNewEvent(eventData);
+        handleReset();
+        setOpen(false);
+      } else {
+        console.log("creatiing event error");
+      }
+    } catch (error) {
+      setCreateEventLoding(false);
+      console.log(error);
+    }
+
+    //
+  };
 
   const handleEventImgToUrl = async (e) => {
     seteventImgToUrlProsess({ loding: true, error: false, success: false });
@@ -258,57 +334,60 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
     const formData = new FormData();
     formData.set("image", image);
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        formData
-      )
-      .then((res) => {
-        console.log(res.data.data.display_url);
-        setEventData({ ...eventData, posterUrl: res.data.data.display_url });
-        // setImgUploadLoding(false)
-        seteventImgToUrlProsess({ loding: false, error: false, success: true });
-      })
-      .catch((error) => {
-        seteventImgToUrlProsess({ loding: false, error: true, success: false });
-      });
+    // axios
+    //   .post(
+    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
+    //     // setImgUploadLoding(false)
+    //     seteventImgToUrlProsess({ loding: false, error: false, success: true });
+    //   })
+    //   .catch((error) => {
+    //     seteventImgToUrlProsess({ loding: false, error: true, success: false });
+    // });
 
-    console.log(eventImgToUrlProsess);
+    setEventData({ ...eventData, eventPosterUrl: "emg url" });
   };
 
   const handleSubEventImgToUrl = async (e) => {
-    setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+    // setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
 
     const image = e.target.files[0];
 
     const formData = new FormData();
     formData.set("image", image);
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        formData
-      )
-      .then((res) => {
-        console.log(res.data.data.display_url);
-        setSubEventData({
-          ...subEventData,
-          posterUrl: res.data.data.display_url,
-        });
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: false,
-          success: true,
-        });
-      })
-      .catch((error) => {
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: true,
-          success: false,
-        });
-      });
+    // axios
+    //   .post(
+    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.data.display_url);
+    // setSubEventData({
+    //   ...subEventData,
+    //   posterUrl: res.data.data.display_url,
+    //     });
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: false,
+    //       success: true,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: true,
+    //       success: false,
+    //     });
+    //   });
 
+    setSubEventData({
+      ...subEventData,
+      posterUrl: "imgURL",
+    });
   };
 
   return (
@@ -345,7 +424,15 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
                   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Button onClick={handleReset}>Reset</Button>
-                    <Button onClick={CreateEvent}>Create</Button>
+                    <Button onClick={CreateEvent}>
+                      {createEventLoding ? (
+                        <>
+                          <p>creating..</p> <CircularProgress size="2rem" />
+                        </>
+                      ) : (
+                        "Create"
+                      )}
+                    </Button>
                   </Box>
                 </React.Fragment>
               ) : (
@@ -472,11 +559,11 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
                             )}
                           </div>
                           <div className="d-flex justify-content-center align-items-center">
-                            {eventData.posterUrl && (
+                            {eventData.eventPosterUrl && (
                               <img
                                 className="mt-3 rounded shadow"
                                 style={{ height: "20vh", width: "60%" }}
-                                src={eventData.posterUrl}
+                                src={eventData.eventPosterUrl}
                               ></img>
                             )}
                           </div>
@@ -490,11 +577,11 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
                             id="outlined-basic"
                             label="Event name"
                             variant="outlined"
-                            value={subEventData.name}
+                            value={subEventData.subEventname}
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
-                                name: e.target.value,
+                                subEventname: e.target.value,
                               })
                             }
                             style={{ marginBottom: "10px", width: "100%" }}
@@ -506,11 +593,11 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
                             helperText="Enter name"
                             error
                             variant="outlined"
-                            value={subEventData.name}
+                            value={subEventData.subEventname}
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
-                                name: e.target.value,
+                                subEventname: e.target.value,
                               })
                             }
                             style={{ marginBottom: "10px", width: "100%" }}
@@ -751,17 +838,17 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
                     )}
                     {activeStep + 1 == 3 && (
                       <>
-                        {!coordinatorDataError.name ? (
+                        {!coordinatorDataError.coordinatorName ? (
                           <TextField
                             id="outlined-basic"
                             label="coordinator name"
                             variant="outlined"
                             style={{ marginBottom: "10px", width: "100%" }}
-                            value={coordinatorData.name}
+                            value={coordinatorData.coordinatorName}
                             onChange={(e) =>
                               setCoordinatorData({
                                 ...coordinatorData,
-                                name: e.target.value,
+                                coordinatorName: e.target.value,
                               })
                             }
                           />
@@ -773,11 +860,11 @@ export default function CreateEvent({ open, setOpen , handleCreateNewEvent }) {
                             error
                             helperText="Enter name"
                             style={{ marginBottom: "10px", width: "100%" }}
-                            value={coordinatorData.name}
+                            value={coordinatorData.coordinatorName}
                             onChange={(e) =>
                               setCoordinatorData({
                                 ...coordinatorData,
-                                name: e.target.value,
+                                coordinatorName: e.target.value,
                               })
                             }
                           />

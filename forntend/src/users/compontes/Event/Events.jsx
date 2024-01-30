@@ -1,7 +1,10 @@
-import React , {useState} from "react";
+import React , {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 import './Events.css'
+
+//utils
+import {URL} from '../../../util/URL';
 
 //mui
 import { styled } from '@mui/material/styles';
@@ -11,6 +14,9 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
+//componets
+import EventCard from './EventCard';
+
 import img2 from "./assets/client-3.jpg"
 
 
@@ -18,9 +24,29 @@ export default function Events() {
   const navigate = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
+  const [event  , setEvent] = useState([]);
   const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
-  // const [category , setCategory] = useState(["completed" ," uncompleted"]);
   const [activeFillter , setActiveFillter]= useState(-1);
+
+
+  useEffect(()=>{
+    console.log("load");
+    getAllEvents();
+  },[]);
+
+  const getAllEvents = async()=>{
+    let result = await fetch(`${URL}/event/getAllEvent`);
+    result = await result.json();
+
+
+    if(result.success){
+      setEvent(result.data);
+    }else{
+     console.log("get al event error");
+    }
+     
+    console.log(result);
+ }
 
 
   const eventFillter = (itemData , index) =>{
@@ -46,34 +72,14 @@ export default function Events() {
             }
           </div>
         <div className="row">
-          <div className="col-md-3 col-sm-6 trending__card p-0" onClick={()=>navigate('subsevent/2')}>
-          <div>
-              <CardMedia
-                component="img"
-                className={`image-container ${isHovered ? 'hovered' : ''}`}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                height="250"
-                image={img2}
-                alt="Paella dish"
-              />
-              <CardContent>
-                <p style={{textAlign : 'left'}}>
-                  <CalendarMonthIcon htmlColor="#6372ff"/> <span>January 21, 2021</span>
-                </p>
-                <p>
-                  App-A-Thon
-                </p>
-                {/* <Typography variant="body2" color="text.secondary">
-                  This impressive paella is a perfect party dish and a fun meal
-                  to cook together with your guests. Add 1 cup of frozen peas
-                  along with the mussels, if you like.
-                </Typography> */}
-              </CardContent>
-              
-            </div>
-          </div>
-          <div className="col-md-3 col-sm-6 team" onClick={()=>navigate('event/2')}>
+          <div className="col-md-3 col-sm-6 trending__card p-0">
+                {
+                event && event.map((data , index)=>(
+                    <div key={index} onClick={()=>navigate(`subevent/${data._id}`)} >
+                    <EventCard data={data}/>
+                    </div>
+                )) 
+                 }
           </div>
         </div>
       </div>

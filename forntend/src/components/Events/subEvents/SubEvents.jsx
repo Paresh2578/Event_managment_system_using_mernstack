@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams , useNavigate } from 'react-router-dom';
 
 import "../../../users/compontes/Event/Events.css";
+
+//utils
+import {URL} from '../../../util/URL';
 
 //componets
 import CeateSubEvents from "./ceateSubEvents";
@@ -40,9 +43,12 @@ import img from "../../../users/compontes/Event/assets/client-1.jpg";
 
 export default function SubEvents() {
   const navigate = useNavigate();
+  const {id } = useParams();
 
   const [subEvent , setSubEvent] = useState([]);
   const [open, setOpen] = useState(false);
+
+
   
     const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
     const [activeFillter , setActiveFillter]= useState(-1);
@@ -69,12 +75,23 @@ export default function SubEvents() {
 
     window.addEventListener("resize", handleWindowResize);
 
-    
+    getAllSubEvents();
 
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
-  }, []);
+  }, [subEvent]);
+
+  const getAllSubEvents = async()=>{
+    let result = await fetch(`${URL}/event/getSubEvent/${id}`);
+    result = await result.json();
+
+    if(result.success){
+      setSubEvent(result.data);
+    }else{
+     console.log("get al event error");
+    }
+ }
 
   const eventFillter = (itemData , index) =>{
     // const filterData = GalleryData.filter((item)=> item == itemData);
@@ -84,8 +101,8 @@ export default function SubEvents() {
 
   // handleCreateSubEvent
   const handleCreateSubEvent = (data)=>{
-       console.log(data);
        setSubEvent([...subEvent , {...data , time : data.time.toDateString()}]);
+      //  getAllEvents();
   }
 
   const handleEditSubEvent = (data , index)=>{
@@ -134,9 +151,9 @@ export default function SubEvents() {
             }
           </div>
           
-          <div id="row">
+          <div className="row">
           {subEvent && subEvent.map((data , index)=>(
-              <div className="col-md-4 col-sm-6 trending__card p-0 me-3 ">
+              <div className="col-md-3 col-sm-6 trending__card p-0 me-3 ">
               <SubEventCard key={index} data={data} handleEditSubEvent={handleEditSubEvent} index={index} handleRemoveSubEvent={handleRemoveSubEvent}/>
               </div>
             ))}
@@ -152,7 +169,7 @@ export default function SubEvents() {
       >
         <AddIcon />
       </Fab>
-     <CeateSubEvents open={open} setOpen={setOpen}  handleCreateSubEvent={handleCreateSubEvent}/>
+     <CeateSubEvents open={open} setOpen={setOpen}  handleCreateSubEvent={handleCreateSubEvent} eventID={id}/>
     </>
   );
 }

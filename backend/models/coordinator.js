@@ -9,7 +9,7 @@ const coordinatorSchema =new  mongoose.Schema({
         required : true,
         type : String,
     },
-    password : {
+    mobile : {
         required : true,
         type : String,
     }

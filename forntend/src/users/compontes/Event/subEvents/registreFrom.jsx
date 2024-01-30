@@ -109,7 +109,7 @@ export default function RegistreFrom({
                <TextField
                  id="outlined-basic"
                  style={{ marginBottom: "10px", width: "100%" }}
-                 label={`member ${index+1} mobile No.`}
+                 label={` mobile No.`}
                  variant="outlined"
                />
             </>

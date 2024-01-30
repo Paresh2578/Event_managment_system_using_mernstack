@@ -6,6 +6,7 @@ const cors = require("cors");
 // routes
 const adminRoutes = require("./routes/adminRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const subEventRoutes = require("./routes/subEventRoutes")
 
 const app = express();
 
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 4500;
 connectToDB();
 app.use("/admin", adminRoutes);
 app.use("/event", eventRoutes);
+app.use("/subEvent", subEventRoutes);
 // app.use("/", todosRoutes);
 
 app.listen(PORT , ()=>console.log(`server starting on ${PORT}`))

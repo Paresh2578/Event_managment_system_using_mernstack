@@ -3,6 +3,7 @@ import axios from "axios";
 
 //util
 import {FromentDate} from '../../util/FormentDate'
+import {URL} from '../../util/URL';
 
 //mui
 import Dialog from "@mui/material/Dialog";
@@ -19,9 +20,10 @@ import dayjs from "dayjs";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function EditEvent({ open, setOpen, data , handleEditEvent, index }) {
- 
+  let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
 
   const [eventData , setEventData] = useState(data);
+  const [eventEditLoding , setEventEditLoding]= useState(false);
   
 
   const [eventDataError, setEventDataError] = useState({
@@ -37,13 +39,14 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
   });
 
   const handleCancle = () => {
-    eventData(data);
+    setEventData(data);
     setOpen(false);
   };
 
   // const 
 
-  const handleEditEventAndCheckValidationData = ()=>{
+  const handleEditEventAndCheckValidationData = async()=>{
+    console.log(eventData);
 
     if (eventData.name.length == 0) {
       setEventDataError({ name: true, date: false, posterUrl: false });
@@ -51,18 +54,40 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
     } else if (eventData.date == null || eventData.date.length == 0) {
       setEventDataError({ name: false, date: true, posterUrl: false });
       return false;
-    } else if (eventData.posterUrl.length == 0) {
+    } else if (eventData.eventPosterUrl.length == 0) {
       setEventDataError({ name: false, date: false, posterUrl: true });
       return false;
     } else {
       setEventDataError({ name: false, date: false, posterUrl: false });
-      handleEditEvent(eventData , index)
-      setEventData(data);
-     seteventImgToUrlProsess({loding: false,
-      error: false,
-      success: false,});
+      seteventImgToUrlProsess({loding: false,
+        error: false,
+        success: false,});
 
-      setOpen(false);
+      try{
+        setEventEditLoding(true);
+        let result = await fetch(`${URL}/event/edit/${data._id}`, {
+          method: "PUT",
+          body: JSON.stringify(eventData),
+          headers: {
+            "content-type": "application/json",
+            "Authorization": adminAuth.token
+                   },
+        });
+  
+        result = await result.json();
+        setEventEditLoding(false);
+        if(result.success){
+          handleEditEvent(eventData , index);
+        setEventData(data);
+        setOpen(false);
+        }else{
+          console.log("edit event error");
+        }
+  
+      }catch(error){
+        setEventEditLoding(false);
+        console.log("edit event error ")
+      }
     }
 
   }
@@ -70,7 +95,6 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
   const handleEventImgToUrl = async (e) => {
     seteventImgToUrlProsess({ loding: true, error: false, success: false });
 
-    console.log(eventImgToUrlProsess);
     const image = e.target.files[0];
 
     const formData = new FormData();
@@ -79,21 +103,17 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
     axios
       .post(
         "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        // "https://api.imgbb.com/1/upload?key=c1e87660595242c0175f82bb850d3e15",
-        // "https://api.imgbb.com/1/upload?key=c1e87660595242c0175f82bb850d3e5",
-        formData
+            formData
       )
       .then((res) => {
         console.log(res.data.data.display_url);
-        setEventData({ ...eventData, posterUrl: res.data.data.display_url });
+        setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
         // setImgUploadLoding(false)
         seteventImgToUrlProsess({ loding: false, error: false, success: true });
       })
       .catch((error) => {
         seteventImgToUrlProsess({ loding: false, error: true, success: false });
       });
-
-    console.log(eventImgToUrlProsess);
   };
 
 
@@ -293,7 +313,13 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
             color="primary"
             onClick={() => handleEditEventAndCheckValidationData()}
           >
-            Edit
+            {eventEditLoding ? (
+                        <>
+                          <p>updating..</p> <CircularProgress size="2rem" />
+                        </>
+                      ) : (
+                        "Edit"
+                      )}
           </Button>
           {/* </div> */}
         </DialogContent>

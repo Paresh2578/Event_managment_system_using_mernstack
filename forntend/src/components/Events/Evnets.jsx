@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import "../../users/compontes/Event/Events.css";
 import "./Events.css";
 
+//utils
+import {URL} from '../../util/URL';
+
 //componets
 import CreateEvent from "./CreateEvent";
 import EditEvent from "./EditEvent";
@@ -51,12 +54,28 @@ export default function Events() {
 
     window.addEventListener("resize", handleWindowResize);
 
-    setEvent([{name : "florik" , date : "January 21, 2021" , posterUrl : img2} , {name : "florik" , date : "January 21, 2021" , posterUrl : img2}]);
+    getAllEvents();
+
+    // setEvent([{name : "florik" , date : "January 21, 2021" , posterUrl : img2} , {name : "florik" , date : "January 21, 2021" , posterUrl : img2}]);
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
 
-  }, []);
+  }, [event]);
+
+  const getAllEvents = async()=>{
+     let result = await fetch(`${URL}/event/getAllEvent`);
+     result = await result.json();
+
+
+     if(result.success){
+       setEvent(result.data);
+     }else{
+      console.log("get al event error");
+     }
+      
+     console.log(result);
+  }
 
   const eventFillter = (itemData , index) =>{
       setActiveFillter(index);
@@ -65,6 +84,8 @@ export default function Events() {
   const handleCreateNewEvent = (data)=>{
     console.log(data);
        setEvent([...event , data]);
+      //  getAllEvents();
+       
   }
 
   const handleEditEvent = (data , index)=>{
@@ -80,6 +101,7 @@ export default function Events() {
     })
 
     setEvent(newEventData);
+   
  }
 
  const handleRemoveEvent = (index)=>{
@@ -91,6 +113,7 @@ export default function Events() {
       }
     })
     setEvent(newEventData);
+
  }
 
   
@@ -110,7 +133,7 @@ export default function Events() {
           </div>
           <div className="row">
             {event && event.map((data , index)=>(
-              <div className="col-md-4 col-sm-6 trending__card p-0 me-3 ">
+              <div className="col-md-3 col-sm-6 trending__card p-0 me-3 ">
               <EventCard key={index} data={data} handleEditEvent={handleEditEvent} index={index} handleRemoveEvent={handleRemoveEvent}/>
               </div>
             ))}

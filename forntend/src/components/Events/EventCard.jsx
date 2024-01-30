@@ -4,15 +4,44 @@ import { useNavigate } from "react-router-dom";
 //componets
 import EditEvent from './EditEvent';
 
+//utils
+import {URL} from '../../util/URL';
+
 //mui
-import {Button , CardContent , CardMedia} from "@mui/material"
+import {Button , CardContent , CardMedia , CircularProgress} from "@mui/material"
 import {CalendarMonth , Edit , Delete} from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
 
 export default function EventCard({data  , handleEditEvent , index , handleRemoveEvent}) {
   const navigate =useNavigate();
+  let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
 
   const [editEventOpen, setEditEventOpen] = useState(false);
+  const [deleteEventLoding , setDeleteEventLoding] = useState(false);
+
+  const deleteEvent = async()=>{
+    try{
+      setDeleteEventLoding(true);
+      let result = await fetch(`${URL}/event/delete/${data._id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": adminAuth.token
+                 },
+      });
+
+      result = await result.json();
+      setDeleteEventLoding(false);
+      if(result.success){
+      handleRemoveEvent(index);
+      }else{
+        console.log("edit event error");
+      }
+
+    }catch(error){
+      setDeleteEventLoding(false);
+      console.log("edit event error ")
+    }
+  }
 
   return (
     <>
@@ -21,9 +50,9 @@ export default function EventCard({data  , handleEditEvent , index , handleRemov
               <div>
                 <CardMedia
                   component="img"
-                  onClick={() => navigate("/admin/events/2")}
-                  height="200"
-                  image={data.posterUrl}
+                  onClick={() => navigate(`/admin/events/${data._id}`)}
+                  height="250"
+                  image={data.eventPosterUrl}
                   alt="Paella dish"
                 />
                 <CardContent>
@@ -32,13 +61,17 @@ export default function EventCard({data  , handleEditEvent , index , handleRemov
                     <span>{data.date}</span>
                   </p>
                   <p>{data.name}</p>
-                  <Button color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<Edit size="small" />} ></Button>
-                  <Button color="error" startIcon={<Delete
+                  <div className='roe'>
+                  <Button className='col' color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<Edit size="small" />} ></Button>
+                  <Button color="error" className='col' startIcon={
+                  deleteEventLoding ? <CircularProgress/>  :  
+                  <Delete
                     className="ms-2"
-                    size="small" 
-                    onClick={()=>handleRemoveEvent(index)}
+                    size="2 rem" 
+                    onClick={()=>deleteEvent()}
                     />}>
                   </Button>
+                  </div>
                 </CardContent>
               </div>
             </div>

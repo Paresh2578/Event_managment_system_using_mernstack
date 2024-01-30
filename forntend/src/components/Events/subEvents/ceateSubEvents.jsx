@@ -4,6 +4,9 @@ import axios from 'axios';
 
 // import "../style.css";
 
+//utils
+import {URL} from '../../../util/URL';
+
 //mui
 import {CircularProgress , InputLabel , Select , MenuItem , FormControlLabel ,  FormControl , FormLabel , RadioGroup ,Radio , Typography ,StepButton , Step , Stepper , Box ,TextField , DialogTitle , DialogContent ,Button , Dialog} from "@mui/material";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
@@ -14,23 +17,25 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 const steps = ["Enter subEvent details", "Enter coordinator details"];
 
-export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent }) {
+export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , eventID }) {
+  let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
+  const [createSubEventLoding ,setCreateSubEventLoding ] = useState(false);
 
   const [subEventData, setSubEventData] = useState({
-    name: "",
+    subEventname: "",
     category: "",
     time: "",
     seats : 10,
     grupMember: 2,
     isGroup: false,
-    posterUrl: "",
+    subEventPosterUrl: "",
   });
 
   
   const [coordinatorData, setCoordinatorData] = useState({
-    name: "",
+    coordinatorName: "",
     email: "",
     mobile: "",
   });
@@ -47,7 +52,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
     time: false,
     seats : false,
     grupMember: false,
-    posterUrl: false,
+    subEventsubEventPosterUrl: false,
   });
 
   const [coordinatorDataError, setCoordinatorDataError] = useState({
@@ -103,14 +108,14 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
 
   const checkValidtionData = (activeStep) => {
     if (activeStep == 0) {
-      if (subEventData.name.length == 0) {
+      if (subEventData.subEventname.length == 0) {
         setSubEventDataError({
           name: true,
           category: false,
           time: false,
           seats : false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
 
         });
         return false;
@@ -121,7 +126,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
           time: false,
           seats : false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
       } else if (subEventData.time.length == 0) {
@@ -131,7 +136,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
           time: true,
           seats : false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
       }else if (subEventData.seats < 10 ) {
@@ -141,7 +146,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
           time: false,
           seats : true,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
       }
@@ -151,16 +156,16 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
           category: false,
           time: false,
           grupMember: true,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
-      } else if (subEventData.posterUrl.length == 0) {
+      } else if (subEventData.subEventPosterUrl.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
           time: false,
           grupMember: false,
-          posterUrl: true,
+          subEventPosterUrl: true,
         });
         return false;
       } else {
@@ -169,11 +174,11 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
           category: false,
           time: false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
       }
     } else if (activeStep == 1) {
-      if (coordinatorData.name.length == 0) {
+      if (coordinatorData.coordinatorName.length == 0) {
         setCoordinatorDataError({ name: true, email: false, mobile: false });
         return false;
       } else if (coordinatorData.email.length == 0) {
@@ -193,9 +198,9 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
-    setSubEventData({ name: "",category: "",time: "", grupMember: 2, isGroup: false, posterUrl: ""});
-    setCoordinatorData({ name: "", email: "", mobile: "" });
-    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  posterUrl: false});
+    setSubEventData({ namsubEventnamee: "",category: "",time: "", grupMember: 2, isGroup: false, subEventPosterUrl: ""});
+    setCoordinatorData({ coordinatorName: "", email: "", mobile: "" });
+    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  subEventPosterUrl: false});
     setCoordinatorDataError({ name: false, email: false, mobile: false });
     setSubEventImgToUrlProsess({ loding: false, error: false, success: false });
   };
@@ -207,44 +212,89 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
 
 
   const handleSubEventImgToUrl = async (e) => {
-    setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+    // setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
 
-    const image = e.target.files[0];
+    // const image = e.target.files[0];
 
-    const formData = new FormData();
-    formData.set("image", image);
+    // const formData = new FormData();
+    // formData.set("image", image);
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        formData
-      )
-      .then((res) => {
-        console.log(res.data.data.display_url);
-        setSubEventData({
-          ...subEventData,
-          posterUrl: res.data.data.display_url,
-        });
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: false,
-          success: true,
-        });
-      })
-      .catch((error) => {
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: true,
-          success: false,
-        });
-      });
+    // axios
+    //   .post(
+    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.data.display_url);
+        // setSubEventData({
+        //   ...subEventData,
+        //   subEventPosterUrl: res.data.data.display_url,
+        // });
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: false,
+    //       success: true,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: true,
+    //       success: false,
+    //     });
+    //   });
+    setSubEventData({
+      ...subEventData,
+      subEventPosterUrl: 'res.data.data.display_url',
+    });
 
   };
 
-  const CreateEvent = ()=>{
-    handleCreateSubEvent(subEventData);
-    handleReset();
-    setOpen(false);
+  const CreateSubEvent = async()=>{
+    let createSubEventData = {
+      coordinatorName: coordinatorData.coordinatorName, //
+      email: coordinatorData.email,
+      mobile: coordinatorData.mobile,
+      subEventname: subEventData.subEventname,
+      category: subEventData.category,
+      time: subEventData.time,
+      seats: subEventData.seats,
+      groupMember: subEventData.grupMember,
+      isGroup: subEventData.isGroup,
+      subEventPosterUrl: subEventData.subEventPosterUrl, //
+    };
+
+    console.log('createing event');
+
+    try {
+      setCreateSubEventLoding(true);
+      let result = await fetch(`${URL}/subEvent/create/${eventID}`, {
+        method: "POST",
+        body: JSON.stringify(createSubEventData),
+        headers: {
+          "content-type": "application/json",
+          "Authorization":
+            adminAuth.token
+        },
+      });
+      result = await result.json();
+      setCreateSubEventLoding(false);
+      if (result.success) {
+        handleCreateSubEvent(subEventData);
+        handleReset();
+        setOpen(false);
+      } else {
+        console.log("creatiing event error");
+      }
+    } catch (error) {
+      setCreateSubEventLoding(false);
+      console.log(error);
+    }
+    // handleCreateSubEvent(subEventData);
+    // console.log(subEventData);
+    // console.log(coordinatorData);
+    // handleReset();
+    // setOpen(false);
 }
 
   return (
@@ -281,7 +331,15 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Button onClick={handleReset}>Reset</Button>
-                    <Button onClick={CreateEvent}>Create</Button>
+                    <Button onClick={CreateSubEvent}>
+                    {createSubEventLoding ? (
+                        <>
+                          <p>creating..</p> <CircularProgress size="2rem" />
+                        </>
+                      ) : (
+                        "Create"
+                      )}
+                    </Button>
                   </Box>
                 </React.Fragment>
               ) : (
@@ -295,11 +353,11 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                             id="outlined-basic"
                             label="Event name"
                             variant="outlined"
-                            value={subEventData.name}
+                            value={subEventData.subEventname}
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
-                                name: e.target.value,
+                                subEventname: e.target.value,
                               })
                             }
                             style={{ marginBottom: "10px", width: "100%" }}
@@ -311,11 +369,11 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                             helperText="Enter name"
                             error
                             variant="outlined"
-                            value={subEventData.name}
+                            value={subEventData.subEventname}
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
-                                name: e.target.value,
+                                subEventname: e.target.value,
                               })
                             }
                             style={{ marginBottom: "10px", width: "100%" }}
@@ -495,7 +553,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                           <div className="col">
                             <div
                               className={
-                                subEventDataError.posterUrl
+                                subEventDataError.subEventPosterUrl
                                   ? "mt-3 border border-1 border-danger"
                                   : "mt-3"
                               }
@@ -509,7 +567,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                                 }
                                 onChange={(e) => handleSubEventImgToUrl(e)}
                               />
-                              {subEventData.posterUrl && (
+                              {subEventData.subEventPosterUrl && (
                                 <Typography className="text-danger ms-3">
                                   select img
                                 </Typography>
@@ -543,11 +601,11 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                             )}
                           </div>
                           <div className="d-flex justify-content-center align-items-center">
-                            {subEventData.posterUrl && (
+                            {subEventData.subEventPosterUrl && (
                               <img
                                 className="mt-3 rounded shadow"
                                 style={{ height: "20vh", width: "60%" }}
-                                src={subEventData.posterUrl}
+                                src={subEventData.subEventPosterUrl}
                               ></img>
                             )}
                           </div>
@@ -562,11 +620,11 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                           label="coordinator name"
                           variant="outlined"
                           style={{ marginBottom: "10px", width: "100%" }}
-                          value={coordinatorData.name}
+                          value={coordinatorData.coordinatorName}
                           onChange={(e) =>
                             setCoordinatorData({
                               ...coordinatorData,
-                              name: e.target.value,
+                              coordinatorName: e.target.value,
                             })
                           }
                         />
@@ -578,11 +636,11 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent })
                           error
                           helperText="Enter name"
                           style={{ marginBottom: "10px", width: "100%" }}
-                          value={coordinatorData.name}
+                          value={coordinatorData.coordinatorName}
                           onChange={(e) =>
                             setCoordinatorData({
                               ...coordinatorData,
-                              name: e.target.value,
+                              coordinatorName: e.target.value,
                             })
                           }
                         />

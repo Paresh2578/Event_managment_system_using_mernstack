@@ -3,6 +3,7 @@ import { useSnackbar } from "notistack";
 import axios from 'axios';
 
 // import "../style.css";
+import {URL} from '../../../util/URL';
 
 //mui
 import {CircularProgress , InputLabel , Select , MenuItem , FormControlLabel ,  FormControl , FormLabel , RadioGroup ,Radio , Typography ,StepButton , Step , Stepper , Box ,TextField , DialogTitle , DialogContent ,Button , Dialog} from "@mui/material";
@@ -15,8 +16,10 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 const steps = ["Enter subEvent details", "Enter coordinator details"];
 
 export default function EditSubEvent({ open, setOpen , data , index , handleEditSubEvent }) {
+  let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
+  const [SubEventEditLoding , setEventSubEditLoding] = useState(false);
 
   const [subEventData, setSubEventData] = useState(data);
   // const [subEventData, setSubEventData] = useState({
@@ -26,15 +29,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
   //   seats : 10,
   //   grupMember: 2,
   //   isGroup: false,
-  //   posterUrl: "",
+  //   subEventPosterUrl: "",
   // });
 
   
-  const [coordinatorData, setCoordinatorData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-  });
+  const [coordinatorData, setCoordinatorData] = useState(data.coordinator);
 
   const [subEventImgToUrlProsess, setSubEventImgToUrlProsess] = useState({
     loding: false,
@@ -48,7 +47,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
     time: false,
     seats : false,
     grupMember: false,
-    posterUrl: false,
+    subEventPosterUrl: false,
   });
 
   const [coordinatorDataError, setCoordinatorDataError] = useState({
@@ -104,14 +103,14 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
 
   const checkValidtionData = (activeStep) => {
     if (activeStep == 0) {
-      if (subEventData.name.length == 0) {
+      if (subEventData.subEventname.length == 0) {
         setSubEventDataError({
           name: true,
           category: false,
           time: false,
           seats : false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
 
         });
         return false;
@@ -122,7 +121,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           time: false,
           seats : false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
       } else if (subEventData.time.length == 0) {
@@ -132,7 +131,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           time: true,
           seats : false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
       }else if (subEventData.seats < 10) {
@@ -142,7 +141,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           time: false,
           seats : true,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
       }
@@ -152,16 +151,16 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           category: false,
           time: false,
           grupMember: true,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
         return false;
-      } else if (subEventData.posterUrl.length == 0) {
+      } else if (subEventData.subEventPosterUrl.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
           time: false,
           grupMember: false,
-          posterUrl: true,
+          subEventPosterUrl: true,
         });
         return false;
       } else {
@@ -170,11 +169,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           category: false,
           time: false,
           grupMember: false,
-          posterUrl: false,
+          subEventPosterUrl: false,
         });
       }
     } else if (activeStep == 1) {
-      if (coordinatorData.name.length == 0) {
+      if (coordinatorData.coordinatorName.length == 0) {
         setCoordinatorDataError({ name: true, email: false, mobile: false });
         return false;
       } else if (coordinatorData.email.length == 0) {
@@ -195,8 +194,8 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
     setActiveStep(0);
     setCompleted({});
     setSubEventData(data);
-    setCoordinatorData({ name: "", email: "", mobile: "" });
-    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  posterUrl: false});
+    setCoordinatorData(data.coordinator);
+    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  subEventPosterUrl: false});
     setCoordinatorDataError({ name: false, email: false, mobile: false });
     setSubEventImgToUrlProsess({ loding: false, error: false, success: false });
   };
@@ -224,7 +223,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
         console.log(res.data.data.display_url);
         setSubEventData({
           ...subEventData,
-          posterUrl: res.data.data.display_url,
+          subEventPosterUrl: res.data.data.display_url,
         });
         setSubEventImgToUrlProsess({
           loding: false,
@@ -240,12 +239,44 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
         });
       });
 
+    // setSubEventData({
+    //         ...subEventData,
+    //         subEventPosterUrl: 'res.data.data.display_url',
+    //       });
+
   };
 
-  const EditSubEvent = ()=>{
-    handleEditSubEvent(subEventData , index);
-    handleReset();
-    setOpen(false);
+  const EditSubEvent = async()=>{
+    let updateSubEventData = subEventData;
+    updateSubEventData = {...updateSubEventData , coordinator : coordinatorData };
+    try{
+      setEventSubEditLoding(true);
+      let result = await fetch(`${URL}/subEvent/edit/${data._id}`, {
+        method: "PUT",
+        body: JSON.stringify(updateSubEventData),
+        headers: {
+          "content-type": "application/json",
+          "Authorization": adminAuth.token
+                 },
+      });
+
+      result = await result.json();
+      setEventSubEditLoding(false);
+      if(result.success){
+        handleEditSubEvent(subEventData , index);  
+        handleReset();
+      setOpen(false);
+      }else{
+        console.log("edit event error");
+      }
+
+    }catch(error){
+      setEventSubEditLoding(false);
+      console.log("edit event error ")
+    }
+    //
+    // handleReset();
+    // setOpen(false);
 }
 
   return (
@@ -282,7 +313,13 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Button onClick={handleReset}>Reset</Button>
-                    <Button onClick={EditSubEvent}>Edit</Button>
+                    <Button onClick={EditSubEvent}>{SubEventEditLoding ? (
+                        <>
+                          <p>updateing..</p> <CircularProgress size="2rem" />
+                        </>
+                      ) : (
+                        "Edit"
+                      )}</Button>
                   </Box>
                 </React.Fragment>
               ) : (
@@ -296,11 +333,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                             id="outlined-basic"
                             label="Event name"
                             variant="outlined"
-                            value={subEventData.name}
+                            value={subEventData.subEventname}
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
-                                name: e.target.value,
+                                subEventname: e.target.value,
                               })
                             }
                             style={{ marginBottom: "10px", width: "100%" }}
@@ -312,11 +349,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                             helperText="Enter name"
                             error
                             variant="outlined"
-                            value={subEventData.name}
+                            value={subEventData.subEventname}
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
-                                name: e.target.value,
+                                subEventname: e.target.value,
                               })
                             }
                             style={{ marginBottom: "10px", width: "100%" }}
@@ -496,7 +533,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                           <div className="col">
                             <div
                               className={
-                                subEventDataError.posterUrl
+                                subEventDataError.subEventPosterUrl
                                   ? "mt-3 border border-1 border-danger"
                                   : "mt-3"
                               }
@@ -510,7 +547,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                                 }
                                 onChange={(e) => handleSubEventImgToUrl(e)}
                               />
-                              {subEventData.posterUrl && (
+                              {subEventData.subEventPosterUrl && (
                                 <Typography className="text-danger ms-3">
                                   select img
                                 </Typography>
@@ -544,11 +581,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                             )}
                           </div>
                           <div className="d-flex justify-content-center align-items-center">
-                            {subEventData.posterUrl && (
+                            {subEventData.subEventPosterUrl && (
                               <img
                                 className="mt-3 rounded shadow"
                                 style={{ height: "20vh", width: "60%" }}
-                                src={subEventData.posterUrl}
+                                src={subEventData.subEventPosterUrl}
                               ></img>
                             )}
                           </div>
@@ -563,11 +600,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                           label="coordinator name"
                           variant="outlined"
                           style={{ marginBottom: "10px", width: "100%" }}
-                          value={coordinatorData.name}
+                          value={coordinatorData.coordinatorName}
                           onChange={(e) =>
                             setCoordinatorData({
                               ...coordinatorData,
-                              name: e.target.value,
+                              coordinatorName: e.target.value,
                             })
                           }
                         />
@@ -579,11 +616,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                           error
                           helperText="Enter name"
                           style={{ marginBottom: "10px", width: "100%" }}
-                          value={coordinatorData.name}
+                          value={coordinatorData.coordinatorName}
                           onChange={(e) =>
                             setCoordinatorData({
                               ...coordinatorData,
-                              name: e.target.value,
+                              coordinatorName: e.target.value,
                             })
                           }
                         />

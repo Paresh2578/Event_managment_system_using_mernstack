@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
     req.adminData = { email: decodedToken.email };
     next();
   } catch (err) {
-    console.log(err);
     res.status(403).json({
       success: false,
       message: "Authentication failed!",
