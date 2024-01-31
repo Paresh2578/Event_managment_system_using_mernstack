@@ -9,6 +9,10 @@ const groupParticipationSchema = new  mongoose.Schema({
         required : true,
         type : String,
     },
+    subEventId : {
+        required : true,
+        type : String,
+    },
     members : [
         {
             name : {

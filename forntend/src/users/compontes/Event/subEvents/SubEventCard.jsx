@@ -16,14 +16,14 @@ import RegistreFrom from './registreFrom';
 
 import img from '../assets/client-2.jpg'
 
-export default function SubEventCard({data , open , setOpen }){
+export default function SubEventCard({data , open , setOpen , eventName }){
     const registerPopup = (name)=>{
         // setEeventName(name);
         setOpen(true);
        }
       
     return <>
-      <RegistreFrom open={open} setOpen={setOpen} eventName={data.subEventname} group={data.isGroup} numberOfNumber={data.groupMember}/>
+      <RegistreFrom open={open} setOpen={setOpen} data={data} eventName={eventName}/>
     <div>
                 <div className="card-container">
                   <div className="img-text">

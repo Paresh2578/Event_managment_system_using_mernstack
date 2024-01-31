@@ -75,7 +75,7 @@ export default function Events() {
           <div className="col-md-3 col-sm-6 trending__card p-0">
                 {
                 event && event.map((data , index)=>(
-                    <div key={index} onClick={()=>navigate(`subevent/${data._id}`)} >
+                    <div key={index} onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
                     <EventCard data={data}/>
                     </div>
                 )) 

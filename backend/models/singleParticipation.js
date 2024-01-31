@@ -9,6 +9,10 @@ const singleParticipationSchema = new  mongoose.Schema({
         required : true,
         type : String,
     },
+    subEventId : {
+        required: true,
+        type :String
+   },
     name : {
         required : true,
         type : String,

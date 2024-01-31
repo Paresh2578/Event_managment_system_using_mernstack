@@ -28,7 +28,7 @@ import img from '../assets/client-2.jpg'
 
 export default function SubEvents() {
   const navigate = useNavigate();
-  const {id } = useParams();
+  const {id , eventName } = useParams();
 
   // const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
@@ -70,7 +70,7 @@ export default function SubEvents() {
              {
               subEvent && subEvent.map((data , index)=>(
                 <div key={index}>
-                  <SubEventCard data={data} open={open} setOpen={setOpen}/>
+                  <SubEventCard data={data} open={open} setOpen={setOpen} eventName={eventName}/>
                 </div>
               ))
              } 
