@@ -17,8 +17,8 @@ import {CircularProgress}  from '@mui/material';
 import { Troubleshoot } from "@mui/icons-material";
 
 export default function RegistreFrom({
-  open,
-  setOpen,
+  registerOpen,
+  setregisterOpen,
   data,
   eventName
 }) {
@@ -41,30 +41,10 @@ export default function RegistreFrom({
   const [groupParticipationDataError , setGroupParticipationDataError] =useState(Array.from({ length: data.groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
   const [registerLoding , setRegisterLoding] = useState(false);
 
-  // useEffect(()=>{
-  //     if(data.isGroup){
-  //        let membersEmptyList = [];
-  //        let membersErrorDataList = [];
-  //        for(let i=1;i<=data.groupMember;i++){
-  //         membersEmptyList.push({name : "" ,Enrollment : "" ,email : "" ,mobile : ""});
-  //         membersErrorDataList.push({name : false,Enrollment : false ,email : false ,mobile : false});
 
-  //        }
-  //        setGroupParticipationData({...groupParticipationData , members : membersEmptyList});
-  //       //  console.log(membersErrorDataList[0].name);
-  //        setGroupParticipationDataError(membersErrorDataList);
-  //     }
-
-  // },[]);
-
-  console.log(groupParticipationDataError);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
-    setOpen(false);
+    setregisterOpen(false);
   };
 
   const handleRegister = async()=>{
@@ -102,8 +82,9 @@ export default function RegistreFrom({
            setRegisterLoding(false);
            console.log(result);
            if(result.success){
-            setOpen(false);
+            setregisterOpen(false);
            }else{
+            alert(result.error);
             console.log("registr error : " , result.error);
            }
         }catch(error){
@@ -139,8 +120,9 @@ export default function RegistreFrom({
            console.log(result);
            console.log(result.success);
            if(result.success){
-            setOpen(false);
+            setregisterOpen(false);
            }else{
+            alert(result.error);
             console.log("registr error : " , result.error);
            }
         }catch(error){
@@ -154,7 +136,7 @@ export default function RegistreFrom({
   return (
     <React.Fragment>
       <Dialog
-        open={open}
+        open={registerOpen}
         // onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

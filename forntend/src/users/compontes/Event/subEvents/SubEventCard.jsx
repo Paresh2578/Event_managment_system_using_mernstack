@@ -1,14 +1,15 @@
-import React from "react";
+import React , {useState} from "react";
 
 
+//utile
+import {formetTime} from '../../../../util/FormentTime'
 
 //mui
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import EventSeatIcon from "@mui/icons-material/EventSeat";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Button from "@mui/material/Button";
+import {EventSeat, AccessAlarm} from "@mui/icons-material";
 
 //compontes
 import RegistreFrom from './registreFrom';
@@ -16,19 +17,16 @@ import RegistreFrom from './registreFrom';
 
 import img from '../assets/client-2.jpg'
 
-export default function SubEventCard({data , open , setOpen , eventName }){
-    const registerPopup = (name)=>{
-        // setEeventName(name);
-        setOpen(true);
-       }
+export default function SubEventCard({data , eventName }){
+  const [registerOpen, setregisterOpen] = useState(false);
       
     return <>
-      <RegistreFrom open={open} setOpen={setOpen} data={data} eventName={eventName}/>
+      <RegistreFrom registerOpen={registerOpen} setregisterOpen={setregisterOpen} data={data} eventName={eventName}/>
     <div>
                 <div className="card-container">
                   <div className="img-text">
                     <span className="text-center">
-                      <EventSeatIcon /> {data.seats} Seat
+                      <EventSeat /> {data.seats} Seat
                     </span>
                   </div>
                   <img
@@ -39,12 +37,12 @@ export default function SubEventCard({data , open , setOpen , eventName }){
                 </div>
                 <CardContent>
                   <p style={{ textAlign: "left" }}>
-                    <CalendarMonthIcon color="#6372ff" /> <span>{data.time}</span>
+                    <AccessAlarm color="#6372ff" /> <span>{formetTime(data.time)}</span>
                   </p>
                   <p>{data.subEventname}</p>
                 </CardContent>
                 <CardActions>
-                  <Button  variant="outlined" onClick={()=>registerPopup("App-A-Thon")}>register</Button>
+                  <Button  variant="outlined" onClick={()=>setregisterOpen(true)}>register</Button>
                 </CardActions>
               </div>
     </>

@@ -26,8 +26,8 @@ function App() {
         <Route path="admin" element={<ProtectedRoute><FullLayout/></ProtectedRoute>}>
             <Route path='dashboard' element={<Dashboard/>}/>
             <Route path='events' element={<Events/>}/>
-            <Route path='events/:id' element={<SubEventAdmin/>}/>
-            <Route path='events/subevent/:id' element={<ParticipateUserListing/>}/>
+            <Route path='subEvents/:id' element={<SubEventAdmin/>}/>
+            <Route path='events/subevent/participationsList/:subEventID' element={<ParticipateUserListing/>}/>
         </Route>
         <Route path="/admin/login" element={<Login/>}>
         </Route>

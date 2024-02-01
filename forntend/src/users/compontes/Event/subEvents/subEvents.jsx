@@ -16,9 +16,8 @@ import SubEventCard from './SubEventCard';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import EventSeatIcon from "@mui/icons-material/EventSeat";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Button from "@mui/material/Button";
+import {CalendarMonth  , EventSeat, AccessAlarm} from "@mui/icons-material";
 
 
 import img from '../assets/client-2.jpg'
@@ -31,11 +30,15 @@ export default function SubEvents() {
   const {id , eventName } = useParams();
 
   // const [isHovered, setIsHovered] = useState(false);
-  const [open, setOpen] = useState(false);
+  
   // const [eventName , setEeventName] = useState("");
   // const [group , setGroup] =useState(false);
   // const [numberOfNumber , SetNumberOfNumber] = useState(4);
+  const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
   const [subEvent , setSubEvent] = useState([]);
+  const [dupSubEvent  ,  setDupSubEvent] = useState([]);
+  const [activeFillter , setActiveFillter]= useState(-1);
+
 
   useEffect(()=>{
     getAllSubEvents();
@@ -47,12 +50,23 @@ export default function SubEvents() {
 
     if(result.success){
       setSubEvent(result.data);
+      setDupSubEvent(result.data);
     }else{
      console.log("get al event error");
     }
    console.log(result);
  }
 
+ const eventFillter = (itemData , index) =>{
+  // setData(filterData);
+    setActiveFillter(index);
+    // setSubEvent(subEvent.filter((e)=>e.category.toString().toLowerCase() != category[index]).toString().toLowerCase());
+    if(index == -1){
+      setSubEvent(dupSubEvent);
+    }else{
+   setSubEvent(dupSubEvent.filter((e)=>e.category.toString().toLowerCase() == category[index].toString().toLowerCase()));
+    }
+}
 
  
   return (
@@ -63,18 +77,24 @@ export default function SubEvents() {
           <div className="col-md-8 col-md-offset-2 section-title">
             <h2>All SubEvents</h2>
           </div>
-          <div id="row">
-            <div
-              className="col-md-3 col-sm-6 trending__card"
-            >
+          <div className="row mt-5 filter-button">
+            <div class="col-12">
+            <button className={activeFillter != -1 ? 'filter-btn  mb-2 me-1' : 'filter-btn-active mb-2 me-1'} onClick={()=>{eventFillter("All" , -1)}}>All</button>
+            {
+              category.map((item , index)=> <button className={activeFillter != index ? 'filter-btn  mb-2 me-1' : 'filter-btn-active  mb-2 me-1'} onClick={()=>{eventFillter(item , index)}}>{item}</button>)
+            }
+
+            </div>
+
+            </div>
+          <div className="row mt-4 gap-4 container">
              {
-              subEvent && subEvent.map((data , index)=>(
-                <div key={index}>
-                  <SubEventCard data={data} open={open} setOpen={setOpen} eventName={eventName}/>
+              subEvent.length >= 1 && subEvent.map((data , index)=>(
+                <div key={index} className="col-md-3 col-sm-6 trending__card">
+                  <SubEventCard data={data}  eventName={eventName}/>
                 </div>
               ))
              } 
-            </div>
           </div>
         </div>
       </div>

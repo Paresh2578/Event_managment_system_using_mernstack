@@ -25,8 +25,6 @@ export default function Events() {
 
   const [isHovered, setIsHovered] = useState(false);
   const [event  , setEvent] = useState([]);
-  const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
-  const [activeFillter , setActiveFillter]= useState(-1);
 
 
   useEffect(()=>{
@@ -49,12 +47,6 @@ export default function Events() {
  }
 
 
-  const eventFillter = (itemData , index) =>{
-    // const filterData = GalleryData.filter((item)=> item == itemData);
-    // setData(filterData);
-      setActiveFillter(index);
-  }
-
   return (
     <div id="Events" className="text-center">
       <div className="container">
@@ -65,24 +57,19 @@ export default function Events() {
             dapibus leonec.
           </p> */}
         </div>
-        <div className="row">
-            <div className="col mb-3"><button className={activeFillter != -1 ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter("All" , -1)}}>All</button></div>
-            {
-              category.map((item , index)=> <div  className="col mb-3 "><button className={activeFillter != index ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter(item , index)}}>{item}</button></div>)
-            }
-          </div>
-        <div className="row">
-          <div className="col-md-3 col-sm-6 trending__card p-0">
+        <div className="p-4">
+        <div className="row mt-4 gap-4 container" >
                 {
                 event && event.map((data , index)=>(
-                    <div key={index} onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
+                    // <div key={index}  onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
+                    <div key={index} className="col-md-3 col-sm-6 trending__card p-0" onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
                     <EventCard data={data}/>
                     </div>
                 )) 
                  }
-          </div>
+        </div>
         </div>
       </div>
-    </div>
+    // </div>
   );
 }

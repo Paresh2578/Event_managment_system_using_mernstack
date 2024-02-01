@@ -50,7 +50,7 @@ export default function EventCard({data  , handleEditEvent , index , handleRemov
               <div>
                 <CardMedia
                   component="img"
-                  onClick={() => navigate(`/admin/events/${data._id}`)}
+                  onClick={() => navigate(`/admin/subEvents/${data._id}`)}
                   height="250"
                   image={data.eventPosterUrl}
                   alt="Paella dish"

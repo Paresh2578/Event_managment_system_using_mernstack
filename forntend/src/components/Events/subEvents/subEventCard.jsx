@@ -1,4 +1,5 @@
 import React , {useState} from "react";
+import { useNavigate } from "react-router-dom";
 
 //utils
 import {formetTime} from '../../../util/FormentTime';
@@ -14,6 +15,7 @@ import Dialog from "@mui/material/Dialog";
 
 export default function SubEventCard({data , handleEditSubEvent , index , handleRemoveSubEvent}) {
   let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
+  const navigate =useNavigate();
     const [editEventOpen , setEditEventOpen] = useState(false);
     const [deleteSubEventLoding , setdeleteSubEventLoding] = useState(false);
 
@@ -46,7 +48,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
   return (
     <div>
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
-      <div className="card-container">
+      <div className="card-container" onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}`)}>
         {/* <p className="img-text">Your Text Goes Here</p> */}
         <div className="img-text">
           <span className="text-center">

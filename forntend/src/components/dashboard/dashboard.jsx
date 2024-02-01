@@ -19,7 +19,7 @@ export default function Dashboard() {
       {/***Table ***/}
       <Row>
         <Col lg="12">
-          <ProjectTables />
+          {/* <ProjectTables /> */}
         </Col>
       </Row>
     </div>

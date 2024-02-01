@@ -32,7 +32,7 @@ const tableData = [
   },
 ];
 
-const ProjectTables = () => {
+const ProjectTables = ({singleParticipationsList}) => {
   return (
     <div>
       <Card>
@@ -53,12 +53,12 @@ const ProjectTables = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((tdata, index) => (
+              {singleParticipationsList &&   singleParticipationsList.map((tdata, index) => (
                 <tr key={index} className="border-top">
                   <td>
                     <div className="d-flex align-items-center p-2">
                       <img
-                        src={tdata.avatar}
+                        src={user5}
                         className="rounded-circle"
                         alt="avatar"
                         width="45"
@@ -70,7 +70,7 @@ const ProjectTables = () => {
                       </div>
                     </div>
                   </td>
-                  <td>{tdata.enrollNo}</td>
+                  <td>{tdata.Enrollment}</td>
                   <td>{tdata.eventName}</td>
                   <td>{tdata.subEventName}</td>
                 </tr>

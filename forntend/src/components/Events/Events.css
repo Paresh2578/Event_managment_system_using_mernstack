@@ -30,3 +30,19 @@
   .galleryItem img {
     border-radius: 15px;
   }
+
+  #filterable-cards .card {
+    width: 15rem;
+    border: 2px solid transparent;
+  }
+  #filterable-cards .card.hide {
+    display: none;
+  }
+  @media (max-width: 600px) {
+    #filterable-cards {
+      justify-content: center;
+    }
+    #filterable-cards .card {
+      width: calc(100% / 2 - 10px);
+    }
+  }

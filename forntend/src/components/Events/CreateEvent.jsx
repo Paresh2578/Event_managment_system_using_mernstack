@@ -334,60 +334,60 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
     const formData = new FormData();
     formData.set("image", image);
 
-    // axios
-    //   .post(
-    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-    //     formData
-    //   )
-    //   .then((res) => {
-    //     setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
-    //     // setImgUploadLoding(false)
-    //     seteventImgToUrlProsess({ loding: false, error: false, success: true });
-    //   })
-    //   .catch((error) => {
-    //     seteventImgToUrlProsess({ loding: false, error: true, success: false });
-    // });
+    axios
+      .post(
+        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+        formData
+      )
+      .then((res) => {
+        setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
+        // setImgUploadLoding(false)
+        seteventImgToUrlProsess({ loding: false, error: false, success: true });
+      })
+      .catch((error) => {
+        seteventImgToUrlProsess({ loding: false, error: true, success: false });
+    });
 
-    setEventData({ ...eventData, eventPosterUrl: "emg url" });
+    // setEventData({ ...eventData, eventPosterUrl: "emg url" });
   };
 
   const handleSubEventImgToUrl = async (e) => {
-    // setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+    setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
 
     const image = e.target.files[0];
 
     const formData = new FormData();
     formData.set("image", image);
 
-    // axios
-    //   .post(
-    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-    //     formData
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data.data.display_url);
-    // setSubEventData({
-    //   ...subEventData,
-    //   posterUrl: res.data.data.display_url,
-    //     });
-    //     setSubEventImgToUrlProsess({
-    //       loding: false,
-    //       error: false,
-    //       success: true,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     setSubEventImgToUrlProsess({
-    //       loding: false,
-    //       error: true,
-    //       success: false,
-    //     });
-    //   });
-
+    axios
+      .post(
+        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+        formData
+      )
+      .then((res) => {
+        console.log(res.data.data.display_url);
     setSubEventData({
       ...subEventData,
-      posterUrl: "imgURL",
-    });
+      posterUrl: res.data.data.display_url,
+        });
+        setSubEventImgToUrlProsess({
+          loding: false,
+          error: false,
+          success: true,
+        });
+      })
+      .catch((error) => {
+        setSubEventImgToUrlProsess({
+          loding: false,
+          error: true,
+          success: false,
+        });
+      });
+
+    // setSubEventData({
+    //   ...subEventData,
+    //   posterUrl: "imgURL",
+    // });
   };
 
   return (

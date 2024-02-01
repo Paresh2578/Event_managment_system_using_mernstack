@@ -12,7 +12,15 @@ import img2 from "./assets/client-3.jpg"
 
 export default function EventCard({data}){
     return <>
-     <div>
+
+    {/* <div class="card p-0" data-name="nature">
+          <img src="images/nature-1.jpg" alt="img"/>
+          <div class="card-body">
+            <h6 class="card-title">Mountains</h6>
+            <p class="card-text">Lorem ipsum dolor..</p>
+          </div>
+        </div> */}
+     <div className="m-2">
               <CardMedia
                 component="img"
                 className={`image-container`}
@@ -27,11 +35,7 @@ export default function EventCard({data}){
                 <p>
                   {data.name}
                 </p>
-                {/* <Typography variant="body2" color="text.secondary">
-                  This impressive paella is a perfect party dish and a fun meal
-                  to cook together with your guests. Add 1 cup of frozen peas
-                  along with the mussels, if you like.
-                </Typography> */}
+              
               </CardContent>
               
             </div>
