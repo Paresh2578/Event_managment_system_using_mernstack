@@ -40,7 +40,7 @@ export default function Events() {
     if(result.success){
       setEvent(result.data);
     }else{
-     console.log("get al event error");
+     console.log("get all event error");
     }
      
     console.log(result);
@@ -70,6 +70,6 @@ export default function Events() {
         </div>
         </div>
       </div>
-    // </div>
+    </div>
   );
 }

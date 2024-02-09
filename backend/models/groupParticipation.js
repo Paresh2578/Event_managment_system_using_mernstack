@@ -13,6 +13,10 @@ const groupParticipationSchema = new  mongoose.Schema({
         required : true,
         type : String,
     },
+    groupName : {
+        required : true,
+        type : String
+    },
     members : [
         {
             name : {

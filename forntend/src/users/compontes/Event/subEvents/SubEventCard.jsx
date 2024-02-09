@@ -19,6 +19,15 @@ import img from '../assets/client-2.jpg'
 
 export default function SubEventCard({data , eventName }){
   const [registerOpen, setregisterOpen] = useState(false);
+
+  const handleRegister = ()=>{
+      if((data.seats - data.singleParticipation.length - data.groupParticipation.length )  == 0){
+        alert('no seat avalible');
+        //  return;
+      }else{
+        setregisterOpen(true);
+      }
+  }
       
     return <>
       <RegistreFrom registerOpen={registerOpen} setregisterOpen={setregisterOpen} data={data} eventName={eventName}/>
@@ -26,7 +35,7 @@ export default function SubEventCard({data , eventName }){
                 <div className="card-container">
                   <div className="img-text">
                     <span className="text-center">
-                      <EventSeat /> {data.seats} Seat
+                      <EventSeat /> {data.seats - data.singleParticipation.length - data.groupParticipation.length} Seat
                     </span>
                   </div>
                   <img
@@ -42,7 +51,7 @@ export default function SubEventCard({data , eventName }){
                   <p>{data.subEventname}</p>
                 </CardContent>
                 <CardActions>
-                  <Button  variant="outlined" onClick={()=>setregisterOpen(true)}>register</Button>
+                  <Button  variant="outlined" onClick={()=>handleRegister()}>register</Button>
                 </CardActions>
               </div>
     </>

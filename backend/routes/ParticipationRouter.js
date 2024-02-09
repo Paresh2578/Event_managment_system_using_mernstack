@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const checkAuth = require("../middleware/checkAuth");
 
-const {singleRegister  , groupRegister , getSingleParticipationsList} = require('../controllers/ParticipationController');
+const {singleRegister  , groupRegister , getSingleParticipationsList , getGroupParticipationsList} = require('../controllers/ParticipationController');
 
 router.post('/singleRegister' , singleRegister );
 router.post('/groupRegister' , groupRegister );
@@ -11,6 +11,7 @@ router.post('/groupRegister' , groupRegister );
 router.use(checkAuth);
 
 router.get('/getsingleParticipationsList/:id' , getSingleParticipationsList);
+router.get('/getGroupParticipationsList/:id' , getGroupParticipationsList);
 
 
 

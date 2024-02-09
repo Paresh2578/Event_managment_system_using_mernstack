@@ -81,7 +81,7 @@ exports.singleRegister = async (req, resp) => {
 
 exports.groupRegister = async (req, resp) => {
   try {
-    let { eventName, subEventName, subEventId } = req.body;
+    let { eventName, subEventName, subEventId , groupName } = req.body;
     let members = req.body.members;
 
     let subEvent = await SubEvent.findOne({ _id: subEventId });
@@ -116,6 +116,7 @@ exports.groupRegister = async (req, resp) => {
       eventName,
       subEventName,
       subEventId,
+      groupName , 
       members,
     });
     await groupParticipation.save();
@@ -177,4 +178,41 @@ exports.getSingleParticipationsList =  async (req , resp)=>{
             message: error,
           });
     }
+}
+
+
+exports.getGroupParticipationsList =  async (req , resp)=>{
+  try{
+      
+    //verify admin
+    if(!checkValidAdmin(req.adminData.email)){
+     return  resp.status(500).json({
+          success: false,
+          message: "invalid admin",
+        });
+    }
+
+    let subEvent = await SubEvent.findOne({_id : req.params.id})
+    let groupParticipationList = [];
+
+    for(var groupParticipationId of subEvent.groupParticipation){
+         let groupParticipationInfo = await GroupParticipation.findOne({_id : groupParticipationId});
+
+         groupParticipationList.push(groupParticipationInfo)
+    }
+
+
+    resp.status(201).json({
+      success: true,
+      data : groupParticipationList
+    });
+
+
+
+  }catch(error){
+      resp.status(500).json({
+          success: false,
+          message: error,
+        });
+  }
 }

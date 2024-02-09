@@ -48,7 +48,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
   return (
     <div>
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
-      <div className="card-container" onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}`)}>
+      <div className="card-container" onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
         {/* <p className="img-text">Your Text Goes Here</p> */}
         <div className="img-text">
           <span className="text-center">

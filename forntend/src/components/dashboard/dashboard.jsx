@@ -13,7 +13,7 @@ export default function Dashboard() {
       {/***Sales & Feed***/}
       <Row>
         <Col>
-          <SalesChart />
+          {/* <SalesChart /> */}
         </Col>
       </Row>
       {/***Table ***/}
