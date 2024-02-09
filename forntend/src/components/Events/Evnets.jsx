@@ -32,7 +32,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-import img2 from "../../users/compontes/Event/assets/client-1.jpg";
 
 export default function Events() {
   const navigate = useNavigate();

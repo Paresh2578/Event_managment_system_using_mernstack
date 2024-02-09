@@ -20,7 +20,6 @@ import Button from "@mui/material/Button";
 import {CalendarMonth  , EventSeat, AccessAlarm} from "@mui/icons-material";
 
 
-import img from '../assets/client-2.jpg'
 
 
 
@@ -70,15 +69,15 @@ export default function SubEvents() {
 
  
   return (
-    <>
+    <div className="user-body" style={{height:'100vh'}}>
     <Navbar/>
-      <div className="text-center mt-5" style={{ marginTop: "15vh" }}>
-        <div className="container">
-          <div className="col-md-8 col-md-offset-2 section-title">
-            <h2>All SubEvents</h2>
-          </div>
-          <div className="row mt-5 filter-button">
-            <div class="col-12">
+    <section class="gallery container"  style={{ paddingTop: "20vh" }}>
+      <h1 class="heading">
+       All sub <span>Events</span>
+      </h1>
+
+      <div className="row filter-button">
+            <div class="">
             <button className={activeFillter != -1 ? 'filter-btn  mb-2 me-1' : 'filter-btn-active mb-2 me-1'} onClick={()=>{eventFillter("All" , -1)}}>All</button>
             {
               category.map((item , index)=> <button className={activeFillter != index ? 'filter-btn  mb-2 me-1' : 'filter-btn-active  mb-2 me-1'} onClick={()=>{eventFillter(item , index)}}>{item}</button>)
@@ -87,6 +86,11 @@ export default function SubEvents() {
             </div>
 
             </div>
+
+      <div class="box-container">
+      <div className="text-center " >
+        <div className="container">
+          
           <div className="row mt-4 gap-4 container">
              {
               subEvent.length >= 1 && subEvent.map((data , index)=>(
@@ -98,6 +102,9 @@ export default function SubEvents() {
           </div>
         </div>
       </div>
-    </>
+      </div>
+    </section>
+      
+    </div>
   );
 }

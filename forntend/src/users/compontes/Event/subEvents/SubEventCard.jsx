@@ -15,7 +15,6 @@ import {EventSeat, AccessAlarm} from "@mui/icons-material";
 import RegistreFrom from './registreFrom';
 
 
-import img from '../assets/client-2.jpg'
 
 export default function SubEventCard({data , eventName }){
   const [registerOpen, setregisterOpen] = useState(false);
@@ -31,7 +30,7 @@ export default function SubEventCard({data , eventName }){
       
     return <>
       <RegistreFrom registerOpen={registerOpen} setregisterOpen={setregisterOpen} data={data} eventName={eventName}/>
-    <div>
+    <div style={{backgroundColor : "#333"}}>
                 <div className="card-container">
                   <div className="img-text">
                     <span className="text-center">
@@ -45,13 +44,17 @@ export default function SubEventCard({data , eventName }){
                   />
                 </div>
                 <CardContent>
-                  <p style={{ textAlign: "left" }}>
-                    <AccessAlarm color="#6372ff" /> <span>{formetTime(data.time)}</span>
+                  <p style={{ textAlign: "left" , color:"white" }}>
+                    <AccessAlarm color="#6372ff" style={{fontSize:"2rem"}} /> <span style={{fontSize:"2rem"}}>{formetTime(data.time)}</span>
                   </p>
-                  <p>{data.subEventname}</p>
+                  <p style={{ textAlign: "center" , color:"white"  ,}}>
+            <span style={{borderBottom:"4px solid #6372ff"   , fontSize:"2rem"}}>
+            {data.subEventname}
+              </span>
+            </p>
                 </CardContent>
                 <CardActions>
-                  <Button  variant="outlined" onClick={()=>handleRegister()}>register</Button>
+                  <Button  variant="outlined" style={{color:"white"  , fontSize:"1.5rem"}} onClick={()=>handleRegister()}>register</Button>
                 </CardActions>
               </div>
     </>
