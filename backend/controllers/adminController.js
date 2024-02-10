@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/admin");
+const Events = require('../models/event')
 
 
 exports.login = async (req, res) => {
@@ -66,3 +67,5 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+

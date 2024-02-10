@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { ToastContainer, toast } from 'react-toastify';
+
 import './login.css'
 
 //utils
@@ -18,6 +20,8 @@ export default function Login() {
   const login = async (e)=>{
       e.preventDefault();
 
+   
+
        try{
         // fetch(`${URL}/admin/login/${data.email}/${data.password}`).then((res)=>res.json).then((data)=>console.log(data)).catch((err)=>console.log(err));
         setLoding(true);
@@ -28,13 +32,15 @@ export default function Login() {
            if(result.success){
             localStorage.setItem('adminAuth', JSON.stringify(result));
             navigate('/admin/dashboard')
+            toast.success("sucessfully login");
            }else{
+            toast.error("email or password invalid");
             console.log("not valid")
            }
           
        }catch(err){
         setLoding(false);
-        console.log(err);
+        toast.error("email or password invalid");
        }
 
 

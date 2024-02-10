@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
+import { ToastContainer, toast } from 'react-toastify';
+
 import axios from 'axios';
 
 // import "../style.css";
-import {URL} from '../../../util/URL';
+import {URL} from '../../../../util/URL';
 
 //mui
 import {CircularProgress , InputLabel , Select , MenuItem , FormControlLabel ,  FormControl , FormLabel , RadioGroup ,Radio , Typography ,StepButton , Step , Stepper , Box ,TextField , DialogTitle , DialogContent ,Button , Dialog} from "@mui/material";
@@ -265,9 +267,11 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
       if(result.success){
         handleEditSubEvent(subEventData , index);  
         handleReset();
+        // toast.success("sucessfully Edit Subevent");
+        toast.success("sucessfully Edit Subevent");
       setOpen(false);
       }else{
-        console.log("edit event error");
+        toast.error("Fail to Edit Subevent");
       }
 
     }catch(error){

@@ -202,7 +202,7 @@ exports.getGroupParticipationsList =  async (req , resp)=>{
     }
 
 
-    resp.status(201).json({
+    resp.status(200).json({
       success: true,
       data : groupParticipationList
     });

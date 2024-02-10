@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Events.css";
 
 //utils
-import { URL } from "../../../util/URL";
+import { URL } from "../../../../util/URL";
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -48,12 +48,14 @@ export default function Events() {
       </h1>
 
       <div class="box-container">
+      {/* <div class="row"> */}
         {event &&
           event.map((data, index) => (
             // <div key={index}  onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
             <div
               key={index}
-              className="col-md-3 col-sm-6 trending__card p-0"
+              // className="col-md-3 col-sm-6 trending__card p-0"
+              // className="col-md-3 col-sm-6 trending__card p-0"
               onClick={() => navigate(`subevent/${data.name}/${data._id}`)}
             >
               

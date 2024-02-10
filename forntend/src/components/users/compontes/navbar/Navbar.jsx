@@ -82,7 +82,7 @@ export default function Navbar() {
             <a href="#home">home</a>
           </Link>
           <a href="#about">about</a>
-          <a href="#gallery">events</a>
+          <a href="#events">events</a>
           <a href="#contact">contact</a>
           <Link to="/admin">admin</Link>
         </div>

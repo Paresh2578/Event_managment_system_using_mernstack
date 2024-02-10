@@ -1,9 +1,5 @@
 export const FromentDate = (currentDate) =>{
 
-    console.log(currentDate);
-
-
-
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
     const day = String(currentDate.getDate()).padStart(2, '0');
     const year = currentDate.getFullYear();

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 // import "../style.css";
 
 //utils
-import {URL} from '../../../util/URL';
+import {URL} from '../../../../util/URL';
 
 //mui
 import {CircularProgress , InputLabel , Select , MenuItem , FormControlLabel ,  FormControl , FormLabel , RadioGroup ,Radio , Typography ,StepButton , Step , Stepper , Box ,TextField , DialogTitle , DialogContent ,Button , Dialog} from "@mui/material";
@@ -283,8 +285,9 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         handleCreateSubEvent(subEventData);
         handleReset();
         setOpen(false);
+        toast.success("sucessfully create subevent");
       } else {
-        console.log("creatiing event error");
+        toast.error("fail to create subevent");
       }
     } catch (error) {
       setCreateSubEventLoding(false);
@@ -317,7 +320,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
               {steps.map((label, index) => (
                 <Step key={label} completed={completed[index]}>
                   <StepButton color="inherit" onClick={handleStep(index)}>
-                    {label}
+                  <span style={{fontSize:'1.5rem'}}> {label}</span>
                   </StepButton>
                 </Step>
               ))}

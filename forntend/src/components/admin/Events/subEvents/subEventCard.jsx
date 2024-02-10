@@ -2,8 +2,8 @@ import React , {useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 //utils
-import {formetTime} from '../../../util/FormentTime';
-import {URL} from '../../../util/URL';
+import {formetTime} from '../../../../util/FormentTime';
+import {URL} from '../../../../util/URL';
 
 //componets
 import EditSubEvent from './EditSubEvent';
@@ -46,9 +46,9 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
 
 
   return (
-    <div>
+    <div >
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
-      <div className="card-container" onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
+      <div className="card-container " onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
         {/* <p className="img-text">Your Text Goes Here</p> */}
         <div className="img-text">
           <span className="text-center">
@@ -64,11 +64,11 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
         //   onClick={() => navigate("/admin/events/subevent/id")}
         />
       </div>
-      <CardContent>
-        <p style={{ textAlign: "left" }}>
-          <AccessAlarm color="#6372ff" /> <span>{formetTime(data.time)}</span>
+      <CardContent >
+        <p style={{ textAlign: "left" , fontSize:'1.5rem' }}>
+          <AccessAlarm color="#6372ff" style={{fontSize:'1.5rem'}}/> <span>{formetTime(data.time)}</span>
         </p>
-        <p>{data.subEventname}</p>
+        <p style={{fontSize:'2rem'}}>{data.subEventname}</p>
         <Button
           color="secondary"
           onClick={() => setEditEventOpen(true)}

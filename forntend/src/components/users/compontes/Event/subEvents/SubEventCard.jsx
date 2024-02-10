@@ -2,7 +2,7 @@ import React , {useState} from "react";
 
 
 //utile
-import {formetTime} from '../../../../util/FormentTime'
+import {formetTime} from '../../../../../util/FormentTime'
 
 //mui
 import Card from "@mui/material/Card";

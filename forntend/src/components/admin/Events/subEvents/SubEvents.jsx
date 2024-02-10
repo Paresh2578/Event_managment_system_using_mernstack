@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams , useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 import "../../../users/compontes/Event/Events.css";
 
 //utils
-import {URL} from '../../../util/URL';
+import { URL } from "../../../../util/URL";
 
 //componets
 import CeateSubEvents from "./ceateSubEvents";
-import EditSubEvent from './EditSubEvent'
-import SubEventCard from './subEventCard';
+import EditSubEvent from "./EditSubEvent";
+import SubEventCard from "./subEventCard";
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -21,8 +23,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -39,25 +41,29 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-
 export default function SubEvents() {
   const navigate = useNavigate();
-  const {id } = useParams();
+  const { id } = useParams();
 
-  const [subEvent , setSubEvent] = useState([]);
+  const [subEvent, setSubEvent] = useState([]);
   const [open, setOpen] = useState(false);
 
-
-  
-    const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
-    const [activeFillter , setActiveFillter]= useState(-1);
-  
+  const [category, setCategory] = useState([
+    "Civil",
+    "Computer",
+    "Electrical",
+    "Mechanical",
+    "Management",
+    "Microbiology",
+    "General",
+  ]);
+  const [activeFillter, setActiveFillter] = useState(-1);
+  const [dupSubEvent  ,  setDupSubEvent] = useState([]);
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
 
   useEffect(() => {
-
     // setSubEvent([{
     //   name: "app-thon",
     //   category: "Computer",
@@ -79,64 +85,69 @@ export default function SubEvents() {
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
-  }, [subEvent]);
+  }, []);
 
-  const getAllSubEvents = async()=>{
+  const getAllSubEvents = async () => {
     let result = await fetch(`${URL}/event/getSubEvent/${id}`);
     result = await result.json();
 
-    if(result.success){
+    if (result.success) {
       setSubEvent(result.data);
-    }else{
-     console.log("get al event error");
+      setDupSubEvent(result.data);
+    } else {
+      toast.error("something worng");
     }
- }
+  };
 
-  const eventFillter = (itemData , index) =>{
-    // const filterData = GalleryData.filter((item)=> item == itemData);
-    // setData(filterData);
-      setActiveFillter(index);
-  }
+  const eventFillter = (itemData, index) => {
+    setActiveFillter(index);
+    if(index == -1){
+      setSubEvent(dupSubEvent);
+    }else{
+      setSubEvent(dupSubEvent.filter((e)=>e.category.toString().toLowerCase() == category[index].toString().toLowerCase()));
+    }
+  };
 
   // handleCreateSubEvent
-  const handleCreateSubEvent = (data)=>{
-       setSubEvent([...subEvent , {...data , time : data.time.toDateString()}]);
-      //  getAllEvents();
-  }
+  const handleCreateSubEvent = (data) => {
+    setSubEvent([...subEvent, { ...data, time: data.time.toDateString() }]);
+    getAllSubEvents();
+  };
 
-  const handleEditSubEvent = (data , index)=>{
+  const handleEditSubEvent = (data, index) => {
     // setEvent([...event , event[index] = data]);
     let temp = [];
-    
-    subEvent.map((e , i)=>{
-      if(i == index){
+
+    subEvent.map((e, i) => {
+      if (i == index) {
         temp.push(data);
-      }else{
-         temp.push(e);
+      } else {
+        temp.push(e);
       }
-    })
+    });
 
     setSubEvent(temp);
- }
+  };
 
- const handleRemoveSubEvent = (index)=>{
-  let newEventData = [];
-    
-    subEvent.map((e , i)=>{
-      if(i != index){
+  const handleRemoveSubEvent = (index) => {
+    let newEventData = [];
+
+    subEvent.map((e, i) => {
+      if (i != index) {
         newEventData.push(e);
       }
-    })
+    });
     setSubEvent(newEventData);
- }
-
+  };
 
   return (
     <>
-     <div className="text-center mt-5" style={{ marginTop: "15vh" }}>
+      <div className="text-center mt-5 container" style={{ marginTop: "15vh" }}>
         <div className="container">
           <div className="col-md-8 col-md-offset-2 section-title">
-            <h2>All SubEvents</h2>
+            <h1 class="admin-heading text-center">
+              all <span>subEvents</span>
+            </h1>
             {/* <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
             dapibus leonec.
@@ -144,18 +155,47 @@ export default function SubEvents() {
           </div>
 
           <div className="row">
-            <div className="col mb-3"><button className={activeFillter != -1 ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter("All" , -1)}}>All</button></div>
-            {
-              category.map((item , index)=> <div  className="col mb-3 "><button className={activeFillter != index ? 'filter-btn' : 'filter-btn-active'} onClick={()=>{eventFillter(item , index)}}>{item}</button></div>)
-            }
-          </div>
-          
-          <div className="row">
-          {subEvent && subEvent.map((data , index)=>(
-              <div className="col-md-3 col-sm-6 trending__card p-0 me-3 ">
-              <SubEventCard key={index} data={data} handleEditSubEvent={handleEditSubEvent} index={index} handleRemoveSubEvent={handleRemoveSubEvent}/>
+            <div className="col mb-3">
+              <button
+                className={
+                  activeFillter != -1 ? "filter-btn" : "filter-btn-active"
+                }
+                onClick={() => {
+                  eventFillter("All", -1);
+                }}
+              >
+                All
+              </button>
+            </div>
+            {category.map((item, index) => (
+              <div className="col mb-3 ">
+                <button
+                  className={
+                    activeFillter != index ? "filter-btn" : "filter-btn-active"
+                  }
+                  onClick={() => {
+                    eventFillter(item, index);
+                  }}
+                >
+                  {item}
+                </button>
               </div>
             ))}
+          </div>
+
+          <div className="row">
+            {subEvent &&
+              subEvent.map((data, index) => (
+                <div className="col-md-3 col-sm-6 trending__card p-0 me-3 mt-5 ">
+                  <SubEventCard
+                    key={index}
+                    data={data}
+                    handleEditSubEvent={handleEditSubEvent}
+                    index={index}
+                    handleRemoveSubEvent={handleRemoveSubEvent}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -168,7 +208,12 @@ export default function SubEvents() {
       >
         <AddIcon />
       </Fab>
-     <CeateSubEvents open={open} setOpen={setOpen}  handleCreateSubEvent={handleCreateSubEvent} eventID={id}/>
+      <CeateSubEvents
+        open={open}
+        setOpen={setOpen}
+        handleCreateSubEvent={handleCreateSubEvent}
+        eventID={id}
+      />
     </>
   );
 }

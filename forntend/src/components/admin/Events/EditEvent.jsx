@@ -1,9 +1,11 @@
 import React , {useState} from "react";
 import axios from "axios";
 
+import { ToastContainer, toast } from 'react-toastify';
+
 //util
-import {FromentDate} from '../../util/FormentDate'
-import {URL} from '../../util/URL';
+import {FromentDate} from '../../../util/FormentDate'
+import {URL} from '../../../util/URL';
 
 //mui
 import Dialog from "@mui/material/Dialog";
@@ -80,13 +82,14 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
           handleEditEvent(eventData , index);
         setEventData(data);
         setOpen(false);
+        toast.success("sucessfully Edit");
         }else{
-          console.log("edit event error");
+          toast.error("fail to Edit");
         }
   
       }catch(error){
         setEventEditLoding(false);
-        console.log("edit event error ")
+        toast.error("Fail to Edit");
       }
     }
 

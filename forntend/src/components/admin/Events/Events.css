@@ -48,3 +48,22 @@
       width: calc(100% / 2 - 10px);
     }
   }
+
+
+  .admin-heading {
+    text-align: center;
+    padding-bottom: 2rem;
+    color: red;
+    text-transform: uppercase;
+    align-items: center;
+    /* font-size: 4rem; */
+  }
+  
+  .admin-heading span {
+    color: var(--theme-color);
+    text-transform: uppercase;
+  }
+
+  .event-card{
+    font-size: 5.5rem;
+  }

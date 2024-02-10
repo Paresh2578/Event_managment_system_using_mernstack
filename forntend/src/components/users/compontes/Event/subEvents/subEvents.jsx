@@ -5,7 +5,7 @@ import './subEvents.css'
 import '../Events.css'
 
 //utils
-import {URL} from '../../../../util/URL';
+import {URL} from '../../../../../util/URL';
 
 //compontes
 import RegistreFrom from './registreFrom';
@@ -69,7 +69,7 @@ export default function SubEvents() {
 
  
   return (
-    <div className="user-body" style={{height:'100vh'}}>
+    <div className="user-body" style={{}}>
     <Navbar/>
     <section class="gallery container"  style={{ paddingTop: "20vh" }}>
       <h1 class="heading">

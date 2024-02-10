@@ -6,13 +6,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // Components
 import FullLayout from './layouts/FullLayout';
-import Home from './users/compontes/Home';
-import SubEvents from './users/compontes/Event/subEvents/subEvents'
+import Home from './components/users/compontes/Home';
+import SubEvents from './components/users/compontes/Event/subEvents/subEvents'
 import Login from './auth/login';
-import Dashboard from './components/dashboard/dashboard';
-import Events from './components/Events/Evnets';
-import SubEventAdmin from './components/Events/subEvents/SubEvents'
-import ParticipateUserListing from './components/Events/subEvents/ParticipateUserListing';
+import Dashboard from './components/admin/dashboard/dashboard';
+import Events from './components/admin/Events/Evnets';
+import SubEventAdmin from './components/admin/Events/subEvents/SubEvents'
+import ParticipateUserListing from './components/admin/Events/subEvents/ParticipateUserListing';
 import ProtectedRoute from './ProtectedRoute';
 
 

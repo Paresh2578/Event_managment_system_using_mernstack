@@ -444,7 +444,7 @@ import { useSnackbar } from "notistack";
 
 // import "../style.css";
 ///utils
-import {URL} from '../../../../util/URL';
+import {URL} from '../../../../../util/URL';
 
 //mui
 import Button from "@mui/material/Button";
@@ -576,7 +576,7 @@ export default function RegistreFrom({
   }
 
   return (
-    <React.Fragment>
+    <div className="mt-5">
       <Dialog
         open={registerOpen}
         // onClose={handleClose}
@@ -598,13 +598,13 @@ export default function RegistreFrom({
                     required
                     label={`Group name`}
                     value={groupParticipationData.groupName}
-                    style={{ marginBottom: "10px", width: "100%" }}
+                    style={{ marginBottom: "10px", width: "100%" , fontSize:"10rem" }}
                     onChange={(e)=>setGroupParticipationData({...groupParticipationData, groupName : e.target.value})}
                   />
               {/* {Array.from({ length: data.groupMember }).map((_, index) => ( */}
               {Array.from({ length: data.groupMember }).map((_, index) => (
                  <>
-                 <p className="t-center">*** member {index+1} ***</p>
+                 <p className="t-center" style={{fontSize:'2rem'}} >*** member {index+1} ***</p>
                  {groupParticipationDataError[index].name ? 
                     <TextField
                     id="outlined-basic"
@@ -614,7 +614,7 @@ export default function RegistreFrom({
                     required
                     label={`member ${index+1} name`}
                     value={groupParticipationData.members[index].name}
-                    style={{ marginBottom: "10px", width: "100%" }}
+                    style={{ marginBottom: "10px", width: "100%" , fontSize:'4rem' }}
                     onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , name : e.target.value} : member)})}
                   />
                  : <TextField
@@ -844,6 +844,6 @@ export default function RegistreFrom({
           {/* </div> */}
         </DialogContent>
       </Dialog>
-    </React.Fragment>
+    </div>
   );
 }

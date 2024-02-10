@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 import dayjs from "dayjs";
+import { ToastContainer, toast } from 'react-toastify';
+
 import axios from "axios";
 
 // import "../style.css";
 
 //utis
-import { FromentDate } from "../../util/FormentDate";
-import { URL } from "../../util/URL";
+import { FromentDate } from "../../../util/FormentDate";
+import { URL } from "../../../util/URL";
 
 //mui
 import {
@@ -314,12 +316,13 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       handleCreateNewEvent(eventData);
         handleReset();
         setOpen(false);
+        toast.success("sucessfully Create Event");
       } else {
-        console.log("creatiing event error");
+        toast.error("Fail to create Evnet");
       }
     } catch (error) {
       setCreateEventLoding(false);
-      console.log(error);
+      toast.error("Fail to create Event");
     }
 
     //
@@ -391,7 +394,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   };
 
   return (
-    <React.Fragment>
+    <div style={{fontSize:'2rem'}}>
       <Dialog
         open={open}
         // onClose={handleClose}
@@ -400,7 +403,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       >
         <DialogTitle
           id="alert-dialog-title"
-          style={{ padding: "20px 50px 20px 50px" }}
+          style={{ padding: "20px 50px 20px 50px"  ,fontSize:'2rem'}}
         >
           {`create new Event`}
         </DialogTitle>
@@ -408,9 +411,9 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           <Box sx={{ width: "100%" }}>
             <Stepper nonLinear activeStep={activeStep}>
               {steps.map((label, index) => (
-                <Step key={label} completed={completed[index]}>
-                  <StepButton color="inherit" onClick={handleStep(index)}>
-                    {label}
+                <Step key={label} completed={completed[index]} style={{fontSize:'2rem'}}>
+                  <StepButton color="inherit" style={{fontSize:'2rem'}} onClick={handleStep(index)}>
+                   <span style={{fontSize:'1.5rem'}}> {label}</span>
                   </StepButton>
                 </Step>
               ))}
@@ -970,6 +973,6 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           {/* </div> */}
         </DialogContent>
       </Dialog>
-    </React.Fragment>
+    </div>
   );
 }

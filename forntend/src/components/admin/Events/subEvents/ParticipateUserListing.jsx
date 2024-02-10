@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {useParams} from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
-import user5 from "../../../assets/images/users/user5.jpg";
+import user5 from "../../../../assets/images/users/user5.jpg";
 
-import ProjectTables from '../../dashboard/ProjectTable'
+// import ProjectTables from '../../dashboard/ProjectTable'
 
 //utils
-import {URL} from '../../../util/URL';
+import {URL} from '../../../../util/URL';
 
 export default function ParticipateUserListing() {
 
@@ -79,7 +79,7 @@ export default function ParticipateUserListing() {
 
 
   return (
-    <div>
+    <div className='container mt-4'>
       <ParticipateListTable singleParticipationsList={singleParticipationsList} groupParticipationsList={groupParticipationsList} isGroup={isGroup}/>
     </div>
   )

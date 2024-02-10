@@ -1,7 +1,7 @@
 
 import './Home.css'
 
-import about from '../../assets/user/about.jpg'
+import about from '../../../assets/user/about.jpg'
 
 //compontes
 import Navbar from './navbar/Navbar'
@@ -10,7 +10,8 @@ import Events from './Event/Events'
 export default function Home(){
 
   return (
-    <div class="user-body ">
+    <main>
+      <div class="user-body " id='user-html'>
 
 {/* <!-- header section starts  --> */}
     <Navbar/>
@@ -130,6 +131,7 @@ export default function Home(){
 
 
     </div>
+    </main>
   )
 }
 

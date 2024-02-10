@@ -1,11 +1,13 @@
 import React , {useState} from 'react'
 import { useNavigate } from "react-router-dom";
 
+import './Events.css'
+
 //componets
 import EditEvent from './EditEvent';
 
 //utils
-import {URL} from '../../util/URL';
+import {URL} from '../../../util/URL';
 
 //mui
 import {Button , CardContent , CardMedia , CircularProgress} from "@mui/material"
@@ -58,9 +60,9 @@ export default function EventCard({data  , handleEditEvent , index , handleRemov
                 <CardContent>
                   <p style={{ textAlign: "left" }}>
                     <CalendarMonth htmlColor="#6372ff" />{" "}
-                    <span>{data.date}</span>
+                    <span style={{fontSize:'1.5rem'}}>{data.date}</span>
                   </p>
-                  <p>{data.name}</p>
+                  <p className='event-card' style={{fontSize:'2rem'}}>{data.name}</p>
                   <div className='roe'>
                   <Button className='col' color="secondary" onClick={() => setEditEventOpen(true)} startIcon={<Edit size="small" />} ></Button>
                   <Button color="error" className='col' startIcon={
