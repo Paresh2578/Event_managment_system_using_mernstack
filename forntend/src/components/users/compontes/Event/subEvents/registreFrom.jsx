@@ -441,10 +441,13 @@
 
 import React , {useEffect, useState} from "react";
 import { useSnackbar } from "notistack";
+import axios from "axios";
 
 // import "../style.css";
 ///utils
 import {URL} from '../../../../../util/URL';
+import {service_id , sendEmail_api , user_id , template_id} from  '../../../../../util/sendEmailData'
+import { formetTime } from '../../../../../util/FormentTime'
 
 //mui
 import Button from "@mui/material/Button";
@@ -456,6 +459,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import {CircularProgress}  from '@mui/material';
 import { Troubleshoot } from "@mui/icons-material";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function RegistreFrom({
   registerOpen,
@@ -482,6 +487,30 @@ export default function RegistreFrom({
   const [singleParticipationDataError , setsingleParticipationDataError] =useState({name : false ,Enrollment : false ,email : false ,mobile : false});
   const [groupParticipationDataError , setGroupParticipationDataError] =useState(Array.from({ length: data.groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
   const [registerLoding , setRegisterLoding] = useState(false);
+  const [eventDate , setEventDate] = useState();
+  const [subEventTime , setSubEvnetTime] = useState(data.time);
+  const [isGroup , setIsGrup] = useState(data.isGroup);
+  const [groupMember , setGroupMember] = useState(data.groupMember);
+
+
+  useEffect(async ()=>{
+    getEventInfo();
+  },[]);
+
+  const getEventInfo =async ()=>{
+    try{
+      let result = await fetch(`${URL}/event/getOneEvent/${data.eventId}`);
+      result = await result.json();
+
+      if(result.success){
+        setEventDate(result.data.date);
+      }else{
+        toast.error('something wrong');
+      }
+    }catch(error){
+      toast.error('something wrong');
+    }
+  }
 
 
 
@@ -490,12 +519,30 @@ export default function RegistreFrom({
   };
 
   const handleRegister = async()=>{
-      if(data.isGroup){
+
+    
+
+        
+
+
+
+      // try{
+      // //  const res =  await axios.post( 'https://api.emailjs.com/api/v1.0/email/send', data)
+
+      //  console.log(res);
+      //  toast.success("send email");
+
+      // }catch(error){
+      //   toast.error(error);
+      // }
+
+
+      if(isGroup){
         //validate groupParticipationData
         if(groupParticipationData.groupName.length == 0){
           return;
         }
-        for(let i=0;i<data.groupMember;i++){
+        for(let i=0;i<groupMember;i++){
           if(groupParticipationData.members[i].name.length == 0){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : true ,Enrollment : false ,email : false ,mobile : false}: data));
             return;
@@ -511,8 +558,23 @@ export default function RegistreFrom({
           }
         }
 
-        setGroupParticipationDataError(Array.from({ length: data.groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
+        setGroupParticipationDataError(Array.from({ length: groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
         try{
+           //send email in group leader
+         var data = {
+          service_id: service_id,
+          template_id:template_id,
+          user_id: user_id,
+          template_params: {
+            'student_name' :`group leader ${groupParticipationData.members[0].name}`,
+            'event_name' :groupParticipationData.members[0].subEventName,
+            'college_name' : "Darshan university",
+            'event_date' : eventDate,
+            'event_time' : formetTime(subEventTime),
+            'Contact_Information' :'9327095244',
+            'student_email' :groupParticipationData.members[0].email,
+          }
+      };
           setRegisterLoding(true);
            let result = await fetch(`${URL}/participation/groupRegister`  , {
             method : "POST",
@@ -525,13 +587,16 @@ export default function RegistreFrom({
            setRegisterLoding(false);
            if(result.success){
             setregisterOpen(false);
+            toast.success("sucessfully Register");
+            //send email
+            await axios.post(`${sendEmail_api}`, data)
+        toast.success("send email in group leader");
            }else{
-            alert(result.error);
-            console.log("registr error : " , result.error);
+            toast.error(result.message);
            }
         }catch(error){
           setRegisterLoding(false);
-          console.log("register user error : " , error);
+          toast.error("Fail Register");
         }
 
 
@@ -547,6 +612,22 @@ export default function RegistreFrom({
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : true})
       }else{
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
+        
+        //send email
+         var data = {
+          service_id: service_id,
+          template_id:template_id,
+          user_id: user_id,
+          template_params: {
+            'student_name' : singleParticipationData.name,
+            'event_name' : singleParticipationData.subEventName,
+            'college_name' : "Darshan university",
+            'event_date' : eventDate,
+            'event_time' : formetTime(subEventTime),
+            'Contact_Information' :'9327095244',
+            'student_email' :singleParticipationData.email,
+          }
+      };
 
         try{
           setRegisterLoding(true);
@@ -559,17 +640,22 @@ export default function RegistreFrom({
            })
            result = await result.json();
            setRegisterLoding(false);
-           console.log(result);
-           console.log(result.success);
            if(result.success){
             setregisterOpen(false);
+            toast.success("sucessfully Register");
+
+            //send email
+             await axios.post(`${sendEmail_api}`, data)
+
+        toast.success("send email");
+
            }else{
-            alert(result.error);
+            toast.error(result.message);
             console.log("registr error : " , result.error);
            }
         }catch(error){
           setRegisterLoding(false);
-          console.log("register user error : " , error);
+          toast.error("Register fail");
         }
       }
       }

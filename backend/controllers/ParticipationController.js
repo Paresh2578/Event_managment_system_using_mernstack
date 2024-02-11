@@ -27,14 +27,14 @@ exports.singleRegister = async (req, resp) => {
         _id: alredySingleParticipationId,
       });
 
-      if (singleParticipation.Enrollment == Enrollment) {
+      if (singleParticipation.Enrollment == Enrollment || singleParticipation.email == email) {
         studentAreAlreadyRegister = true;
         break;
       }
     }
 
     if(studentAreAlreadyRegister){
-        return resp.status(500).json({
+        return resp.status(200).json({
             success: false,
             message: "alrady register in this event ",
           });
@@ -68,7 +68,7 @@ exports.singleRegister = async (req, resp) => {
       );
     
 
-    resp.status(201).json({
+    resp.status(200).json({
       success: true,
     });
   } catch (error) {
@@ -95,7 +95,7 @@ exports.groupRegister = async (req, resp) => {
 
          for(var memberData of groupParticipationData.members){
              for(var newRegisterMemberData of members){
-                if(memberData.Enrollment == newRegisterMemberData.Enrollment){
+                if(memberData.Enrollment == newRegisterMemberData.Enrollment || memberData.email == newRegisterMemberData.email){
                     studentAlreadyRegister = true;
                     break;
                 }
@@ -104,7 +104,7 @@ exports.groupRegister = async (req, resp) => {
     }
 
     if(studentAlreadyRegister){
-        return resp.status(500).json({
+        return resp.status(200).json({
             success: false,
             message: "alrady register in this event ",
           });

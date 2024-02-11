@@ -16,6 +16,19 @@ exports.getAllEvent = async (req, resp) => {
   }
 };
 
+
+exports.getOneEvent = async (req, resp) => {
+  try {
+    let event = await Events.findOne({_id : req.params.id});
+    resp.send({ success: true, data: event });
+  } catch (error) {
+    resp.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 exports.createEvnet = async (req, resp) => {
   try {
     //check admin auth

@@ -30,7 +30,7 @@ const FullLayout = () => {
       <div class="admin-container">
         <div class={mobileNaigation ? "navigation active" : "navigation"}>
             <ul>
-                <li>
+                <li  onClick={togaleSidbar}>
                     <Link to="dashboard">
                         <span class="icon">
                             <ion-icon name="logo-apple"></ion-icon>
@@ -39,7 +39,7 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li>
+                <li  onClick={togaleSidbar}>
                     <Link to="dashboard">
                         <span class="icon">
                             <ion-icon name="home-outline"></ion-icon>
@@ -48,7 +48,7 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li>
+                <li  onClick={togaleSidbar}>
                     <Link to="events">
                         <span class="icon">
                             <ion-icon name="people-outline"></ion-icon>
@@ -57,7 +57,7 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li>
+                <li onClick={togaleSidbar}>
                     <a href="#">
                         <span class="icon">
                             <ion-icon name="chatbubble-outline"></ion-icon>

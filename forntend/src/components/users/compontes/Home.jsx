@@ -106,12 +106,10 @@ export default function Home(){
 
         <div class="box">
           <h3>contact info</h3>
-          <a href="#"> <i class="fas fa-phone"></i> +123-456-7890 </a>
-          <a href="#"> <i class="fas fa-phone"></i> +123-456-7890 </a>
-          <a href="#"> <i class="fas fa-envelope"></i> kanasu@gmail.com </a>
-          <a href="#"> <i class="fas fa-envelope"></i> kanasuind@gmail.com </a>
+          <a href="#"> <i class="fas fa-phone"></i> +91 9327095244</a>
+          <a href="#"> <i class="fas fa-envelope"></i> paresh2005@gmail.com </a>
           <a href="#">
-            <i class="fas fa-map-marker-alt"></i> bangalore, india - 560054
+            <i class="fas fa-map-marker-alt"></i> Rajkot, india
           </a>
         </div>
 
@@ -125,7 +123,7 @@ export default function Home(){
       </div>
 
       <div class="credit">
-        created by <span>Tivotal</span> | all rights reserved
+        created by <span>Paresh chaudhary</span> | all rights reserved
       </div>
     </section>
 

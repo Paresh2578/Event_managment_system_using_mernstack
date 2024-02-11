@@ -45,6 +45,7 @@ html{
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 9%;
+  z-index: 1;
 }
 
 .user-header .logo {

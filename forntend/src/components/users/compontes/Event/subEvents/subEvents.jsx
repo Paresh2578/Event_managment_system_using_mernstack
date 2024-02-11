@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate , useParams } from "react-router-dom";
 
+import { ToastContainer, toast } from 'react-toastify';
+
+
 import './subEvents.css'
 import '../Events.css'
 
@@ -39,6 +42,7 @@ export default function SubEvents() {
   const [activeFillter , setActiveFillter]= useState(-1);
 
 
+
   useEffect(()=>{
     getAllSubEvents();
   },[]);
@@ -51,8 +55,8 @@ export default function SubEvents() {
       setSubEvent(result.data);
       setDupSubEvent(result.data);
     }else{
-     console.log("get al event error");
-    }
+      toast.error("Fetch Subevent fail");
+       }
    console.log(result);
  }
 

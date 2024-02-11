@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { ToastContainer, toast } from 'react-toastify';
+
+
 import "./Events.css";
 
 //utils
@@ -24,7 +27,6 @@ export default function Events() {
   const [event, setEvent] = useState([]);
 
   useEffect(() => {
-    console.log("load");
     getAllEvents();
   }, []);
 
@@ -35,10 +37,8 @@ export default function Events() {
     if (result.success) {
       setEvent(result.data);
     } else {
-      console.log("get all event error");
-    }
-
-    console.log(result);
+      toast.error("Fetch event fail");
+    };
   };
 
   return (
