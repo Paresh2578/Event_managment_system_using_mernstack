@@ -1,5 +1,7 @@
 import React , {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 //utils
 import {formetTime} from '../../../../util/FormentTime';
@@ -7,6 +9,7 @@ import {URL} from '../../../../util/URL';
 
 //componets
 import EditSubEvent from './EditSubEvent';
+import DeleteConformAlertDialog from '../DeleteConformAlertDialog';
 
 //mui
 import {Button , CardContent , CardMedia , CircularProgress} from "@mui/material"
@@ -18,6 +21,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
   const navigate =useNavigate();
     const [editEventOpen , setEditEventOpen] = useState(false);
     const [deleteSubEventLoding , setdeleteSubEventLoding] = useState(false);
+    const [deleteConformAlertDialogOpen,       setDeleteConformAlertDialogOpen] = useState(false);
 
     const deleteSubEvent = async()=>{
       try{
@@ -31,14 +35,17 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
   
         result = await result.json();
         setdeleteSubEventLoding(false);
+        setDeleteConformAlertDialogOpen(false);
         if(result.success){
           handleRemoveSubEvent(index);
+        toast.success("successfully delete sub event");
         }else{
-          console.log("edit event error");
+          toast.error("Faild to delete sub event")
         }
   
       }catch(error){
         setdeleteSubEventLoding(false);
+        setDeleteConformAlertDialogOpen(false);
         console.log("edit event error ")
       }
     }
@@ -47,6 +54,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
 
   return (
     <div >
+       <DeleteConformAlertDialog open={deleteConformAlertDialogOpen} setOpen={setDeleteConformAlertDialogOpen} deleteFunction={deleteSubEvent} deleteEventLoding={deleteSubEventLoding}/>
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
       <div className="card-container " onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
         {/* <p className="img-text">Your Text Goes Here</p> */}
@@ -65,10 +73,10 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
         />
       </div>
       <CardContent >
-        <p style={{ textAlign: "left" , fontSize:'1.5rem' }}>
-          <AccessAlarm color="#6372ff" style={{fontSize:'1.5rem'}}/> <span>{formetTime(data.time)}</span>
+        <p style={{ textAlign: "left"}}>
+          <AccessAlarm color="#6372ff"/> <span>{formetTime(data.time)}</span>
         </p>
-        <p style={{fontSize:'2rem'}}>{data.subEventname}</p>
+        <p style={{fontSize:'1.5rem'}}>{data.subEventname}</p>
         <Button
           color="secondary"
           onClick={() => setEditEventOpen(true)}
@@ -79,7 +87,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
                   <Delete
                     className="ms-2"
                     size="small" 
-                    onClick={()=>deleteSubEvent()}
+                    onClick={()=>setDeleteConformAlertDialogOpen(true)}
                     />}>
                   </Button>
       </CardContent>

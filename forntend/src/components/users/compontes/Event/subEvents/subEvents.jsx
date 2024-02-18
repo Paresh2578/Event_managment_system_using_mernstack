@@ -48,7 +48,7 @@ export default function SubEvents() {
   },[]);
 
   const getAllSubEvents = async()=>{
-    let result = await fetch(`${URL}/event/getSubEvent/${id}`);
+    let result = await fetch(`${URL}/subEvent/getSubEvent/${id}`);
     result = await result.json();
 
     if(result.success){
@@ -57,7 +57,6 @@ export default function SubEvents() {
     }else{
       toast.error("Fetch Subevent fail");
        }
-   console.log(result);
  }
 
  const eventFillter = (itemData , index) =>{
@@ -91,11 +90,20 @@ export default function SubEvents() {
 
             </div>
 
-      <div class="box-container">
+            <div className="row">
+            {subEvent &&
+              subEvent.map((data, index) => (
+                <div key={index} className="col-md-3 col-sm-6 trending__card">
+                  <SubEventCard data={data}  eventName={eventName}/>
+                </div>
+              ))}
+          </div>
+
+      {/* <div class="box-container">
       <div className="text-center " >
         <div className="container">
           
-          <div className="row mt-4 gap-4 container">
+          <div className="row">
              {
               subEvent.length >= 1 && subEvent.map((data , index)=>(
                 <div key={index} className="col-md-3 col-sm-6 trending__card">
@@ -106,7 +114,7 @@ export default function SubEvents() {
           </div>
         </div>
       </div>
-      </div>
+      </div> */}
     </section>
       
     </div>

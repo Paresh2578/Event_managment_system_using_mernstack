@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Container } from "reactstrap";
-import React , {useState} from "react";
+import React , {useState , useEffect} from "react";
 import {Link , useNavigate} from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -12,9 +12,27 @@ import './fullLayout.css';
 const FullLayout = () => {
     let navigate = useNavigate();
   const [mobileNaigation , setMobileNavigation] = useState(false);
+  const [currActiveComponet  , setCurrActiveComponet] = useState(1);
+
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
 
   const togaleSidbar = ()=>{
+
+    // if(width)
     setMobileNavigation(mobileNaigation => !mobileNaigation);
   }
 
@@ -30,8 +48,8 @@ const FullLayout = () => {
       <div class="admin-container">
         <div class={mobileNaigation ? "navigation active" : "navigation"}>
             <ul>
-                <li  onClick={togaleSidbar}>
-                    <Link to="dashboard">
+                <li  onClick={width <= 991 ? togaleSidbar :  ()=>{}}>
+                    <Link to="dashboard" >
                         <span class="icon">
                             <ion-icon name="logo-apple"></ion-icon>
                         </span>
@@ -39,8 +57,8 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li  onClick={togaleSidbar}>
-                    <Link to="dashboard">
+                <li className={currActiveComponet == 1 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(1)}}>
+                    <Link to="dashboard" >
                         <span class="icon">
                             <ion-icon name="home-outline"></ion-icon>
                         </span>
@@ -48,7 +66,7 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li  onClick={togaleSidbar}>
+                <li className={currActiveComponet == 2 ? "active-naviation" : ""}   onClick={width < 991 ? togaleSidbar : ()=>{setCurrActiveComponet(2)}}>
                     <Link to="events">
                         <span class="icon">
                             <ion-icon name="people-outline"></ion-icon>
@@ -57,8 +75,8 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li onClick={togaleSidbar}>
-                    <a href="#">
+                <li className={currActiveComponet == 3 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(3)}}>
+                    <a href="#" >
                         <span class="icon">
                             <ion-icon name="chatbubble-outline"></ion-icon>
                         </span>

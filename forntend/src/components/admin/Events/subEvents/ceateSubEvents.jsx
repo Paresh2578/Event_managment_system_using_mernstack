@@ -33,6 +33,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
     grupMember: 2,
     isGroup: false,
     subEventPosterUrl: "",
+    discription : ""
   });
 
   
@@ -263,7 +264,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
       seats: subEventData.seats,
       groupMember: subEventData.grupMember,
       isGroup: subEventData.isGroup,
-      subEventPosterUrl: subEventData.subEventPosterUrl, //
+      subEventPosterUrl: subEventData.subEventPosterUrl,
+      discription : subEventData.discription //
     };
 
     console.log('createing event');
@@ -320,7 +322,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
               {steps.map((label, index) => (
                 <Step key={label} completed={completed[index]}>
                   <StepButton color="inherit" onClick={handleStep(index)}>
-                  <span style={{fontSize:'1.5rem'}}> {label}</span>
+                  <span> {label}</span>
                   </StepButton>
                 </Step>
               ))}
@@ -612,6 +614,23 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
                               ></img>
                             )}
                           </div>
+
+                          <div class="mt-3">
+                          <label
+                            for="exampleFormControlTextarea1"
+                            class="form-label"
+                          >
+                            Enter event discription
+                          </label>
+                          <textarea
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            placeholder="Enter event discription"
+                            onChange={(e)=>setSubEventData({...subEventData , discription : e.target.value})}
+                            rows="3"
+                          ></textarea>
+                        </div>
+                        
                         </div>
                       </>
                     )}

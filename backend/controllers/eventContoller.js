@@ -16,6 +16,37 @@ exports.getAllEvent = async (req, resp) => {
   }
 };
 
+exports.getUpcomingEvets = async (req, res) => {
+  try {
+    let totalevents = await Events.find();
+    let upcomingEvents = [];
+
+    for (var event of totalevents) {
+      //add complted and upcoming event
+      const currentDate = new Date();
+      // Create a new Date object for the other date (year, month - 1, day)
+      let eventDateArr = event.date.split("/");
+      eventDateArr[1] = parseInt(eventDateArr[1]) + 1;
+      const eventDate = new Date(`${eventDateArr[0]}/${eventDateArr[1]}/${eventDateArr[2]}`); // December 31, 2023 (month is 0-based, so 11 is December)
+      if (currentDate < eventDate) {
+        upcomingEvents.push(event);
+      } 
+
+    }
+
+    res.status(200).json({
+      success: true,
+      data: upcomingEvents,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+
 
 exports.getOneEvent = async (req, resp) => {
   try {
@@ -67,7 +98,12 @@ exports.createEvnet = async (req, resp) => {
       groupMember,
       isGroup,
       subEventPosterUrl,
+      discription
     } = req.body;
+
+    console.log(discription , "this is discription")
+
+
     let subEvent = new SubEvents({
       eventId,
       subEventname,
@@ -77,6 +113,7 @@ exports.createEvnet = async (req, resp) => {
       groupMember,
       isGroup,
       subEventPosterUrl,
+      discription,
       coordinatorId,
     });
     await subEvent.save();
@@ -176,37 +213,10 @@ exports.deletEvent = async (req, resp) => {
   }
 };
 
-exports.getSubEvents = async (req, resp) => {
-  try {
-    //find event
-    let event = await Events.findOne({ _id: req.params.id });
 
-    let allSubEvents = [];
-
-    for (let i = 0; i < event.subEvents.length; i++) {
-      let subEvent = await SubEvents.findOne({ _id: event.subEvents[i] });
-      let coordinatorData = await Coordinators.findOne({
-        _id: subEvent.coordinatorId,
-      });
-
-      let subEventDataAndCoordinatorData = subEvent;
-      subEventDataAndCoordinatorData = {
-        ...subEventDataAndCoordinatorData._doc,
-        coordinator: coordinatorData,
-      };
-      allSubEvents.push(subEventDataAndCoordinatorData);
-    }
-
-    resp.send({ success: true, data: allSubEvents });
-  } catch (error) {
-    resp.status(500).json({
-      success: false,
-      message: error,
-    });
-  }
-};
 
 exports.getDashbordInfomation = async (req, res) => {
+  
   try {
     //check admin auth
     let validAdmin;
@@ -217,10 +227,15 @@ exports.getDashbordInfomation = async (req, res) => {
       throw error;
     }
 
+
+
     if (!validAdmin) {
       const error = new Error("Invalid credentials, could not log you in.");
       throw error;
     }
+
+
+
 
     let dasbordInfo = {
       totalCompetedEvent: 0,
@@ -232,6 +247,9 @@ exports.getDashbordInfomation = async (req, res) => {
 
     let totalevents = await Events.find();
 
+
+    
+    
     for (var event of totalevents) {
       //add complted and upcoming event
       const currentDate = new Date();
@@ -240,30 +258,31 @@ exports.getDashbordInfomation = async (req, res) => {
       eventDateArr[1] = parseInt(eventDateArr[1]) + 1;
       const eventDate = new Date(`${eventDateArr[0]}/${eventDateArr[1]}/${eventDateArr[2]}`); // December 31, 2023 (month is 0-based, so 11 is December)
       if (currentDate >= eventDate) {
-          dasbordInfo = {...dasbordInfo , totalCompetedEvent : dasbordInfo.totalCompetedEvent + 1};
+        dasbordInfo = {...dasbordInfo , totalCompetedEvent : dasbordInfo.totalCompetedEvent + 1};
       } else if (currentDate < eventDate) {
-         dasbordInfo = {...dasbordInfo , upCompingEvent : dasbordInfo.upCompingEvent + 1};
-
-         for(var subEventID of event.subEvents){
-            let subEventInfo = await SubEvents.findOne({_id : subEventID});
+        dasbordInfo = {...dasbordInfo , upCompingEvent : dasbordInfo.upCompingEvent + 1};
+        
+        for(var subEventID of event.subEvents){
+          let subEventInfo = await SubEvents.findOne({_id : subEventID});
             dasbordInfo = {...dasbordInfo , totalParticiptionStudent : dasbordInfo.totalParticiptionStudent + subEventInfo.singleParticipation.length + subEventInfo.groupParticipation.length};
             dasbordInfo = {...dasbordInfo , avalibleSteats : dasbordInfo.avalibleSteats + subEventInfo.seats - subEventInfo.singleParticipation.length - subEventInfo.groupParticipation.length};
-         }
-      }
+          }
+        }
+        
+        //single particiption List
+        let singleParticipationList = await SingleParticipation.find();
+        singleParticipationList.reverse();
 
-      //single particiption List
-      let singleParticipationList = await SingleParticipation.find();
-      singleParticipationList.reverse();
-
-      if(singleParticipationList.length < 10){
+        if(singleParticipationList.length < 10){
           dasbordInfo = {...dasbordInfo , recentParticiptionStudentList :singleParticipationList}
-      }else{
-         dasbordInfo = {...dasbordInfo , recentParticiptionStudentList : singleParticipationList.slice(-10)}
+        }else{
+          dasbordInfo = {...dasbordInfo , recentParticiptionStudentList : singleParticipationList.slice(-10)}
+        }
+        
+        
+        
       }
-
-
-     
-    }
+      console.log("call" , validAdmin);
 
     res.status(200).json({
       success: true,
@@ -276,3 +295,4 @@ exports.getDashbordInfomation = async (req, res) => {
     });
   }
 };
+

@@ -593,6 +593,23 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                               ></img>
                             )}
                           </div>
+
+                          <div class="mt-3">
+                          <label
+                            for="exampleFormControlTextarea1"
+                            class="form-label"
+                          >
+                            Enter event discription
+                          </label>
+                          <textarea
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            value={subEventData.discription}
+                            placeholder="Enter event discription"
+                            onChange={(e)=>setSubEventData({...subEventData , discription : e.target.value})}
+                            rows="3"
+                          ></textarea>
+                        </div>
                         </div>
                       </>
                     )}

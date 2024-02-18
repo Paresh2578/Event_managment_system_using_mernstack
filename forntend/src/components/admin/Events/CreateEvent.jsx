@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 import dayjs from "dayjs";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 import axios from "axios";
 
@@ -33,6 +33,7 @@ import {
   Button,
   Dialog,
 } from "@mui/material";
+import { makeStyles, TextareaAutosize } from "@material-ui/core";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -69,6 +70,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
     grupMember: 2,
     isGroup: false,
     posterUrl: "",
+    discription: "",
   });
 
   const [coordinatorData, setCoordinatorData] = useState({
@@ -297,7 +299,10 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       name: eventData.name,
       date: eventData.date,
       eventPosterUrl: eventData.eventPosterUrl, //
-    };
+      discription : subEventData.discription
+        };
+
+    console.log("this is evetn data :: ", createEventData);
 
     try {
       setCreateEventLoding(true);
@@ -306,14 +311,13 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         body: JSON.stringify(createEventData),
         headers: {
           "content-type": "application/json",
-          "Authorization":
-            adminAuth.token
+          Authorization: adminAuth.token,
         },
       });
       result = await result.json();
       setCreateEventLoding(false);
       if (result.success) {
-      handleCreateNewEvent(eventData);
+        handleCreateNewEvent(eventData);
         handleReset();
         setOpen(false);
         toast.success("sucessfully Create Event");
@@ -343,13 +347,16 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         formData
       )
       .then((res) => {
-        setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
+        setEventData({
+          ...eventData,
+          eventPosterUrl: res.data.data.display_url,
+        });
         // setImgUploadLoding(false)
         seteventImgToUrlProsess({ loding: false, error: false, success: true });
       })
       .catch((error) => {
         seteventImgToUrlProsess({ loding: false, error: true, success: false });
-    });
+      });
 
     // setEventData({ ...eventData, eventPosterUrl: "emg url" });
   };
@@ -369,9 +376,9 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       )
       .then((res) => {
         console.log(res.data.data.display_url);
-    setSubEventData({
-      ...subEventData,
-      posterUrl: res.data.data.display_url,
+        setSubEventData({
+          ...subEventData,
+          posterUrl: res.data.data.display_url,
         });
         setSubEventImgToUrlProsess({
           loding: false,
@@ -394,7 +401,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   };
 
   return (
-    <div style={{fontSize:'2rem'}}>
+    <div style={{ fontSize: "2rem" }}>
       <Dialog
         open={open}
         // onClose={handleClose}
@@ -403,17 +410,18 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       >
         <DialogTitle
           id="alert-dialog-title"
-          style={{ padding: "20px 50px 20px 50px"  ,fontSize:'2rem'}}
+          style={{ padding: "20px 50px 20px 50px" }}
         >
           {`create new Event`}
         </DialogTitle>
         <DialogContent className="d-block">
-          <Box sx={{ width: "100%" }}>
+          {/* <Box sx={{ width: "100%" }}> */}
+          <Box sx={{ width: "fit-content" }}>
             <Stepper nonLinear activeStep={activeStep}>
               {steps.map((label, index) => (
-                <Step key={label} completed={completed[index]} style={{fontSize:'2rem'}}>
-                  <StepButton color="inherit" style={{fontSize:'2rem'}} onClick={handleStep(index)}>
-                   <span style={{fontSize:'1.5rem'}}> {label}</span>
+                <Step key={label} completed={completed[index]}>
+                  <StepButton color="inherit" onClick={handleStep(index)}>
+                    <span> {label}</span>
                   </StepButton>
                 </Step>
               ))}
@@ -581,6 +589,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                             label="Event name"
                             variant="outlined"
                             value={subEventData.subEventname}
+                            required
                             onChange={(e) =>
                               setSubEventData({
                                 ...subEventData,
@@ -595,6 +604,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                             label="Event name"
                             helperText="Enter name"
                             error
+                            required
                             variant="outlined"
                             value={subEventData.subEventname}
                             onChange={(e) =>
@@ -837,6 +847,23 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                             )}
                           </div>
                         </div>
+                        <div class="mt-3">
+                          <label
+                            for="exampleFormControlTextarea1"
+                            class="form-label"
+                          >
+                            Enter event discription
+                          </label>
+                          <textarea
+                            class="form-control"
+                            id="exampleFormControlTextarea1"
+                            placeholder="Enter event discription"
+                            onChange={(e)=>setSubEventData({...subEventData , discription : e.target.value})}
+                            rows="3"
+                          ></textarea>
+                        </div>
+
+                        
                       </>
                     )}
                     {activeStep + 1 == 3 && (

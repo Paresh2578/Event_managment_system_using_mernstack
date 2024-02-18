@@ -11,12 +11,43 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 export default function EventCard({ data }) {
   return (
     <>
-      <div>
-        <div class="box">
-          <img src={data.eventPosterUrl} alt="" />
-          <h3 class="title"> {data.name}</h3>
+
+
+<div style={{backgroundColor : '#333'}} className="m-3">
+        <div>
+          <div  className="card-container">
+          <img
+            src={data.eventPosterUrl}
+            style={{ height: "200px" }}
+            alt="Your Alt Text"
+            className="overlay-image"
+          />
+          </div>
+          <CardContent>
+            <p style={{ textAlign: "left" }}>
+              <CalendarMonthIcon htmlColor="white" />{" "}
+              {/* <span style={{fontSize:'1.5rem'}}>{data.date}</span> */}
+              <span style={{color:'white'}}>{data.date}</span>
+            </p>
+            {/* <p className="event-card" style={{ fontSize: "1rem" }}>
+              {data.name}
+            </p> */}
+            <p style={{ textAlign: "center" , color:"white"  ,}}>
+            <span style={{borderBottom:"4px solid #6372ff"   , fontSize:""}}>
+              {data.name}
+              </span>
+            </p>
+          </CardContent>
         </div>
-        <div className="pt-3 pb-3 cardInfo">
+      </div>
+
+
+      {/* <div>
+        <div class="">
+          <img src={data.eventPosterUrl} alt="" />
+          <h3 class=""> {data.name}</h3>
+        </div>
+        <div className="pt-3 pb-3 ">
           <p style={{ textAlign: "left" , color:"white" }} className="">
             <CalendarMonthIcon htmlColor="#6372ff"  style={{fontSize:"2rem"}}/> <span style={{fontSize:"2rem"}}>{data.date}</span>
           </p>
@@ -26,7 +57,7 @@ export default function EventCard({ data }) {
               </span>
             </p>
         </div>
-      </div>
+      </div> */}
 
       
 

@@ -61,9 +61,8 @@ export default function Login() {
         </div>
         {/* <div className="pass"><a href="#">Forgot password?</a></div> */}
         <div className="row button">
-          {/* <input type="submit" value="Login"/> */}
-          {/* <button type="submit">login</button> */}
-          <button className="loginBtn" type="submit" disabled={loding ? true : false}>{loding ? <CircularProgress size="2rem" color="inherit"/> : "Login"}</button>
+          <button className="loginBtn col me-3" type="submit" disabled={loding ? true : false}>{loding ? <CircularProgress size="2rem" color="inherit"/> : "Login"}</button>
+          <button className="loginBtn col" onClick={()=>navigate('/')}>Home</button>
         </div>
       </form>
     </div>

@@ -493,7 +493,7 @@ export default function RegistreFrom({
   const [groupMember , setGroupMember] = useState(data.groupMember);
 
 
-  useEffect(async ()=>{
+  useEffect(()=>{
     getEventInfo();
   },[]);
 
@@ -552,7 +552,7 @@ export default function RegistreFrom({
           }else if(groupParticipationData.members[i].email.length == 0){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : false ,Enrollment : false ,email : true ,mobile : false}: data));
             return;
-          }else if(groupParticipationData.members[i].mobile.toString().length <= 0){
+          }else if(groupParticipationData.members[i].mobile.toString().length <= 9){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : false ,Enrollment : false ,email : false ,mobile : true}: data));
             return;
           }
@@ -644,10 +644,15 @@ export default function RegistreFrom({
             setregisterOpen(false);
             toast.success("sucessfully Register");
 
-            //send email
+            try{
+               //send email
              await axios.post(`${sendEmail_api}`, data)
+             toast.success("send email");
+            }catch(error){
+              toast.error("Failed to send email");
+            }
 
-        toast.success("send email");
+        
 
            }else{
             toast.error(result.message);
@@ -690,7 +695,7 @@ export default function RegistreFrom({
               {/* {Array.from({ length: data.groupMember }).map((_, index) => ( */}
               {Array.from({ length: data.groupMember }).map((_, index) => (
                  <>
-                 <p className="t-center" style={{fontSize:'2rem'}} >*** member {index+1} ***</p>
+                 <p className="t-center" style={{fontSize:'1rem'}} >*** member {index+1} ***</p>
                  {groupParticipationDataError[index].name ? 
                     <TextField
                     id="outlined-basic"

@@ -249,11 +249,11 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
                 )}
               </div>
               <div className="d-flex justify-content-center align-items-center">
-                {eventData.posterUrl && (
+                {eventData.eventPosterUrl && (
                   <img
                     className="mt-3 rounded shadow"
                     style={{ height: "30vh", width: "60%"  , objectFit:'cover'}}
-                    src={eventData.posterUrl}
+                    src={eventData.eventPosterUrl}
                   ></img>
                 )}
               </div>

@@ -192,7 +192,7 @@ export default function Events() {
           <div className="row">
             {event &&
               event.map((data, index) => (
-                <div className="col-md-3 col-sm-6 trending__card p-0 me-3 ">
+                <div className="col-md-3 col-sm-6  trending__card p-0 me-3 mb-3">
                   <EventCard
                     key={index}
                     data={data}

@@ -82,7 +82,7 @@ export default function Home(){
     </section>
 
     {/* <!-- footer section starts  --> */}
-    <section class="footer ">
+    {/* <section class="footer ">
       <div class="box-container container">
         <div class="box">
           <h3>branches</h3>
@@ -125,7 +125,7 @@ export default function Home(){
       <div class="credit">
         created by <span>Paresh chaudhary</span> | all rights reserved
       </div>
-    </section>
+    </section> */}
 
 
     </div>

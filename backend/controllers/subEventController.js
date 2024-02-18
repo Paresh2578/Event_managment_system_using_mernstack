@@ -32,9 +32,9 @@ exports.createSubEvnet = async (req , resp)=>{
       
       
       // subEvent data
-      let {subEventname ,category , time , seats , groupMember ,isGroup , subEventPosterUrl } = req.body;
+      let {subEventname ,category , time , seats , groupMember ,isGroup , subEventPosterUrl , discription } = req.body;
       let {eventId} = req.params;
-      let newSubEvent = new SubEvents({eventId ,  subEventname , category,time  , seats , groupMember , isGroup , subEventPosterUrl , coordinatorId})
+      let newSubEvent = new SubEvents({eventId ,  subEventname , category,time  , seats , groupMember , isGroup , subEventPosterUrl , discription , coordinatorId})
       await newSubEvent.save();
 
       //add to eventId in eventDocument
@@ -170,3 +170,47 @@ exports.deletSubEvent = async (req , resp)=>{
 
 
 
+exports.getSubEvents = async (req, resp) => {
+   try {
+     //find event
+     let event = await Events.findOne({ _id: req.params.id });
+ 
+     let allSubEvents = [];
+ 
+     for (let i = 0; i < event.subEvents.length; i++) {
+       let subEvent = await SubEvents.findOne({ _id: event.subEvents[i] });
+       let coordinatorData = await Coordinators.findOne({
+         _id: subEvent.coordinatorId,
+       });
+ 
+       let subEventDataAndCoordinatorData = subEvent;
+       subEventDataAndCoordinatorData = {
+         ...subEventDataAndCoordinatorData._doc,
+         coordinator: coordinatorData,
+       };
+       allSubEvents.push(subEventDataAndCoordinatorData);
+     }
+ 
+     resp.send({ success: true, data: allSubEvents });
+   } catch (error) {
+     resp.status(500).json({
+       success: false,
+       message: error,
+     });
+   }
+ };
+
+
+ exports.getCoordinator = async (req, resp) => {
+   try {
+     //find event
+     let coordinator = await Coordinators.findOne({ _id: req.params.id });
+ 
+     resp.send({ success: true, data: coordinator });
+   } catch (error) {
+     resp.status(500).json({
+       success: false,
+       message: error,
+     });
+   }
+ };

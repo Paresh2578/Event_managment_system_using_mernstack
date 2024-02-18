@@ -6,10 +6,10 @@
     padding: 8px 10px;
     text-transform: uppercase;
     border:2px solid #3867d6;
-    /* font-size: 17px; */
+    font-size: 17px;
     color: #3867d6;
     border-radius: 10px; 
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
   }
   
   .filter-btn:hover {
@@ -20,10 +20,10 @@
 
   .filter-btn-active{
     padding: 8px 10px;
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
     text-transform: uppercase;
     border:2px solid #3867d6;
-    /* font-size: 17px; */
+    font-size: 17px;
     color: white;
     background:#3867d6;
     border-radius: 10px; 
@@ -66,4 +66,13 @@
 
   .event-card{
     font-size: 5.5rem;
+  }
+
+
+
+  .my-btn{
+    background-color: gray;
+    color : white;
+    padding: 5px 10px 10px 10px;
+    border-radius: 10px;
   }

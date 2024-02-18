@@ -73,9 +73,11 @@ export default function Navbar() {
   return (
     <>
       <div className="user-header">
+        <Link to="/#home">
         <a href="#" className="logo">
-          <span>k</span>anasu
+          <span>Coder</span>Pro
         </a>
+        </Link>
 
         <div className={`user-navbar ${isMenuOpen ? 'active' : ''}`}>
           <Link to="/#home">
@@ -84,7 +86,7 @@ export default function Navbar() {
           <a href="#about">about</a>
           <a href="#events">events</a>
           <a href="#contact">contact</a>
-          <Link to="/admin">admin</Link>
+          <Link to="/admin/dashboard">admin</Link>
         </div>
 
         <div

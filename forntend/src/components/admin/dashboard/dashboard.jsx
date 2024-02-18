@@ -105,7 +105,7 @@ export default function Dashboard() {
                         <h2>Recent participation</h2>
                     </div>
 
-                    <table>
+                    <table className='table table-hover'>
                         <thead>
                             <tr>
                                 <td>Name</td>

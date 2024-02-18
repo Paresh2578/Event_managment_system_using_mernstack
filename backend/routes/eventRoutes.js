@@ -3,12 +3,13 @@ const router = express.Router();
 const checkAuth = require("../middleware/checkAuth");
 
 
-const {createEvnet  , editEvent , deletEvent , getAllEvent , getSubEvents , getDashbordInfomation   , getOneEvent} = require("../controllers/eventContoller");
+const {createEvnet  , editEvent , deletEvent , getAllEvent  , getDashbordInfomation   , getOneEvent , getUpcomingEvets} = require("../controllers/eventContoller");
 
 
 router.get('/getAllEvent' , getAllEvent);
 router.get('/getOneEvent/:id' , getOneEvent);
-router.get('/getSubEvent/:id' ,getSubEvents );
+
+router.get('/getUpcomingEvents' ,getUpcomingEvets );
 
 //auth middleaware
 router.use(checkAuth);

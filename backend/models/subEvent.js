@@ -33,6 +33,9 @@ const subEventSchema =new  mongoose.Schema({
         required : true,
         type : String,
     },
+    discription : {
+        type : String
+    },
     coordinatorId :{
         required : true,
         type : String,
