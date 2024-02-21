@@ -15,6 +15,7 @@ import { compareToCurrDate } from "../../../util/compareToDate";
 import CreateEvent from "./CreateEvent";
 import EditEvent from "./EditEvent";
 import EventCard from "./EventCard";
+import EmptyEvent from '../EmptyEvent';
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -190,7 +191,7 @@ export default function Events() {
             ))}
           </div>
           <div className="row">
-            {event &&
+            {event && event.length !=0 &&
               event.map((data, index) => (
                 <div className="col-md-3 col-sm-6  trending__card p-0 me-3 mb-3">
                   <EventCard
@@ -202,6 +203,9 @@ export default function Events() {
                   />
                 </div>
               ))}
+              {
+                event.length == 0 && <EmptyEvent/>
+              }
           </div>
         </div>
       </div>
