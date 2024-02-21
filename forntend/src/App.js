@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // Components
 import AdminLayout from './layouts/AdminLayout';
-import Home from './components/users/compontes/Home';
+import Home from './components/users/compontes/Home/Home';
 import SubEvents from './components/users/compontes/Event/subEvents/subEvents'
 import Login from './auth/login';
 import Dashboard from './components/admin/dashboard/dashboard';
@@ -15,6 +15,7 @@ import SubEventAdmin from './components/admin/Events/subEvents/SubEvents'
 import ParticipateUserListing from './components/admin/Events/subEvents/ParticipateUserListing';
 import ProtectedRoute from './ProtectedRoute';
 import NotFound from './components/Not Found/Not_Found'
+import UserLayout from './layouts/UserLayout/UserLayout';
 
 
 
@@ -23,6 +24,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home/>} />
+        {/* <Route path='demo' element={<UserLayout/>}>
+            <Route path='home' element={<Home/>}/>
+        </Route> */}
         <Route path='subevent/:eventName/:id' element={<SubEvents/>} />
         <Route path="admin" element={<ProtectedRoute><AdminLayout/></ProtectedRoute>}>
             <Route path='dashboard' element={<Dashboard/>}/>

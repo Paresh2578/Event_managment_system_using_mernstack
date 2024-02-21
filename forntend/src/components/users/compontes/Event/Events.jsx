@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import "./Events.css";
 
+import img from '../img/team/team-1.jpg'
+
 //utils
 import { URL } from "../../../../util/URL";
 
@@ -43,50 +45,24 @@ export default function Events() {
   };
 
   return (
-    <section class="gallery container" id="events">
-      <h1 class="heading">
-        Upcoming <span>Events</span>
-      </h1>
+    <section id="event" class="team section-bg">
+      <div class="container" data-aos="fade-up">
 
-      {/* <div class="box-container"> */}
-      <div class="row">
+        <div class="section-title">
+          <h2>Event</h2>
+          <h3>Upcoming <span>Events</span></h3>
+         </div>
+
+        <div class="row">
         {event &&
           event.map((data, index) => (
-            // <div key={index}  onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
-            <div
-              key={index}
-              // className="col-md-3 col-sm-6 trending__card p-0"
-              className="col-md-3 col-sm-6 trending__card p-0"
-              onClick={() => navigate(`subevent/${data.name}/${data._id}`)}
-            >
-              
+            <div key={index} onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
               <EventCard data={data}/>
-            </div>
+          </div>
           ))}
+        </div>
+
       </div>
     </section>
-    // <div id="Events" className="text-center">
-    //   <div className="container">
-    //     <div className="col-md-8 col-md-offset-2 section-title">
-    //       <h2>Events</h2>
-    //       {/* <p>
-    //         Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-    //         dapibus leonec.
-    //       </p> */}
-    //     </div>
-    //     <div className="p-4">
-    // <div className="row mt-4 gap-4 container" >
-    //         {
-    //         event && event.map((data , index)=>(
-    //             // <div key={index}  onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
-    //             <div key={index} className="col-md-3 col-sm-6 trending__card p-0" onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} >
-    //             <EventCard data={data}/>
-    //             </div>
-    //         ))
-    //          }
-    // </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }

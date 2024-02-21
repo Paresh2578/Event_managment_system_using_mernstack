@@ -12,7 +12,6 @@ import {URL} from '../../../../../util/URL';
 
 //compontes
 import RegistreFrom from './registreFrom';
-import Navbar from "../../navbar/Navbar";
 import SubEventCard from './SubEventCard';
 
 //mui
@@ -73,7 +72,6 @@ export default function SubEvents() {
  
   return (
     <div className="user-body" style={{}}>
-    <Navbar/>
     <section class="gallery container"  style={{ paddingTop: "20vh" }}>
       <h1 class="heading">
        All sub <span>Events</span>

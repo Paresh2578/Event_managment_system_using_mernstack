@@ -568,7 +568,7 @@ export default function RegistreFrom({
           template_params: {
             'student_name' :`group leader ${groupParticipationData.members[0].name}`,
             'event_name' :groupParticipationData.members[0].subEventName,
-            'college_name' : "Darshan university",
+            'college_name' : "XYZ university",
             'event_date' : eventDate,
             'event_time' : formetTime(subEventTime),
             'Contact_Information' :'9327095244',
@@ -621,7 +621,7 @@ export default function RegistreFrom({
           template_params: {
             'student_name' : singleParticipationData.name,
             'event_name' : singleParticipationData.subEventName,
-            'college_name' : "Darshan university",
+            'college_name' : "XYZ university",
             'event_date' : eventDate,
             'event_time' : formetTime(subEventTime),
             'Contact_Information' :'9327095244',
