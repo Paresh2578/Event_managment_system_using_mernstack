@@ -1,14 +1,20 @@
 import React from "react";
-import Navbar from "./Navbar";
-import { Outlet } from "@mui/icons-material";
-import Footer from "./Footer";
+import { Outlet } from "react-router-dom";
 
-export default function UserLayout() {
+
+//compontes
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+
+const UserLayout = () => {
+
   return (
-    <div>
-      <Navbar/>
+    <>
+           <Navbar/>
       <Outlet/>
       <Footer/>
-    </div>
+    </>
   );
-}
+};
+
+export default UserLayout;

@@ -466,7 +466,8 @@ export default function RegistreFrom({
   registerOpen,
   setregisterOpen,
   data,
-  eventName
+  eventName,
+  getAllSubEvents
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [singleParticipationData , setsingleParticipationData] =useState({eventName : eventName ,subEventName : data.subEventname  ,subEventId : data._id,name : "" ,Enrollment : "" ,email : "" ,mobile : ""})
@@ -515,7 +516,9 @@ export default function RegistreFrom({
 
 
   const handleClose = () => {
+    getAllSubEvents();
     setregisterOpen(false);
+
   };
 
   const handleRegister = async()=>{
@@ -586,6 +589,7 @@ export default function RegistreFrom({
            result = await result.json();
            setRegisterLoding(false);
            if(result.success){
+             getAllSubEvents();
             setregisterOpen(false);
             toast.success("sucessfully Register");
             //send email
@@ -608,7 +612,7 @@ export default function RegistreFrom({
         setsingleParticipationDataError({name : false ,Enrollment : true ,email : false ,mobile : false})
       }else if(singleParticipationData.email.length == 0){
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : true ,mobile : false})
-      }else if(singleParticipationData.mobile.toString().length == 0){
+      }else if(singleParticipationData.mobile.toString().length <= 0){
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : true})
       }else{
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
@@ -641,6 +645,7 @@ export default function RegistreFrom({
            result = await result.json();
            setRegisterLoding(false);
            if(result.success){
+            getAllSubEvents();
             setregisterOpen(false);
             toast.success("sucessfully Register");
 
@@ -694,7 +699,7 @@ export default function RegistreFrom({
                   />
               {/* {Array.from({ length: data.groupMember }).map((_, index) => ( */}
               {Array.from({ length: data.groupMember }).map((_, index) => (
-                 <>
+                 <div key={index}>
                  <p className="t-center" style={{fontSize:'1rem'}} >*** member {index+1} ***</p>
                  {groupParticipationDataError[index].name ? 
                     <TextField
@@ -787,7 +792,7 @@ export default function RegistreFrom({
                     value={groupParticipationData.members[index].mobile}
                     onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , mobile : e.target.value} : member)})}    />
                   }
-               </>
+               </div>
             //    <>
             //    <p className="t-center">*** member {index+1} ***</p>
             //    {/* <br/> */}

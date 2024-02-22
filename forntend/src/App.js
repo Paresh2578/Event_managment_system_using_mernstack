@@ -1,11 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes , Outlet } from 'react-router-dom';
 
 
 
 
 // Components
-import AdminLayout from './layouts/AdminLayout';
+import AdminLayout from './layouts/AdminLayout/AdminLayout';
 import Home from './components/users/compontes/Home/Home';
 import SubEvents from './components/users/compontes/Event/subEvents/subEvents'
 import Login from './auth/login';
@@ -23,11 +23,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home/>} />
-        {/* <Route path='demo' element={<UserLayout/>}>
-            <Route path='home' element={<Home/>}/>
-        </Route> */}
-        <Route path='subevent/:eventName/:id' element={<SubEvents/>} />
+        {/* <Route path='/' element={<Home/>} /> */}
+        <Route path=''  element={<UserLayout/>}>
+            <Route index element={<Home/>}/>
+            <Route path='subevent/:eventName/:id' element={<SubEvents/>} />
+        </Route>
+        
         <Route path="admin" element={<ProtectedRoute><AdminLayout/></ProtectedRoute>}>
             <Route path='dashboard' element={<Dashboard/>}/>
             <Route path='events' element={<Events/>}/>

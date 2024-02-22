@@ -44,7 +44,7 @@ export default function Events() {
   const [open, setOpen] = useState(false);
 
   const [category, setCategory] = useState(["completed", " uncompleted"]);
-  const [activeFillter, setActiveFillter] = useState(-1);
+  const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
   const [event, setEvent] = useState([]);
   const [dupEvent, setDupEvent] = useState([]);
 
@@ -67,19 +67,21 @@ export default function Events() {
   }, []);
 
   const getAllEvents = async () => {
+    console.log("calls")
     let result = await fetch(`${URL}/event/getAllEvent`);
     result = await result.json();
 
     if (result.success) {
       setEvent(result.data);
       setDupEvent(result.data);
+      console.log(result.data);
     } else {
       toast.error("something worng");
     }
   };
 
-  const eventFillter = (itemData, index) => {
-    setActiveFillter(index);
+  const eventFillter = (index) => {
+    setActiveEventCatagary(index);
 
     if (index == -1) {
       setEvent(dupEvent);
@@ -154,10 +156,57 @@ export default function Events() {
 
   return (
     <>
-      <div id="" className="text-center container">
+
+<div className="mt-0">
+      <section id="portfolio" class="portfolio section-bg">
+        <div class="container section-bg" data-aos="fade-up">
+          <div class="section-title">
+            <h2>Events</h2>
+            <h3>
+              All <span>Events</span>
+            </h3>
+          </div>
+
+          <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <ul id="portfolio-flters">
+                <div className="col mb-3 ">
+                <li onClick={()=>eventFillter(-1)} class={activeEventCatagary == -1 ?  "filter-active" : ""}>
+                  All
+                </li>
+              {category.map((categoryItem, index) => (
+                <li key={index} class={activeEventCatagary == index ?  "filter-active" : ""} onClick={()=>eventFillter(index)}>{categoryItem}</li>
+                ))}
+                </div>
+               
+              </ul>
+            </div>
+          </div>
+          <div className="row ms-xl-2 ms-sm-0">
+            {event && event.length !=0 &&
+              event.map((data, index) => (
+                <div className="col-xl-3 col-md-4 col-sm-6   p-0 ms-3 me-3 mb-3">
+                  <EventCard
+                    key={index}
+                    data={data}
+                    handleEditEvent={handleEditEvent}
+                    index={index}
+                    handleRemoveEvent={handleRemoveEvent}
+                  />
+                </div>
+              ))}
+              {
+                event.length == 0 && <EmptyEvent/>
+              }
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+      {/* <div id="" className="text-center container">
         <div className="container">
           <div className="col-md-8 col-md-offset-2 section-title">
-            {/* <h2>Events</h2> */}
             <h1 class="admin-heading text-center">
               all <span>Events</span>
             </h1>
@@ -190,25 +239,9 @@ export default function Events() {
               </div>
             ))}
           </div>
-          <div className="row">
-            {event && event.length !=0 &&
-              event.map((data, index) => (
-                <div className="col-md-3 col-sm-6  trending__card p-0 me-3 mb-3">
-                  <EventCard
-                    key={index}
-                    data={data}
-                    handleEditEvent={handleEditEvent}
-                    index={index}
-                    handleRemoveEvent={handleRemoveEvent}
-                  />
-                </div>
-              ))}
-              {
-                event.length == 0 && <EmptyEvent/>
-              }
-          </div>
+        
         </div>
-      </div>
+      </div> */}
       <Fab
         aria-label="like"
         className="bg-primary text-light"

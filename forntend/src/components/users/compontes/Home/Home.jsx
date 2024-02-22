@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/style.css";
+import "../../../../layouts/UserLayout/css/style.css";
 
 //compontes
 import Testimonials from "./Testimonials";
@@ -13,7 +13,7 @@ import Footer from "../../../../layouts/UserLayout/Footer";
 export default function Home() {
   return (
     <>
-    <Navbar/>
+    {/* <Navbar/> */}
       {/* <!-- ======= Hero Section ======= --> */}
       <section id="hero" class="d-flex align-items-center">
         <div class="container" data-aos="zoom-out" data-aos-delay="100">
@@ -46,7 +46,7 @@ export default function Home() {
         <i class="bi bi-arrow-up-short"></i>
       </a>
 
-      <Footer/>
+      {/* <Footer/> */}
     </>
   );
 }

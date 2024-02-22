@@ -14,7 +14,7 @@ export default function EventCard({ data }) {
 
 <div class="member">
               <div class="member-img">
-                <img src={data.eventPosterUrl} class="" alt=""/>
+                <img src={data.eventPosterUrl} class="" alt={data.name}/>
               </div>
               <div class="member-info">
                 <h4>{data.name}</h4>

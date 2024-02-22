@@ -1,55 +1,125 @@
-import React , {useState} from "react";
-
+import React, { useState } from "react";
 
 //utile
-import {formetTime} from '../../../../../util/FormentTime'
+import { formetTime } from "../../../../../util/FormentTime";
 
 //mui
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import {EventSeat, AccessAlarm} from "@mui/icons-material";
-import { ToastContainer, toast } from 'react-toastify';
+import { EventSeat, AccessAlarm } from "@mui/icons-material";
+import { ToastContainer, toast } from "react-toastify";
 
 //compontes
-import RegistreFrom from './registreFrom';
+import RegistreFrom from "./registreFrom";
 import EventDiscriptionDialog from "./eventDiscriptionDialog";
 
-
-
-export default function SubEventCard({data , eventName }){
+export default function SubEventCard({ data, eventName , getAllSubEvents }) {
   const [registerOpen, setregisterOpen] = useState(false);
   const [eventDiscriptionOpen, setEventDiscriptionOpen] = useState(false);
 
-  const handleRegister = ()=>{
-      if((data.seats - data.singleParticipation.length - data.groupParticipation.length )  == 0){
-        toast.error("No avalible seats");
-        //  return;
-      }else{
-        setregisterOpen(true);
-      }
-  }
-      
-    return <>
-      <RegistreFrom registerOpen={registerOpen} setregisterOpen={setregisterOpen} data={data} eventName={eventName}/>
-      <EventDiscriptionDialog open={eventDiscriptionOpen} setOpen={setEventDiscriptionOpen} data={data} eventName={eventName}/>
+  const handleRegister = () => {
+    if (
+      data.seats -
+        data.singleParticipation.length -
+        data.groupParticipation.length ==
+      0
+    ) {
+      toast.error("No avalible seats");
+      //  return;
+    } else {
+      setregisterOpen(true);
+    }
+  };
 
-      <div  style={{backgroundColor : "#333"}}>
+  return (
+    <>
+      <RegistreFrom
+        registerOpen={registerOpen}
+        setregisterOpen={setregisterOpen}
+        data={data}
+        eventName={eventName}
+        getAllSubEvents={getAllSubEvents}
+      />
+      <EventDiscriptionDialog
+        open={eventDiscriptionOpen}
+        setOpen={setEventDiscriptionOpen}
+        data={data}
+        eventName={eventName}
+      />
+
+      <div class="card" style={{ width: "18rem" }}>
       <div className="card-container ">
-        {/* <p className="img-text">Your Text Goes Here</p> */}
+       
+       <div className="img-text">
+         <span className="text-center">
+           <EventSeat />  {data.seats - data.singleParticipation.length - data.groupParticipation.length}  Seat
+         </span>
+      
+       </div>
+       <img
+         src={data.subEventPosterUrl}
+         style={{ height: "200px" }}
+         alt="Your Alt Text"
+         className="overlay-image"
+       
+       />
+     </div>
+        <div class="card-body">
+          <h5 class="card-title">{data.subEventname}</h5>
+          <p class="card-text">
+          <AccessAlarm color="#6372ff" /> <span >{formetTime(data.time)}</span>
+          </p>
+
+          <div className="row">
+            <div className="col btn btn-primary me-2 ms-2" onClick={()=>handleRegister()}>Register</div>
+            <div className="col btn btn-info me-2" onClick={()=>setEventDiscriptionOpen(true)}>more details</div>
+          </div>
+          
+        </div>
+      </div>
+
+      {/* <div class="member">
+       
+        <div className="">
+          <div className="img-text">
+            <span className="text-center">
+              <EventSeat />{" "}
+              {data.seats -
+                data.singleParticipation.length -
+                data.groupParticipation.length}{" "}
+              Seat
+            </span>
+          </div>
+          
+                <img src={data.subEventPosterUrl} class="" alt=""/>
+              
+        </div>
+        <div class="member-info">
+          <h4>ssdd</h4>
+          <span>
+            <AccessAlarm />
+            "dddd
+          </span>
+        </div>
+      </div> */}
+
+      {/* <div  style={{backgroundColor : "#333"}}>
+      <div className="card-container ">
+       
         <div className="img-text">
           <span className="text-center">
             <EventSeat />  {data.seats - data.singleParticipation.length - data.groupParticipation.length}  Seat
           </span>
-          {/* <p>100</p> */}
+       
         </div>
         <img
           src={data.subEventPosterUrl}
           style={{ height: "200px" }}
           alt="Your Alt Text"
           className="overlay-image"
-        //   onClick={() => navigate("/admin/events/subevent/id")}
+        
         />
       </div>
       <CardContent >
@@ -62,9 +132,9 @@ export default function SubEventCard({data , eventName }){
                   <Button  variant="outlined" style={{color:"white" }} onClick={()=>handleRegister()}>register</Button>
                   <Button  variant="outlined" style={{color:"white" }} onClick={()=>setEventDiscriptionOpen(true)}>Information</Button>
        </CardActions>
-    </div>
-    
-    {/* <div style={{backgroundColor : "#333"}}>
+    </div> */}
+
+      {/* <div style={{backgroundColor : "#333"}}>
                 <div className="card-container">
                   <div className="img-text">
                     <span className="text-center">
@@ -92,4 +162,5 @@ export default function SubEventCard({data , eventName }){
                 </CardActions>
               </div> */}
     </>
+  );
 }

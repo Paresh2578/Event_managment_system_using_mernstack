@@ -7,6 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import './AdminLayout.css';
 
+import Footer from '../UserLayout/Footer'
+
 const FullLayout = () => {
     let navigate = useNavigate();
   const [mobileNaigation , setMobileNavigation] = useState(false);
@@ -73,14 +75,14 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                <li className={currActiveComponet == 3 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(3)}}>
+                {/* <li className={currActiveComponet == 3 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(3)}}>
                     <a href="#" >
                         <span class="icon">
                             <ion-icon name="chatbubble-outline"></ion-icon>
                         </span>
                         <span class="title">Create Event</span>
                     </a>
-                </li>
+                </li> */}
 
                
 
@@ -106,7 +108,9 @@ const FullLayout = () => {
 
                <Outlet/>
         </div>
+    <Footer/>
     </div>
+
     </>
   );
 };

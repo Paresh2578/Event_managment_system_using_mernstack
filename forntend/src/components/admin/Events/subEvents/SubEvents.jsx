@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-
+import { ToastContainer, toast } from "react-toastify";
 
 import "../../../users/compontes/Event/Events.css";
 
@@ -12,6 +11,7 @@ import { URL } from "../../../../util/URL";
 import CeateSubEvents from "./ceateSubEvents";
 import EditSubEvent from "./EditSubEvent";
 import SubEventCard from "./subEventCard";
+import EmptyEvent from "../../EmptyEvent";
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -57,8 +57,8 @@ export default function SubEvents() {
     "Microbiology",
     "General",
   ]);
-  const [activeFillter, setActiveFillter] = useState(-1);
-  const [dupSubEvent  ,  setDupSubEvent] = useState([]);
+  const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
+  const [dupSubEvent, setDupSubEvent] = useState([]);
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
@@ -99,12 +99,18 @@ export default function SubEvents() {
     }
   };
 
-  const eventFillter = (itemData, index) => {
-    setActiveFillter(index);
-    if(index == -1){
+  const eventFillter = (index) => {
+    setActiveEventCatagary(index);
+    if (index == -1) {
       setSubEvent(dupSubEvent);
-    }else{
-      setSubEvent(dupSubEvent.filter((e)=>e.category.toString().toLowerCase() == category[index].toString().toLowerCase()));
+    } else {
+      setSubEvent(
+        dupSubEvent.filter(
+          (e) =>
+            e.category.toString().toLowerCase() ==
+            category[index].toString().toLowerCase()
+        )
+      );
     }
   };
 
@@ -142,16 +148,12 @@ export default function SubEvents() {
 
   return (
     <>
-      <div className="text-center mt-5 container" style={{ marginTop: "15vh" }}>
+      {/* <div className="text-center mt-5 container" style={{ marginTop: "15vh" }}>
         <div className="container">
           <div className="col-md-8 col-md-offset-2 section-title">
             <h1 class="admin-heading text-center">
               all <span>subEvents</span>
             </h1>
-            {/* <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
-          </p> */}
           </div>
 
           <div className="row">
@@ -198,7 +200,64 @@ export default function SubEvents() {
               ))}
           </div>
         </div>
+      </div> */}
+
+      <div className="mt-0">
+        <section id="portfolio" class="portfolio section-bg">
+          <div class="container section-bg" data-aos="fade-up">
+            <div class="section-title">
+              <h2>Subevents</h2>
+              <h3>
+                All <span>subEvents</span>
+              </h3>
+            </div>
+
+            <div class="row" data-aos="fade-up" data-aos-delay="100">
+              <div class="col-lg-12 d-flex justify-content-center">
+                <ul id="portfolio-flters">
+                  <div className="col mb-3 ">
+                    <li
+                      onClick={() => eventFillter(-1)}
+                      class={activeEventCatagary == -1 ? "filter-active" : ""}
+                    >
+                      All
+                    </li>
+                    {category.map((categoryItem, index) => (
+                      <li
+                        key={index}
+                        class={
+                          activeEventCatagary == index ? "filter-active" : ""
+                        }
+                        onClick={() => eventFillter(index)}
+                      >
+                        {categoryItem}
+                      </li>
+                    ))}
+                  </div>
+                </ul>
+              </div>
+            </div>
+            <div   class="row portfolio-container"
+            data-aos="fade-up"
+            data-aos-delay="200">
+            {subEvent &&
+              subEvent.map((data, index) => (
+                <div className="col-lg-3 col-md-6 d-flex align-items-stretch m-sm-3 me-xl-2 ">
+                  <SubEventCard
+                    key={index}
+                    data={data}
+                    handleEditSubEvent={handleEditSubEvent}
+                    index={index}
+                    handleRemoveSubEvent={handleRemoveSubEvent}
+                  />
+                </div>
+              ))}
+              {SubEventCard.length == 0 && <EmptyEvent />}
+            </div>
+          </div>
+        </section>
       </div>
+
       <Fab
         aria-label="like"
         className="bg-primary text-light"

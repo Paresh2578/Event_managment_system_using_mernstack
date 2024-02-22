@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-
+import { ToastContainer, toast } from "react-toastify";
 
 import "./Events.css";
 
 //componets
 import EditEvent from "./EditEvent";
-import  DeleteConformAlertDialog from './DeleteConformAlertDialog';
+import DeleteConformAlertDialog from "./DeleteConformAlertDialog";
 
 //utils
 import { URL } from "../../../util/URL";
@@ -33,7 +32,8 @@ export default function EventCard({
 
   const [editEventOpen, setEditEventOpen] = useState(false);
   const [deleteEventLoding, setDeleteEventLoding] = useState(false);
-  const [deleteConformAlertDialogOpen,       setDeleteConformAlertDialogOpen] = useState(false);
+  const [deleteConformAlertDialogOpen, setDeleteConformAlertDialogOpen] =
+    useState(false);
 
   const deleteEvent = async () => {
     try {
@@ -52,12 +52,12 @@ export default function EventCard({
         handleRemoveEvent(index);
         toast.success("successfully delete event");
       } else {
-        toast.error("Faild to delete event")
+        toast.error("Faild to delete event");
       }
     } catch (error) {
       setDeleteEventLoding(false);
       setDeleteConformAlertDialogOpen(false);
-      toast.error("Faild to delete event")
+      toast.error("Faild to delete event");
       // console.log("edit event error ");
     }
   };
@@ -71,8 +71,13 @@ export default function EventCard({
         data={data}
         index={index}
       />
-      <DeleteConformAlertDialog open={deleteConformAlertDialogOpen} setOpen={setDeleteConformAlertDialogOpen} deleteFunction={deleteEvent} deleteEventLoding={deleteEventLoding}/>
-      
+      <DeleteConformAlertDialog
+        open={deleteConformAlertDialogOpen}
+        setOpen={setDeleteConformAlertDialogOpen}
+        deleteFunction={deleteEvent}
+        deleteEventLoding={deleteEventLoding}
+      />
+      {/*       
       <div>
         <div>
           <div  className="card-container" onClick={() => navigate(`/admin/subEvents/${data._id}`)}>
@@ -81,26 +86,16 @@ export default function EventCard({
             style={{ height: "200px" }}
             alt={data.name}
             className="overlay-image rounded-top"
-            // className="overlay-image"
           />
           </div>
-          {/* <CardMedia
-                  component="img"
-                  onClick={() => navigate(`/admin/subEvents/${data._id}`)}
-                  height="250"
-                  image={data.eventPosterUrl}
-                  alt="Paella dish"
-                /> */}
           <CardContent>
             <p style={{ textAlign: "left" }}>
               <CalendarMonth htmlColor="#6372ff" />{" "}
-              {/* <span style={{fontSize:'1.5rem'}}>{data.date}</span> */}
               <span>{data.date}</span>
             </p>
-            <p className="event-card" style={{ fontSize: "1rem" }}>
+            <p className="event-card" style={{ fontSize: "1.5rem" }}>
               {data.name}
             </p>
-            {/* <p className='event-card'>{data.name}</p> */}
             <div className="roe">
               <Button
                 className="col"
@@ -121,6 +116,23 @@ export default function EventCard({
               ></Button>
             </div>
           </CardContent>
+        </div>
+      </div> */}
+
+      <div className="card" style={{ width: "18rem" }}>
+        <img src={data.eventPosterUrl} class="card-img-top" alt={data.name} onClick={() => navigate(`/admin/subEvents/${data._id}`)}/>
+        <div class="card-body">
+          <h5 class="card-title fs-4">{data.name}</h5>
+          <p class="card-text">
+          <CalendarMonth htmlColor="#6372ff" />{" "}
+              <span>{data.date}</span>
+          </p>
+          <div  class="btn btn-primary rounded-lg me-3">
+          <Edit size="small"   onClick={() => setEditEventOpen(true)}/>
+          </div>
+          <div  class="btn btn-danger rounded-lg">
+          <Delete size="small" onClick={() => setDeleteConformAlertDialogOpen(true)} />
+          </div>
         </div>
       </div>
     </>

@@ -1,120 +1,128 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate , useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
-
-import './subEvents.css'
-import '../Events.css'
+import "./subEvents.css";
+import "../Events.css";
 
 //utils
-import {URL} from '../../../../../util/URL';
+import { URL } from "../../../../../util/URL";
 
 //compontes
-import RegistreFrom from './registreFrom';
-import SubEventCard from './SubEventCard';
+import RegistreFrom from "./registreFrom";
+import SubEventCard from "./SubEventCard";
 
 //mui
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import {CalendarMonth  , EventSeat, AccessAlarm} from "@mui/icons-material";
-
-
-
-
-
+import { CalendarMonth, EventSeat, AccessAlarm } from "@mui/icons-material";
 
 export default function SubEvents() {
   const navigate = useNavigate();
-  const {id , eventName } = useParams();
+  const { id, eventName } = useParams();
 
   // const [isHovered, setIsHovered] = useState(false);
-  
+
   // const [eventName , setEeventName] = useState("");
   // const [group , setGroup] =useState(false);
   // const [numberOfNumber , SetNumberOfNumber] = useState(4);
-  const [category , setCategory] = useState(["Civil" , "Computer" , "Electrical" , "Mechanical" , "Management" , "Microbiology" , "General"]);
-  const [subEvent , setSubEvent] = useState([]);
-  const [dupSubEvent  ,  setDupSubEvent] = useState([]);
-  const [activeFillter , setActiveFillter]= useState(-1);
+  const [category, setCategory] = useState([
+    "Civil",
+    "Computer",
+    "Electrical",
+    "Mechanical",
+    "Management",
+    "Microbiology",
+    "General",
+  ]);
+  const [subEvent, setSubEvent] = useState([]);
+  const [dupSubEvent, setDupSubEvent] = useState([]);
+  const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
 
-
-
-  useEffect(()=>{
+  useEffect(() => {
     getAllSubEvents();
-  },[]);
+  }, []);
 
-  const getAllSubEvents = async()=>{
+  const getAllSubEvents = async () => {
     let result = await fetch(`${URL}/subEvent/getSubEvent/${id}`);
     result = await result.json();
 
-    if(result.success){
+    if (result.success) {
+      console.log(result.data);
       setSubEvent(result.data);
       setDupSubEvent(result.data);
-    }else{
+    } else {
       toast.error("Fetch Subevent fail");
-       }
- }
-
- const eventFillter = (itemData , index) =>{
-  // setData(filterData);
-    setActiveFillter(index);
-    // setSubEvent(subEvent.filter((e)=>e.category.toString().toLowerCase() != category[index]).toString().toLowerCase());
-    if(index == -1){
-      setSubEvent(dupSubEvent);
-    }else{
-   setSubEvent(dupSubEvent.filter((e)=>e.category.toString().toLowerCase() == category[index].toString().toLowerCase()));
     }
-}
+  };
 
- 
+  const eventFillter = (index) => {
+    // setData(filterData);
+    setActiveEventCatagary(index);
+    // setSubEvent(subEvent.filter((e)=>e.category.toString().toLowerCase() != category[index]).toString().toLowerCase());
+    if (index == -1) {
+      setSubEvent(dupSubEvent);
+    } else {
+      setSubEvent(
+        dupSubEvent.filter(
+          (e) =>
+            e.category.toString().toLowerCase() ==
+            category[index].toString().toLowerCase()
+        )
+      );
+    }
+  };
+
   return (
-    <div className="user-body" style={{}}>
-    <section class="gallery container"  style={{ paddingTop: "20vh" }}>
-      <h1 class="heading">
-       All sub <span>Events</span>
-      </h1>
+    <div className="mt-5">
+      <section id="portfolio" class="portfolio section-bg">
+        <div class="container section-bg" data-aos="fade-up">
+          <div class="section-title">
+            <h2>Subevents</h2>
+            <h3>
+              Upcoming <span>Subevents</span>
+            </h3>
+          </div>
 
-      <div className="row filter-button">
-            <div class="">
-            <button className={activeFillter != -1 ? 'filter-btn  mb-2 me-1' : 'filter-btn-active mb-2 me-1'} onClick={()=>{eventFillter("All" , -1)}}>All</button>
-            {
-              category.map((item , index)=> <button className={activeFillter != index ? 'filter-btn  mb-2 me-1' : 'filter-btn-active  mb-2 me-1'} onClick={()=>{eventFillter(item , index)}}>{item}</button>)
-            }
-
+          <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <ul id="portfolio-flters">
+                <div className="col mb-3 ">
+                <li onClick={()=>eventFillter(-1)} class={activeEventCatagary == -1 ?  "filter-active" : ""}>
+                  All
+                </li>
+              {category.map((categoryItem, index) => (
+                <li key={index} class={activeEventCatagary == index ?  "filter-active" : ""} onClick={()=>eventFillter(index)}>{categoryItem}</li>
+                ))}
+                </div>
+               
+              </ul>
             </div>
+          </div>
 
-            </div>
-
-            <div className="row">
+          <div
+            class="row portfolio-container"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
             {subEvent &&
               subEvent.map((data, index) => (
-                <div key={index} className="col-md-3 col-sm-6 trending__card">
-                  <SubEventCard data={data}  eventName={eventName}/>
+                <div
+                  key={index}
+                  class="col-lg-3 col-md-6 d-flex align-items-stretch"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                >
+              
+                  <SubEventCard data={data} eventName={eventName} getAllSubEvents={getAllSubEvents} />
                 </div>
               ))}
           </div>
-
-      {/* <div class="box-container">
-      <div className="text-center " >
-        <div className="container">
-          
-          <div className="row">
-             {
-              subEvent.length >= 1 && subEvent.map((data , index)=>(
-                <div key={index} className="col-md-3 col-sm-6 trending__card">
-                  <SubEventCard data={data}  eventName={eventName}/>
-                </div>
-              ))
-             } 
-          </div>
         </div>
-      </div>
-      </div> */}
-    </section>
-      
+      </section>
     </div>
   );
 }

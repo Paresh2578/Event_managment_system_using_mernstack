@@ -53,26 +53,58 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
 
 
   return (
-    <div >
+    <div className="">
        <DeleteConformAlertDialog open={deleteConformAlertDialogOpen} setOpen={setDeleteConformAlertDialogOpen} deleteFunction={deleteSubEvent} deleteEventLoding={deleteSubEventLoding}/>
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
+
+      <div class="card" style={{ width: "18rem" }} >
+      <div className="card-container "  onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
+       
+       <div className="img-text" >
+         <span className="text-center">
+           <EventSeat /> {data.seats} Seats
+         </span>
+      
+       </div>
+       <img
+         src={data.subEventPosterUrl}
+         style={{ height: "200px" }}
+         alt={data.subEventname}
+         className="overlay-image"
+       
+       />
+     </div>
+        <div class="card-body">
+          <h5 class="card-title">{data.subEventname}</h5>
+          <p class="card-text">
+          <AccessAlarm color="#6372ff" /> <span >{formetTime(data.time)}</span>
+          </p>
+
+          <div  class="btn btn-primary rounded-lg me-3">
+          <Edit size="small"   onClick={() => setEditEventOpen(true)}/>
+          </div>
+          <div  class="btn btn-danger rounded-lg">
+          <Delete size="small" onClick={() => setDeleteConformAlertDialogOpen(true)} />
+          </div>
+          
+        </div>
+      </div>
+
+{/* 
       <div className="card-container " onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
-        {/* <p className="img-text">Your Text Goes Here</p> */}
         <div className="img-text">
           <span className="text-center">
             <EventSeat /> {data.seats} Seat
           </span>
-          {/* <p>100</p> */}
         </div>
         <img
           src={data.subEventPosterUrl}
           style={{ height: "200px" }}
           alt="Your Alt Text"
           className="overlay-image"
-        //   onClick={() => navigate("/admin/events/subevent/id")}
         />
-      </div>
-      <CardContent >
+      </div> */}
+      {/* <CardContent >
         <p style={{ textAlign: "left"}}>
           <AccessAlarm color="#6372ff"/> <span>{formetTime(data.time)}</span>
         </p>
@@ -90,7 +122,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
                     onClick={()=>setDeleteConformAlertDialogOpen(true)}
                     />}>
                   </Button>
-      </CardContent>
+      </CardContent> */}
     </div>
   );
 }

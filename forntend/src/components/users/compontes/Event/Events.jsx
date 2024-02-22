@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import "./Events.css";
 
-import img from '../img/team/team-1.jpg'
 
 //utils
 import { URL } from "../../../../util/URL";
@@ -56,7 +55,7 @@ export default function Events() {
         <div class="row">
         {event &&
           event.map((data, index) => (
-            <div key={index} onClick={()=>navigate(`subevent/${data.name}/${data._id}`)} class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div key={index} onClick={()=>navigate(`/subevent/${data.name}/${data._id}`)} class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
               <EventCard data={data}/>
           </div>
           ))}
