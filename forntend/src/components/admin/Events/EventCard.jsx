@@ -38,7 +38,7 @@ export default function EventCard({
   const deleteEvent = async () => {
     try {
       setDeleteEventLoding(true);
-      let result = await fetch(`${URL}/event/delete/${data._id}`, {
+      let result = await fetch(`${URL}/api/event/delete/${data._id}`, {
         method: "DELETE",
         headers: {
           Authorization: adminAuth.token,

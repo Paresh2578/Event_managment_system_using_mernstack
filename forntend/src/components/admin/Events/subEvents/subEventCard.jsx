@@ -26,7 +26,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
     const deleteSubEvent = async()=>{
       try{
         setdeleteSubEventLoding(true);
-        let result = await fetch(`${URL}/subEvent/delete/${data._id}`, {
+        let result = await fetch(`${URL}/api/subEvent/delete/${data._id}`, {
           method: "DELETE",
           headers: {
             "Authorization": adminAuth.token

@@ -23,7 +23,7 @@ export default function EventDiscriptionDialog({open ,  setOpen,data, eventName}
   const getCoordinatorInfo= async()=>{
     try{
       setLoading(true);
-    let result = await fetch(`${URL}/subEvent/getCoordinator/${data.coordinatorId}`);
+    let result = await fetch(`${URL}/api/subEvent/getCoordinator/${data.coordinatorId}`);
     result = await result.json();
 
     setLoading(false);

@@ -88,7 +88,7 @@ export default function SubEvents() {
   }, []);
 
   const getAllSubEvents = async () => {
-    let result = await fetch(`${URL}/subEvent/getSubEvent/${id}`);
+    let result = await fetch(`${URL}/api/subEvent/getSubEvent/${id}`);
     result = await result.json();
 
     if (result.success) {

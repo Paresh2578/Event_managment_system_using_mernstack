@@ -32,8 +32,8 @@ export default function Events() {
   }, []);
 
   const getAllEvents = async () => {
-    // let result = await fetch(`${URL}/event/getAllEvent`);
-    let result = await fetch(`${URL}/event/getUpcomingEvents`);
+    let result = await fetch(`${URL}/api/event/getAllEvent`);
+    // let result = await fetch(`${URL}/api/event/getUpcomingEvents`);
     result = await result.json();
 
     if (result.success) {

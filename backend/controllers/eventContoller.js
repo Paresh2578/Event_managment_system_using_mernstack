@@ -98,11 +98,10 @@ exports.createEvnet = async (req, resp) => {
       groupMember,
       isGroup,
       subEventPosterUrl,
-      discription
+      discription,
+      paid,
+      pay
     } = req.body;
-
-    console.log(discription , "this is discription")
-
 
     let subEvent = new SubEvents({
       eventId,
@@ -112,6 +111,8 @@ exports.createEvnet = async (req, resp) => {
       seats,
       groupMember,
       isGroup,
+      pay,
+      paid,
       subEventPosterUrl,
       discription,
       coordinatorId,

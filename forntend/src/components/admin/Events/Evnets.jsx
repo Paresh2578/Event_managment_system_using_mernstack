@@ -67,8 +67,7 @@ export default function Events() {
   }, []);
 
   const getAllEvents = async () => {
-    console.log("calls")
-    let result = await fetch(`${URL}/event/getAllEvent`);
+    let result = await fetch(`${URL}/api/event/getAllEvent`);
     result = await result.json();
 
     if (result.success) {

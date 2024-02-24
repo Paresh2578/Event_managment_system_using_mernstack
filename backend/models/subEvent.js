@@ -29,6 +29,14 @@ const subEventSchema =new  mongoose.Schema({
         required : true,
         type : Boolean,
     },
+    pay : {
+        required : true,
+        type : Number,
+    },
+    paid : {
+        required : true,
+        type : Boolean,
+    },
     subEventPosterUrl : {
         required : true,
         type : String,

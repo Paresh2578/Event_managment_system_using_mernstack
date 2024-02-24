@@ -26,7 +26,7 @@ export default function Dashboard() {
  const getDashBoardData =async ()=>{
     try{
 
-        let result = await fetch(`${URL}/event/getDashbordInfo` , {
+        let result = await fetch(`${URL}/api/event/getDashbordInfo` , {
             headers: {
                 "content-type": "application/json",
                 "Authorization":

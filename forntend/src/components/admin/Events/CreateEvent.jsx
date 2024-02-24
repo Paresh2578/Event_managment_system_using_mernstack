@@ -71,6 +71,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
     isGroup: false,
     posterUrl: "",
     discription: "",
+    pay : 10,
+    paid : false
   });
 
   const [coordinatorData, setCoordinatorData] = useState({
@@ -217,7 +219,10 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           posterUrl: false,
         });
         return false;
-      } else if (subEventData.posterUrl.length == 0) {
+      } else if(subEventData.paid && subEventData.pay < 10){
+        return false;
+      }
+      else if (subEventData.posterUrl.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
@@ -299,14 +304,16 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       name: eventData.name,
       date: eventData.date,
       eventPosterUrl: eventData.eventPosterUrl, //
-      discription : subEventData.discription
+      discription : subEventData.discription,
+      pay : subEventData.pay,
+      paid : subEventData.paid
         };
 
     console.log("this is evetn data :: ", createEventData);
 
     try {
       setCreateEventLoding(true);
-      let result = await fetch(`${URL}/event/create`, {
+      let result = await fetch(`${URL}/api/event/create`, {
         method: "POST",
         body: JSON.stringify(createEventData),
         headers: {
@@ -782,6 +789,59 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                                 })
                               }
                               label="number of group member"
+                              variant="outlined"
+                            />
+                          )}
+
+<div className="row mt-3 ">
+                          <FormLabel
+                            id="demo-row-radio-buttons-group-label"
+                            className="mt-2 ms-3 me-2 col-2"
+                          >
+                            paid :
+                          </FormLabel>
+                          <RadioGroup
+                            row
+                            value={subEventData.paid}
+                            onChange={(e) =>
+                              setSubEventData({
+                                ...subEventData,
+                                paid: e.target.value,
+                              })
+                            }
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            className="col"
+                          >
+                            <FormControlLabel
+                              value={true}
+                              control={<Radio />}
+                              label="Yes"
+                            />
+                            <FormControlLabel
+                              value={false}
+                              control={<Radio />}
+                              label="No"
+                            />
+                          </RadioGroup>
+                        </div>
+
+                        {subEventData.paid == "true" &&
+                           (
+                            <TextField
+                              className="mt-2"
+                              id="outlined-basic"
+                              type="number"
+                              error = {subEventData.paid && subEventData.pay < 10}
+                              value={subEventData.pay}
+                              onChange={(e) =>
+                                setSubEventData({
+                                  ...subEventData,
+                                  pay: e.target.value,
+                                })
+                              }
+                              label="how many pay"
+                              helperText={subEventData.paid && subEventData.pay < 10 ? 'must be greate than 10 rupes' : ''}
                               variant="outlined"
                             />
                           )}

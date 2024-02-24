@@ -67,7 +67,10 @@ export default function SubEventCard({ data, eventName , getAllSubEvents }) {
        />
      </div>
         <div class="card-body">
-          <h5 class="card-title">{data.subEventname}</h5>
+          <div className="d-flex justify-content-between">
+          <h5 class="card-title fs-4">{data.subEventname}</h5>
+          <div className="">{data.paid ?<span className="bg-light font-weight-bold rounded-1 p-1">₹ {data.pay}</span> :<span className="bg-success text-light font-weight-bold rounded-1 p-1">Free</span>}</div>
+          </div>
           <p class="card-text">
           <AccessAlarm color="#6372ff" /> <span >{formetTime(data.time)}</span>
           </p>

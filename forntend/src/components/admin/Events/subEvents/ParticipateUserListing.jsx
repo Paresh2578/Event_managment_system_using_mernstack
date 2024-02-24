@@ -29,7 +29,7 @@ export default function ParticipateUserListing() {
 
    const getSingleParticipationsList =  async ()=>{
       try{
-          let result = await fetch(`${URL}/participation/getsingleParticipationsList/${subEventID}` , {
+          let result = await fetch(`${URL}/api/participation/getsingleParticipationsList/${subEventID}` , {
             headers: {
               "content-type": "application/json",
               "Authorization":
@@ -56,7 +56,7 @@ export default function ParticipateUserListing() {
 
    const getGroupParticipationsList =  async ()=>{
     try{
-        let result = await fetch(`${URL}/participation/getGroupParticipationsList/${subEventID}` , {
+        let result = await fetch(`${URL}/api/participation/getGroupParticipationsList/${subEventID}` , {
           headers: {
             "content-type": "application/json",
             "Authorization":

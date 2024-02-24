@@ -67,7 +67,7 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
 
       try{
         setEventEditLoding(true);
-        let result = await fetch(`${URL}/event/edit/${data._id}`, {
+        let result = await fetch(`${URL}/api/event/edit/${data._id}`, {
           method: "PUT",
           body: JSON.stringify(eventData),
           headers: {

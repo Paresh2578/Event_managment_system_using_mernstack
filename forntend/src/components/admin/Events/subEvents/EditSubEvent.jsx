@@ -253,7 +253,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
     updateSubEventData = {...updateSubEventData , coordinator : coordinatorData };
     try{
       setEventSubEditLoding(true);
-      let result = await fetch(`${URL}/subEvent/edit/${data._id}`, {
+      let result = await fetch(`${URL}/api/subEvent/edit/${data._id}`, {
         method: "PUT",
         body: JSON.stringify(updateSubEventData),
         headers: {
