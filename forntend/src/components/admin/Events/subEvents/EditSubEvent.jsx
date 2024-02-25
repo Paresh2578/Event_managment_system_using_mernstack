@@ -533,6 +533,60 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                             />
                           )}
 
+
+<div className="row mt-3 ">
+                          <FormLabel
+                            id="demo-row-radio-buttons-group-label"
+                            className="mt-2 ms-3 me-2 col-2"
+                          >
+                            paid :
+                          </FormLabel>
+                          <RadioGroup
+                            row
+                            value={subEventData.paid}
+                            onChange={(e) =>
+                              setSubEventData({
+                                ...subEventData,
+                                paid: e.target.value,
+                              })
+                            }
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            className="col"
+                          >
+                            <FormControlLabel
+                              value={true}
+                              control={<Radio />}
+                              label="Yes"
+                            />
+                            <FormControlLabel
+                              value={false}
+                              control={<Radio />}
+                              label="No"
+                            />
+                          </RadioGroup>
+                        </div>
+
+                        {subEventData.paid == "true" &&
+                           (
+                            <TextField
+                              className="mt-2"
+                              id="outlined-basic"
+                              type="number"
+                              error = {subEventData.paid && subEventData.pay < 10}
+                              value={subEventData.pay}
+                              onChange={(e) =>
+                                setSubEventData({
+                                  ...subEventData,
+                                  pay: e.target.value,
+                                })
+                              }
+                              label="how many pay"
+                              helperText={subEventData.paid && subEventData.pay < 10 ? 'must be greate than 10 rupes' : ''}
+                              variant="outlined"
+                            />
+                          )}
+
                         <div className="row">
                           <div className="col">
                             <div

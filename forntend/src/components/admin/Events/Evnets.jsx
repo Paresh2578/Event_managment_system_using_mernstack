@@ -73,7 +73,6 @@ export default function Events() {
     if (result.success) {
       setEvent(result.data);
       setDupEvent(result.data);
-      console.log(result.data);
     } else {
       toast.error("something worng");
     }

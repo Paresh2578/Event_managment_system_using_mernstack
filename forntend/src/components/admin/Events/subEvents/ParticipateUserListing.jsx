@@ -45,9 +45,6 @@ export default function ParticipateUserListing() {
             alert(result.message);
           }
 
-          console.log(result);
-
-          // if(result)
       }catch(error){
         alert("get singlePartication error");
         console.log(error);

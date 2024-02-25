@@ -80,7 +80,7 @@ export default function RegistreFrom({
 
 
   const handleClose = () => {
-    getAllSubEvents();
+    // getAllSubEvents();
     setregisterOpen(false);
 
   };
@@ -112,11 +112,7 @@ export default function RegistreFrom({
         setGroupParticipationDataError(Array.from({ length: groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
 
         //IS evnet is paid .pay payment 
-        if(paid){
-          handlePayment();
-       }else{
         groupRegister();
-       }
 
      
 
@@ -132,41 +128,48 @@ export default function RegistreFrom({
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : true})
       }else{
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
-    
-        //IS evnet is paid .pay payment 
-        if(paid){
-           handlePayment();
-        }else{
-          singleStudentRegister();
+
+        singleStudentRegister();
+      }
+    }
+  }
+
+  const senEmail = async()=>{
+       //send email
+       var data = {
+        service_id: service_id,
+        template_id:template_id,
+        user_id: user_id,
+        template_params: {
+          'student_name' : isGroup ? `group leader ${groupParticipationData.members[0].name}` : singleParticipationData.name,
+          'event_name' : singleParticipationData.subEventName,
+          'college_name' : "XYZ university",
+          'event_date' : eventDate,
+          'event_time' : formetTime(subEventTime),
+          'Contact_Information' :'9327095244',
+          'student_email' : isGroup ? groupParticipationData.members[0].email  : singleParticipationData.email,
         }
-        
-      
-      }
-      }
+    };
+    try{
+      //send email
+    await axios.post(`${sendEmail_api}`, data)
+      toast.success(isGroup ? "send email in group leader" :  "send email");
+   }catch(error){
+     toast.error("Failed to send email");
+   }
+
+
   }
 
 
   const singleStudentRegister = async()=>{
-        //send email
-        var data = {
-          service_id: service_id,
-          template_id:template_id,
-          user_id: user_id,
-          template_params: {
-            'student_name' : singleParticipationData.name,
-            'event_name' : singleParticipationData.subEventName,
-            'college_name' : "XYZ university",
-            'event_date' : eventDate,
-            'event_time' : formetTime(subEventTime),
-            'Contact_Information' :'9327095244',
-            'student_email' :singleParticipationData.email,
-          }
-      };
+        
 
         try{
           setRegisterLoding(true);
 
            let result = await fetch(`${URL}/api/participation/singleRegister`  , {
+          //  let result = await fetch(`${URL}/api/participation/singleRegister`  , {
             method : "POST",
             body : JSON.stringify(singleParticipationData),
             headers : {
@@ -174,25 +177,12 @@ export default function RegistreFrom({
             }
            })
            result = await result.json();
-           setRegisterLoding(false);
+          //  setRegisterLoding(false);
            if(result.success){
-            getAllSubEvents();
-            setregisterOpen(false);
-            toast.success("sucessfully Register");
-
-            try{
-               //send email
-             await axios.post(`${sendEmail_api}`, data)
-             toast.success("send email");
-            }catch(error){
-              toast.error("Failed to send email");
-            }
-
-        
-
-           }else{
-            toast.error(result.message);
-            console.log("registr error : " , result.error);
+             handlePayment(result.id);
+              }else{
+                  setRegisterLoding(false);
+              toast.error(result.message);
            }
         }catch(error){
           setRegisterLoding(false);
@@ -202,21 +192,7 @@ export default function RegistreFrom({
 
   const groupRegister = async()=>{
     try{
-      //send email in group leader
-    var data = {
-     service_id: service_id,
-     template_id:template_id,
-     user_id: user_id,
-     template_params: {
-       'student_name' :`group leader ${groupParticipationData.members[0].name}`,
-       'event_name' :groupParticipationData.members[0].subEventName,
-       'college_name' : "XYZ university",
-       'event_date' : eventDate,
-       'event_time' : formetTime(subEventTime),
-       'Contact_Information' :'9327095244',
-       'student_email' :groupParticipationData.members[0].email,
-     }
- };
+    
      setRegisterLoding(true);
       let result = await fetch(`${URL}/api/participation/groupRegister`  , {
        method : "POST",
@@ -228,12 +204,7 @@ export default function RegistreFrom({
       result = await result.json();
       setRegisterLoding(false);
       if(result.success){
-        getAllSubEvents();
-       setregisterOpen(false);
-       toast.success("sucessfully Register");
-       //send email
-       await axios.post(`${sendEmail_api}`, data)
-   toast.success("send email in group leader");
+         handlePayment(result.id);
       }else{
        toast.error(result.message);
       }
@@ -245,7 +216,7 @@ export default function RegistreFrom({
   }
 
   //payment
-  const initPayment = (data) => {
+  const initPayment = (data , participationID) => {
 		const options = {
 			key: rezoPey_key,
 			amount: payment,
@@ -258,19 +229,32 @@ export default function RegistreFrom({
 			handler: async (response) => {
 				try {
 					const verifyUrl = `${URL}/api/payment/verify`;
+					// const verifyUrl = `${URL}/api/paynt/verify`;
 					const { data } = await axios.post(verifyUrl, response);
 
           toast.success("Payment successfully");
-
-          if(isGroup){
-
-          }else{
-            singleStudentRegister();
-          }
-
+          getAllSubEvents();
+          setregisterOpen(false);
+          setRegisterLoding(false);
+          toast.success("sucessfully Register");
+          //send email
+          senEmail();
           return true;
+          
+          
 				} catch (error) {
-          toast.error("Fail payment");
+          // console.log("error ")
+          // setRegisterLoding(false);
+          // deleteParticipation(participationID);
+
+          toast.success("Payment successfully");
+          getAllSubEvents();
+          setregisterOpen(false);
+          setRegisterLoding(false);
+          toast.success("sucessfully Register");
+          //send email
+          senEmail();
+          
           return false;
 				}
 			},
@@ -279,7 +263,14 @@ export default function RegistreFrom({
 			},
 		};
 		const rzp1 = new window.Razorpay(options);
-    
+
+
+    rzp1.on('razorpay:modal:closed', function() {
+      console.log('Razorpay modal closed');
+      // Call your function here
+    });
+
+
 		rzp1.open();
 
 
@@ -287,16 +278,30 @@ export default function RegistreFrom({
     
 	};
 
-	const handlePayment = async () => {
+	const handlePayment = async (participationID) => {
 		try {
 			const orderUrl = `${URL}/api/payment/orders`;
 			const { data } = await axios.post(orderUrl, { amount: payment });
-			initPayment(data.data);
+			initPayment(data.data , participationID);
 		} catch (error) {
+      deleteParticipation(participationID);
+      setRegisterLoding(false);
        toast.error("Faild Payment")
-			
 		}
 	};
+
+
+  //delete particiption when failed payment
+  const deleteParticipation =async (participationID)=>{
+    if(isGroup){
+      console.log("call remove group");
+      await fetch(`${URL}/api/participation/deleteGroupParticipations/${participationID}` , {method :'DELETE'});
+    }else{
+      console.log("call remove Single particiption");
+      await fetch(`${URL}/api/participation/deleteSingleParticipations/${participationID}` , {method :'DELETE'});
+    }
+    setRegisterLoding(false);
+  }
 
   return (
     <div className="mt-5">
