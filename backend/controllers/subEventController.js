@@ -140,9 +140,7 @@ exports.deletSubEvent = async (req , resp)=>{
             let event = await Events.findOne({_id : subEvents.eventId});
 
             let subEventIds = event.subEvents;
-            console.log(subEventIds);
             subEventIds = subEventIds.filter((id)=> id !=req.params.id )
-         console.log('and : ' , subEventIds);
 
 
             await Events.updateOne(

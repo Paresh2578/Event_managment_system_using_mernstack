@@ -179,7 +179,16 @@ export default function RegistreFrom({
            result = await result.json();
           //  setRegisterLoding(false);
            if(result.success){
-             handlePayment(result.id);
+            if(paid){
+              handlePayment(result.id);
+            }else{
+              getAllSubEvents();
+              setregisterOpen(false);
+              setRegisterLoding(false);
+              toast.success("sucessfully Register");
+              //send email
+              senEmail();
+            }
               }else{
                   setRegisterLoding(false);
               toast.error(result.message);
@@ -204,7 +213,16 @@ export default function RegistreFrom({
       result = await result.json();
       setRegisterLoding(false);
       if(result.success){
-         handlePayment(result.id);
+        if(paid){
+          handlePayment(result.id);
+        }else{
+          getAllSubEvents();
+          setregisterOpen(false);
+          setRegisterLoding(false);
+          toast.success("sucessfully Register");
+          //send email
+          senEmail();
+        }
       }else{
        toast.error(result.message);
       }

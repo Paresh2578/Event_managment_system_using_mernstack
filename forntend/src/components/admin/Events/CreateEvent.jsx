@@ -309,8 +309,6 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       paid : subEventData.paid
         };
 
-    console.log("this is evetn data :: ", createEventData);
-
     try {
       setCreateEventLoding(true);
       let result = await fetch(`${URL}/api/event/create`, {

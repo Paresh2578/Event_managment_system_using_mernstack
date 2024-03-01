@@ -20,22 +20,18 @@ export default function Login() {
   const login = async (e)=>{
       e.preventDefault();
 
-   
-
        try{
         // fetch(`${URL}/admin/login/${data.email}/${data.password}`).then((res)=>res.json).then((data)=>console.log(data)).catch((err)=>console.log(err));
         setLoding(true);
         let result = await fetch(`${URL}/api/admin/login/${data.email}/${data.password}`);
            result = await result.json();
            setLoding(false);
-           console.log(result);
            if(result.success){
             localStorage.setItem('adminAuth', JSON.stringify(result));
             navigate('/admin/dashboard')
             toast.success("sucessfully login");
            }else{
-            toast.error("email or password invalid");
-            console.log("not valid")
+            toast.error(result.message);
            }
           
        }catch(err){

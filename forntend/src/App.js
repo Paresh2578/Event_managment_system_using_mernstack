@@ -16,6 +16,8 @@ import ParticipateUserListing from './components/admin/Events/subEvents/Particip
 import ProtectedRoute from './ProtectedRoute';
 import NotFound from './components/Not Found/Not_Found'
 import UserLayout from './layouts/UserLayout/UserLayout';
+import AddAdmin from './components/admin/AddAdmin/AddAdmin';
+import AdminProfile from './components/admin/adminProfile/adminProfile';
 
 
 
@@ -34,6 +36,8 @@ function App() {
             <Route path='events' element={<Events/>}/>
             <Route path='subEvents/:id' element={<SubEventAdmin/>}/>
             <Route path='events/subevent/participationsList/:subEventID/:isGroup' element={<ParticipateUserListing/>}/>
+            <Route path='addAdmin' element={<AddAdmin/>}/>
+            <Route path='Profile' element={<AdminProfile/>}/>
         </Route>
         <Route path="/admin/login" element={<Login/>}/>
         <Route path="*" element={<NotFound/>}/>

@@ -17,26 +17,26 @@ exports.singleRegister = async (req, resp) => {
       email,
       mobile,
     } = req.body;
-
+    
     let subEvent = await SubEvent.findOne({ _id: subEventId });
     let singleParticipationList = subEvent.singleParticipation;
-
+    
     //check student already register in this event
     let studentAreAlreadyRegister = false;
     for (var alredySingleParticipationId of singleParticipationList) {
       let singleParticipation = await SingleParticipation.findOne({
         _id: alredySingleParticipationId,
       });
-
+      
       if (
         singleParticipation.Enrollment == Enrollment ||
         singleParticipation.email == email
-      ) {
-        studentAreAlreadyRegister = true;
-        break;
+        ) {
+          studentAreAlreadyRegister = true;
+          break;
+        }
       }
-    }
-
+      
     if (studentAreAlreadyRegister) {
       return resp.status(200).json({
         success: false,
@@ -220,7 +220,6 @@ exports.getGroupParticipationsList = async (req, resp) => {
 
 exports.deleteSingleParticipations = async (req, resp) => {
 
-   console.log("cal remover pasrticiption");
 
   try {
     let singleParticipation = await SingleParticipation.findOne({ _id: req.params.id });

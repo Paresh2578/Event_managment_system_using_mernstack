@@ -283,7 +283,6 @@ exports.getDashbordInfomation = async (req, res) => {
         
         
       }
-      console.log("call" , validAdmin);
 
     res.status(200).json({
       success: true,

@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
+const admin = require("../models/admin");
+require('dotenv').config();
 
-module.exports = (req, res, next) => {
+module.exports = async(req, res, next) => {
   if (req.method === "OPTIONS") {
     return next();
   }
@@ -9,13 +11,19 @@ module.exports = (req, res, next) => {
     if (!token) {
       throw new Error("Authentication failed!");
     }
-    const decodedToken = jwt.verify(token, "supersecret_dont_share");
-    req.adminData = { email: decodedToken.email };
-    next();
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    let adminEmailVerify = await admin.findOne({email : decodedToken.email});
+    if(adminEmailVerify ==null){
+      throw new Error("Authentication failed!");
+    }else{
+      req.adminData = { email: decodedToken.email };
+      next();
+    }
+    
   } catch (err) {
     res.status(403).json({
       success: false,
-      message: "Authentication failed!",
+      message:err.message ,
     });
   }
 };

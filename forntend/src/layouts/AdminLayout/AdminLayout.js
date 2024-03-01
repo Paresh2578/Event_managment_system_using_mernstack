@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 import './AdminLayout.css';
+import adminImg from '../../assets/images/users/user5.jpg'
 
 import Footer from '../UserLayout/Footer'
 
@@ -51,7 +52,7 @@ const FullLayout = () => {
                 <li  onClick={width <= 991 ? togaleSidbar :  ()=>{}}>
                     <Link to="dashboard" >
                         <span class="icon">
-                            <ion-icon name="logo-apple"></ion-icon>
+                            {/* <ion-icon name="logo-apple"></ion-icon> */}
                         </span>
                         <span class="title">Code Pro Admin</span>
                     </Link>
@@ -75,14 +76,14 @@ const FullLayout = () => {
                     </Link>
                 </li>
 
-                {/* <li className={currActiveComponet == 3 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(3)}}>
-                    <a href="#" >
+                <li className={currActiveComponet == 3 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(3)}}>
+                    <Link to="addAdmin" >
                         <span class="icon">
-                            <ion-icon name="chatbubble-outline"></ion-icon>
+                            <ion-icon name="people-outline"></ion-icon>
                         </span>
-                        <span class="title">Create Event</span>
-                    </a>
-                </li> */}
+                        <span class="title">Add Admin</span>
+                    </Link>
+                </li>
 
                
 
@@ -103,6 +104,9 @@ const FullLayout = () => {
             <div class="topbar">
                 <div class="toggle" onClick={togaleSidbar}>
                     <ion-icon name="menu-outline"></ion-icon>
+                </div>
+                <div class="user"onClick={()=>navigate('Profile')}>
+                    <img src={adminImg} alt=""/>
                 </div>
             </div>
 

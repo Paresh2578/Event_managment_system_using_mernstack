@@ -10,7 +10,6 @@ const connectToDB = () => {
       console.log(`Connected To DB ${conn.connection.host}`);
     })
     .catch((err) => {
-      console.log(err);
       process.exit(1);
     });
 };
