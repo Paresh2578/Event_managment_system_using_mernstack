@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import Swal from 'sweetalert2'
 
 import "./Events.css";
 
@@ -10,6 +12,7 @@ import DeleteConformAlertDialog from "./DeleteConformAlertDialog";
 
 //utils
 import { URL } from "../../../util/URL";
+import {compareToCurrDate} from '../../../util/compareToDate';
 
 //mui
 import {
@@ -34,20 +37,49 @@ export default function EventCard({
   const [deleteEventLoding, setDeleteEventLoding] = useState(false);
   const [deleteConformAlertDialogOpen, setDeleteConformAlertDialogOpen] =  useState(false);
   const [completedEvent , setCompletedEvent] = useState(false);
+  const [winners, setWinners] = useState([]);
+  
 
   useEffect(()=>{
-    const currentDate = new Date();
-          let eventDateArr = data.date.split("/");
-          eventDateArr[1] = parseInt(eventDateArr[1]) + 1;
-          const eventDate = new Date(
-            `${eventDateArr[0]}/${eventDateArr[1]}/${eventDateArr[2]}`
-          ); // December 31, 2023 (month is 0-based, so 11 is December)
-          if (currentDate >= eventDate) {
-            return setCompletedEvent(false);
-          } else{
-            return setCompletedEvent(true);
-          }
-  },[]);
+   compareDate();
+    // const currentDate = new Date();
+          // let eventDateArr = data.date.split("/");
+          getAllWinners();
+          // eventDateArr[1] = parseInt(eventDateArr[1]) + 1;
+          // const eventDate = new Date(
+          //   `${eventDateArr[0]}/${eventDateArr[1]}/${eventDateArr[2]}`
+          // ); // December 31, 2023 (month is 0-based, so 11 is December)
+          // if (currentDate >= eventDate) {
+          //   return setCompletedEvent(false);
+          // } else{
+          //   return setCompletedEvent(true);
+          // }
+  },[data]);
+
+  const compareDate =async ()=>{
+     let result = await compareToCurrDate(data.date);
+     setCompletedEvent(result);
+    //  console.log("result is ::" , result);
+    //  console.log("result is ::" , data.date);
+  }
+
+  const getAllWinners =async ()=>{
+    let result = await fetch(`${URL}/api/winner/getAllWinner`, {
+         headers: {
+           "content-type": "application/json",
+           "Authorization": adminAuth.token
+                  },
+       });
+
+       result = await result.json();
+       if(result.success){
+        setWinners(result.data);
+       }else{
+        toast.error(result.message)
+       }
+
+       }
+
 
   const deleteEvent = async () => {
     try {
@@ -75,6 +107,51 @@ export default function EventCard({
       // console.log("edit event error ");
     }
   };
+
+  // let winnersHTML = "";
+  // winnersHTML += '<table class="table">';
+  // winnersHTML += '<thead class="thead-dark"> <tr> <th scope="col">No.</th> <th scope="col">Subevent</th> <th>First</th> <th scope="col">secound</th><th scope="col">third</th> </tr> </thead>';
+
+
+
+  //  let i=0;
+  //  while(i < winners.length){
+  //   let {third , secound,first , subEventName} = winners[i];
+  //   // winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' :secound }</td>${third == undefined ? 'Not selected' : third }</td></tr>`
+  //   winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' :secound }</td><td>${third == undefined ? 'Not selected' : third }</td></tr>`
+  //    i++;
+  //  }
+
+  //  winnersHTML += '</tbody>'
+  //  winnersHTML += '</table>';
+  let winnersHTML = "";
+  winnersHTML += '<div style="overflow-x: scoller ,width:10wh">';
+winnersHTML += '<table class="table table-hover" >';
+winnersHTML += '<thead class="thead-dark"> <tr> <th scope="col">No.</th> <th scope="col">Subevent</th> <th>First</th> <th scope="col">secound</th><th scope="col">third</th> </tr> </thead>';
+winnersHTML += '<tbody>';
+
+winnersHTML += '</div>'; //
+
+let i=0;
+while(i < winners.length){
+  let {third , secound,first , subEventName} = winners[i];
+  winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' : secound }</td><td>${third == undefined ? 'Not selected' : third }</td></tr>`;
+  i++;
+}
+
+winnersHTML += '</tbody>';
+
+  const handleShowWinner = (id)=>{
+    Swal.fire({
+      title: `All SubEvent Top 3 Winners list`,
+      html: winnersHTML,
+      confirmButtonText: 'Close',
+      confirmButtonColor: '#3085d6',
+      showCancelButton: false,
+      showConfirmButton: true,
+      allowOutsideClick: false,
+  })
+  }
 
   return (
     <>
@@ -106,6 +183,9 @@ export default function EventCard({
           <div  class="btn btn-danger rounded-lg">
           <Delete size="small" onClick={() => setDeleteConformAlertDialogOpen(true)} />
           </div>
+          {completedEvent == true && <div  class="btn btn-warning rounded-lg ms-3" onClick={()=>handleShowWinner(data._id)}>
+          <EmojiEventsIcon size="small" color="inherit"/>
+          </div> }
         </div>
       </div>
     </>

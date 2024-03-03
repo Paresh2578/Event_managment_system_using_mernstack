@@ -187,17 +187,17 @@ export default function Events() {
           </div>
           <div className="row ms-xl-2 ms-sm-0">
             {event && event.length !=0 &&
-              event.map((data, index) => (
-                <div className="col-xl-3 col-md-4 col-sm-6   p-0 ms-3 me-3 mb-3">
+              event.map((data, index) => {
+               return (<div key={index} className="col-xl-3 col-md-4 col-sm-6   p-0 ms-3 me-3 mb-3">
                   <EventCard
-                    key={index}
                     data={data}
                     handleEditEvent={handleEditEvent}
                     index={index}
                     handleRemoveEvent={handleRemoveEvent}
                   />
-                </div>
-              ))}
+                </div>);
+              }
+              )}
               {
                 event.length == 0 && <EmptyEvent/>
               }

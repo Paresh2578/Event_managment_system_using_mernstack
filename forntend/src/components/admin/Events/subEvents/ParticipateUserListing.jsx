@@ -230,7 +230,7 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
         <CardBody>
           <div className='d-flex justify-content-between'>
           <CardTitle tag="h4">Participate user Listing</CardTitle>
-        {downloadLoding ?   <div className='btn btn-primary'>downloading...</div> :  <div className='my-btn' onClick={downloadPDF}>download pdf</div>}
+        {downloadLoding ?   <div className='btn btn-primary'>downloading...</div> :  <div className='my-btn' onClick={downloadPDF}>export pdf</div>}
           </div>
 
           <div id="student-data-list">

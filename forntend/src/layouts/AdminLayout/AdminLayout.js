@@ -53,8 +53,9 @@ const FullLayout = () => {
                     <Link to="dashboard" >
                         <span class="icon">
                             {/* <ion-icon name="logo-apple"></ion-icon> */}
+                            {/* <span>EX</span> */}
                         </span>
-                        <span class="title">Code Pro Admin</span>
+                        <span class="title">EventX admin</span>
                     </Link>
                 </li>
 

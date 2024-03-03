@@ -145,10 +145,10 @@ export default function RegistreFrom({
           }
         }
 
-        // setGroupParticipationDataError(Array.from({ length: groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
+        setGroupParticipationDataError(Array.from({ length: groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
 
-        // //IS evnet is paid .pay payment 
-        // groupRegister();
+        //IS evnet is paid .pay payment 
+        groupRegister();
 
      
 
@@ -203,9 +203,9 @@ export default function RegistreFrom({
     try{
       //send email
     await axios.post(`${sendEmail_api}`, data)
-      toast.success(isGroup ? "send email in group leader" :  "send email");
+      toast.success(isGroup ? "Emailsend to group leader" :  "Email send");
    }catch(error){
-     toast.error("Failed to send email");
+     toast.error("Failed to email send");
    }
 
 

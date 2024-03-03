@@ -85,6 +85,7 @@ exports.addWinner = async(req , res)=>{
     //   "secound": "65e2fe7d73d6a43fe8e1758b",
     //   "third": "",
 
+    participation = {...participation , subEventName : subEvent.subEventname};
             if(subEvent.isGroup){
 
                 let groupParticipationList = await GroupParticipations.find();

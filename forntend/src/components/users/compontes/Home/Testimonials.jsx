@@ -39,6 +39,29 @@ const Imgs = styled('img')(({theme})=>({
         items: 1
       }
     }
+    const testimonialsData = [
+      {
+          name: 'Paresh Chaudhary',
+          detail: 'Innovation distinguishes between a leader and a follower.',
+          image: 'https://i.ibb.co/tzVQjpF/paresh.jpg'
+      },
+      {
+          name: 'Mukesh Chaudhary',
+          detail: 'Do not follow where the path may lead. Go instead where there is no path and leave a trail.',
+          image: 'https://i.ibb.co/Bj5FbMh/mukesh.jpg'
+      },
+      {
+          name: 'Der Nilesh',
+          detail: 'The very essence of leadership is that you have to have vision. You can\'t blow an uncertain trumpet.',
+          image: 'https://i.ibb.co/ZWhzZKv/nilesh.jpg'
+      },
+      {
+        name: 'Parmar Tejas',
+        detail: 'In matters of style, swim with the current; in matters of principle, stand like a rock.',
+        image: 'https://i.ibb.co/2YxtR0T/tejas.jpg'
+    },
+      
+  ];
     
   
   
@@ -58,30 +81,27 @@ const Imgs = styled('img')(({theme})=>({
            // customTransition="all .5"
            transitionDuration={500}
            >
-             {
-              <div class="container" data-aos="zoom-in">
-
-              <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-                <div class="swiper-wrapper">
-      
-                  <div class="swiper-slide">
-                    <div class="testimonial-item">
-                      <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt=""/>
-                      <h3>Paresh chaudhary</h3>
-                      <p>
-                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                      </p>
-                    </div>
-                  </div>
-      
-                </div>
-                <div class="swiper-pagination"></div>
-              </div>
-      
-            </div>
-             }
+             {testimonialsData.map((testimonial, index) => (
+                        <div key={index} className="container" data-aos="zoom-in">
+                            <div className="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+                                <div className="swiper-wrapper">
+                                    <div className="swiper-slide">
+                                        <div className="testimonial-item">
+                                            <img src={testimonial.image} className="testimonial-img" alt=""/>
+                                            
+                                            <h3>{testimonial.name}</h3>
+                                            <p>
+                                                <i className="bx bxs-quote-alt-left quote-icon-left"></i>
+                                                {testimonial.detail}
+                                                <i className="bx bxs-quote-alt-right quote-icon-right"></i>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    ))}
          </Carousel>
          </div> 
         }
@@ -89,4 +109,3 @@ const Imgs = styled('img')(({theme})=>({
       
     );
   }
-  

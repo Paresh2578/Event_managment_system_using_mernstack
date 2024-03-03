@@ -1267,6 +1267,8 @@ section {
   overflow: hidden;
 }
 .team .member .member-img img{
+  /* width: 100%; */
+  /* height : 40vh; */
   /* position: relative; */
   background-size: cover;
 }
