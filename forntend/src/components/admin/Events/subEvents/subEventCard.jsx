@@ -1,6 +1,10 @@
-import React , {useState} from "react";
+import React , {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import { FaTrophy } from "react-icons/fa";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+
+import Swal from 'sweetalert2'
 
 
 //utils
@@ -16,12 +20,16 @@ import {Button , CardContent , CardMedia , CircularProgress} from "@mui/material
 import {CalendarMonth  , EventSeat, Edit , Delete , AccessAlarm} from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
 
-export default function SubEventCard({data , handleEditSubEvent , index , handleRemoveSubEvent}) {
+export default function SubEventCard({competed , winner , data , handleEditSubEvent , index , handleRemoveSubEvent}) {
   let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
   const navigate =useNavigate();
     const [editEventOpen , setEditEventOpen] = useState(false);
     const [deleteSubEventLoding , setdeleteSubEventLoding] = useState(false);
     const [deleteConformAlertDialogOpen,       setDeleteConformAlertDialogOpen] = useState(false);
+
+    // useEffect(()=>{
+    //     console.log(winner);
+    // },[]);
 
     const deleteSubEvent = async()=>{
       try{
@@ -51,6 +59,50 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
     }
 
 
+      winner = winner.filter((w)=> w.subEventId == data._id);
+      let winnersHTML = '';
+      if(winner.length != 0){
+       let {third , secound,first} = winner[0];
+       winnersHTML = '<ol>';
+       winnersHTML +=  `<li>${first == undefined ? 'Not selected' : first}</li>`;
+       winnersHTML +=  `<li>${secound == undefined ? 'Not selected' :secound }</li>`;
+       winnersHTML +=  `<li>${third == undefined ? 'Not selected' : third }</li>`;
+       winnersHTML += '</ol>';
+      }else{
+        winner = '<p>No selected winner</p>'
+      }
+    //   if(winner.lenght != 0){
+    //      // Build the HTML to display the top 3 winners
+    //  winnersHTML = '<ol>';
+    // if(winner !== undefined && winner[0].first !== undefined){
+    // winnersHTML +=  `<li>${winner[0].first}</li>`;
+    // }
+    // if(winner !== undefined && winner[0].secound !== undefined){
+    //   winnersHTML +=  `<li>${winner[0].secound}</li>`;
+    // }
+    // if(winner !== undefined && winner[0].third !== undefined){
+    //   winnersHTML +=  `<li>${winner[0].third}</li>`;
+    // }
+    // winnersHTML += '</ol>';
+    //   }else{
+    //     winnersHTML = '<p>not select winners</p>'
+    //   }
+    
+   
+
+    const handleShowWinner = (id)=>{
+      Swal.fire({
+        title: `Top 3 Winners`,
+        html: winnersHTML,
+        confirmButtonText: 'Close',
+        confirmButtonColor: '#3085d6',
+        showCancelButton: false,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+    })
+    }
+
+
 
   return (
     <div className="">
@@ -58,7 +110,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
 
       <div class="card" style={{ width: "18rem" }} >
-      <div className="card-container "  onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}`)}>
+      <div className="card-container "  onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}/${competed}/${data.subEventname}}`)}>
        
        <div className="img-text" >
          <span className="text-center">
@@ -77,7 +129,7 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
         <div class="card-body">
           <h5 class="card-title">{data.subEventname}</h5>
           <p class="card-text">
-          <AccessAlarm color="#6372ff" /> <span >{formetTime(data.time)}</span>
+          <AccessAlarm color="#6372ff" /> <span >{formetTime(data.startTime)}</span>
           </p>
 
           <div  class="btn btn-primary rounded-lg me-3">
@@ -86,6 +138,9 @@ export default function SubEventCard({data , handleEditSubEvent , index , handle
           <div  class="btn btn-danger rounded-lg">
           <Delete size="small" onClick={() => setDeleteConformAlertDialogOpen(true)} />
           </div>
+         {competed == "true" && <div  class="btn btn-warning rounded-lg ms-3" onClick={()=>handleShowWinner(data._id)}>
+          <EmojiEventsIcon size="small" color="inherit"/>
+          </div> }
           
         </div>
       </div>

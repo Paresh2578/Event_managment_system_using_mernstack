@@ -28,7 +28,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
   const [subEventData, setSubEventData] = useState({
     subEventname: "",
     category: "",
-    time: "",
+    startTime : "",
+    endTime : "",
     seats : 10,
     grupMember: 2,
     isGroup: false,
@@ -54,7 +55,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
   const [subEventDataError, setSubEventDataError] = useState({
     name: false,
     category: false,
-    time: false,
+    startTime: false,
+    endTime: false,
     seats : false,
     grupMember: false,
     subEventsubEventPosterUrl: false,
@@ -117,7 +119,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         setSubEventDataError({
           name: true,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           seats : false,
           grupMember: false,
           subEventPosterUrl: false,
@@ -128,17 +131,30 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         setSubEventDataError({
           name: false,
           category: true,
-          time: false,
+          startTime: false,
+          endTime: false,
           seats : false,
           grupMember: false,
           subEventPosterUrl: false,
         });
         return false;
-      } else if (subEventData.time.length == 0) {
+      } else if (subEventData.startTime.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
-          time: true,
+          startTime: true,
+          endTime: false,
+          seats : false,
+          grupMember: false,
+          subEventPosterUrl: false,
+        });
+        return false;
+      } else if (subEventData.startTime.length == 0) {
+        setSubEventDataError({
+          name: false,
+          category: false,
+          startTime: false,
+          endTime: true,
           seats : false,
           grupMember: false,
           subEventPosterUrl: false,
@@ -148,7 +164,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           seats : true,
           grupMember: false,
           subEventPosterUrl: false,
@@ -159,7 +176,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
           grupMember: true,
           subEventPosterUrl: false,
         });
@@ -170,7 +187,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           grupMember: false,
           subEventPosterUrl: true,
         });
@@ -179,7 +197,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           grupMember: false,
           subEventPosterUrl: false,
         });
@@ -205,9 +224,9 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
-    setSubEventData({ namsubEventnamee: "",category: "",time: "", grupMember: 2, isGroup: false, subEventPosterUrl: ""});
+    setSubEventData({ namsubEventnamee: "",category: "",startTime: "" , endTime : "", grupMember: 2, isGroup: false, subEventPosterUrl: ""});
     setCoordinatorData({ coordinatorName: "", email: "", mobile: "" });
-    setSubEventDataError({name: false, category: false, time: false, grupMember: false,  subEventPosterUrl: false});
+    setSubEventDataError({name: false, category: false, startTime: false,endTime : false, grupMember: false,  subEventPosterUrl: false});
     setCoordinatorDataError({ name: false, email: false, mobile: false });
     setSubEventImgToUrlProsess({ loding: false, error: false, success: false });
   };
@@ -264,7 +283,8 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
       mobile: coordinatorData.mobile,
       subEventname: subEventData.subEventname,
       category: subEventData.category,
-      time: subEventData.time,
+      startTime: subEventData.startTime,
+      endTime: subEventData.endTime,
       seats: subEventData.seats,
       groupMember: subEventData.grupMember,
       isGroup: subEventData.isGroup,
@@ -275,7 +295,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
       //
     };
 
-    console.log('createing event');
+   
 
     try {
       setCreateSubEventLoding(true);
@@ -288,6 +308,7 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
             adminAuth.token
         },
       });
+      console.log('createing event');
       result = await result.json();
       setCreateSubEventLoding(false);
       if (result.success) {
@@ -436,17 +457,43 @@ export default function CeateSubEvents({ open, setOpen , handleCreateSubEvent , 
                               "StaticDatePicker",
                             ]}
                           >
-                            <DemoItem>
+                            <DemoItem label="startTime">
                               <TimePicker
-                                value={subEventData.time}
+                                value={subEventData.startTime}
                                 className={
-                                  subEventDataError.time &&
+                                  subEventDataError.startTime &&
                                   "border border-1 border-danger"
                                 }
                                 onChange={(time) =>
                                   setSubEventData({
                                     ...subEventData,
-                                    time: time.$d,
+                                    startTime: time.$d,
+                                  })
+                                }
+                              />
+                            </DemoItem>
+                          </DemoContainer>
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer
+                            components={[
+                              "DatePicker",
+                              "MobileDatePicker",
+                              "DesktopDatePicker",
+                              "StaticDatePicker",
+                            ]}
+                          >
+                            <DemoItem label="endTime">
+                              <TimePicker
+                                value={subEventData.endTime}
+                                className={
+                                  subEventDataError.endTime &&
+                                  "border border-1 border-danger"
+                                }
+                                onChange={(time) =>
+                                  setSubEventData({
+                                    ...subEventData,
+                                    endTime: time.$d,
                                   })
                                 }
                               />

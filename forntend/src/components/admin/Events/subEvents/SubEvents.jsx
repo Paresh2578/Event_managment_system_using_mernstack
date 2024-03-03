@@ -43,10 +43,12 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 export default function SubEvents() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id , competed } = useParams();
+  const adminAuth = JSON.parse(localStorage.getItem('adminAuth'));
 
   const [subEvent, setSubEvent] = useState([]);
   const [open, setOpen] = useState(false);
+  const [winners, setWinners] = useState([]);
 
   const [category, setCategory] = useState([
     "Civil",
@@ -81,11 +83,29 @@ export default function SubEvents() {
     window.addEventListener("resize", handleWindowResize);
 
     getAllSubEvents();
+    getAllWinners();
 
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+  const getAllWinners =async ()=>{
+    let result = await fetch(`${URL}/api/winner/getAllWinner`, {
+         headers: {
+           "content-type": "application/json",
+           "Authorization": adminAuth.token
+                  },
+       });
+
+       result = await result.json();
+       if(result.success){
+        setWinners(result.data);
+       }else{
+        toast.error(result.message)
+       }
+
+       }
 
   const getAllSubEvents = async () => {
     let result = await fetch(`${URL}/api/subEvent/getSubEvent/${id}`);
@@ -116,7 +136,7 @@ export default function SubEvents() {
 
   // handleCreateSubEvent
   const handleCreateSubEvent = (data) => {
-    setSubEvent([...subEvent, { ...data, time: data.time.toDateString() }]);
+    setSubEvent([...subEvent, { ...data, startTime: data.startTime.toDateString()  , endTime: data.endTime.toDateString()}]);
     getAllSubEvents();
   };
 
@@ -148,59 +168,7 @@ export default function SubEvents() {
 
   return (
     <>
-      {/* <div className="text-center mt-5 container" style={{ marginTop: "15vh" }}>
-        <div className="container">
-          <div className="col-md-8 col-md-offset-2 section-title">
-            <h1 class="admin-heading text-center">
-              all <span>subEvents</span>
-            </h1>
-          </div>
-
-          <div className="row">
-            <div className="col mb-3">
-              <button
-                className={
-                  activeFillter != -1 ? "filter-btn" : "filter-btn-active"
-                }
-                onClick={() => {
-                  eventFillter("All", -1);
-                }}
-              >
-                All
-              </button>
-            </div>
-            {category.map((item, index) => (
-              <div className="col mb-3 ">
-                <button
-                  className={
-                    activeFillter != index ? "filter-btn" : "filter-btn-active"
-                  }
-                  onClick={() => {
-                    eventFillter(item, index);
-                  }}
-                >
-                  {item}
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <div className="row">
-            {subEvent &&
-              subEvent.map((data, index) => (
-                <div className="col-md-3 col-sm-6 trending__card p-0 me-3 mt-5 ">
-                  <SubEventCard
-                    key={index}
-                    data={data}
-                    handleEditSubEvent={handleEditSubEvent}
-                    index={index}
-                    handleRemoveSubEvent={handleRemoveSubEvent}
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
-      </div> */}
+  
 
       <div className="mt-0">
         <section id="portfolio" class="portfolio section-bg">
@@ -246,6 +214,8 @@ export default function SubEvents() {
                   <SubEventCard
                     key={index}
                     data={data}
+                    competed={competed}
+                    winner = {winners}
                     handleEditSubEvent={handleEditSubEvent}
                     index={index}
                     handleRemoveSubEvent={handleRemoveSubEvent}

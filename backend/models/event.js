@@ -5,6 +5,11 @@ const eventSchema =new  mongoose.Schema({
         required : true,
         type : String,
     },
+    university : {
+         type : String,
+        required : true,
+        default : "All"
+    },
     date : {
         required : true,
         type : String,

@@ -83,9 +83,9 @@ exports.createEvnet = async (req, resp) => {
     let coordinatorId = coordinator._id;
 
     //create empty event
-    let { name, date, eventPosterUrl } = req.body;
+    let { name , university, date, eventPosterUrl } = req.body;
     let subEvents = [];
-    let event = new Events({ name, date, eventPosterUrl, subEvents });
+    let event = new Events({ name , university, date, eventPosterUrl, subEvents });
     await event.save();
     let eventId = event._id;
 
@@ -93,7 +93,8 @@ exports.createEvnet = async (req, resp) => {
     let {
       subEventname,
       category,
-      time,
+      startTime,
+      endTime,
       seats,
       groupMember,
       isGroup,
@@ -107,7 +108,8 @@ exports.createEvnet = async (req, resp) => {
       eventId,
       subEventname,
       category,
-      time,
+      startTime,
+      endTime,
       seats,
       groupMember,
       isGroup,

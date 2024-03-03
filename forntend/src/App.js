@@ -28,14 +28,14 @@ function App() {
         {/* <Route path='/' element={<Home/>} /> */}
         <Route path=''  element={<UserLayout/>}>
             <Route index element={<Home/>}/>
-            <Route path='subevent/:eventName/:id' element={<SubEvents/>} />
+            <Route path='subevent/:eventName/:university/:id' element={<SubEvents/>} />
         </Route>
         
         <Route path="admin" element={<ProtectedRoute><AdminLayout/></ProtectedRoute>}>
             <Route path='dashboard' element={<Dashboard/>}/>
             <Route path='events' element={<Events/>}/>
-            <Route path='subEvents/:id' element={<SubEventAdmin/>}/>
-            <Route path='events/subevent/participationsList/:subEventID/:isGroup' element={<ParticipateUserListing/>}/>
+            <Route path='subEvents/:id/:competed' element={<SubEventAdmin/>}/>
+            <Route path='events/subevent/participationsList/:subEventID/:isGroup/:competed/:subEventname' element={<ParticipateUserListing/>}/>
             <Route path='addAdmin' element={<AddAdmin/>}/>
             <Route path='Profile' element={<AdminProfile/>}/>
         </Route>

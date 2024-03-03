@@ -11,6 +11,8 @@ import { formetTime } from '../../../../../util/FormentTime'
 //mui
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import { FormControl,
+  FormLabel , InputLabel , Select , MenuItem} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -27,17 +29,19 @@ export default function RegistreFrom({
   registerOpen,
   setregisterOpen,
   data,
+  university,
   eventName,
   getAllSubEvents
 }) {
   const { enqueueSnackbar } = useSnackbar();
-  const [singleParticipationData , setsingleParticipationData] =useState({eventName : eventName ,subEventName : data.subEventname  ,subEventId : data._id,name : "" ,Enrollment : "" ,email : "" ,mobile : ""})
+  const [singleParticipationData , setsingleParticipationData] =useState({eventName : eventName ,subEventName : data.subEventname  ,subEventId : data._id,name : "" ,university : "", Enrollment : "" ,email : "" ,mobile : ""})
   // const [groupParticipationData , setGroupParticipationData] =useState({eventName : eventName ,subEventName : data.subEventname  ,subEventId : data._id,members : [data.groupMember.map(e , index)=>{name : "" ,Enrollment : "" ,email : "" ,mobile : ""}]});
   const [groupParticipationData, setGroupParticipationData] = useState({
     eventName: eventName,
     subEventName: data.subEventname,
     subEventId: data._id,
     groupName : "",
+    university : "",
     members: Array.from({ length: data.groupMember }).map((_, index) => ({
       name: "",
       Enrollment: "",
@@ -49,18 +53,47 @@ export default function RegistreFrom({
   const [payment , setPayment] = useState(data.pay);
   const [paid , setPaid] = useState(data.paid);
 
+
   const [singleParticipationDataError , setsingleParticipationDataError] =useState({name : false ,Enrollment : false ,email : false ,mobile : false});
   const [groupParticipationDataError , setGroupParticipationDataError] =useState(Array.from({ length: data.groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
   const [registerLoding , setRegisterLoding] = useState(false);
   const [eventDate , setEventDate] = useState();
-  const [subEventTime , setSubEvnetTime] = useState(data.time);
+  const [subEventTime , setSubEvnetTime] = useState(data.startTime);
   const [isGroup , setIsGrup] = useState(data.isGroup);
   const [groupMember , setGroupMember] = useState(data.groupMember);
+
+  const [allowStudentList , setAllowStudentList] = useState();
+
+  const [college , setCollege] = useState([]);
 
 
   useEffect(()=>{
     getEventInfo();
+    getAllowStudentList();
+
+    if(university == "All"){
+      setCollege(["R.k University" , "Arpitt University" , "Atmiya University" , "Darshan University"]);
+    }else{
+      setCollege([university.toString().split("_").join(" ").toString()]);
+    }
   },[]);
+
+  const getAllowStudentList =async(req , res)=>{
+    try{
+
+      let result = await fetch('http://localhost:4500/api/allowStudentList');
+      result = await result.json();
+
+      if(result.success){
+        setAllowStudentList(result.data[0]);
+      }else{
+        throw new Error("error")
+      }
+
+    }catch(error){
+       toast.error("Opps , Something went wrong");
+    }
+  }
 
   const getEventInfo =async ()=>{
     try{
@@ -94,10 +127,13 @@ export default function RegistreFrom({
           return;
         }
         for(let i=0;i<groupMember;i++){
+        console.log(allowStudentList[groupParticipationData.university.split(" ").join("_").toString()].includes(groupParticipationData.members[i].Enrollment));
+        console.log(allowStudentList[groupParticipationData.university.split(" ").join("_").toString()]);
+        console.log("curr en : " , groupParticipationData.members[i].Enrollment);
           if(groupParticipationData.members[i].name.length == 0){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : true ,Enrollment : false ,email : false ,mobile : false}: data));
             return;
-          }else if(groupParticipationData.members[i].Enrollment.toString().length == 0){
+          }else if(groupParticipationData.members[i].Enrollment.toString().length == 0 || !allowStudentList[groupParticipationData.university.split(" ").join("_").toString()].includes(groupParticipationData.members[i].Enrollment)){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : false ,Enrollment : true ,email : false ,mobile : false}: data));
             return;
           }else if(groupParticipationData.members[i].email.length == 0){
@@ -109,10 +145,10 @@ export default function RegistreFrom({
           }
         }
 
-        setGroupParticipationDataError(Array.from({ length: groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
+        // setGroupParticipationDataError(Array.from({ length: groupMember }).map((_, index)=>({name : false,Enrollment : false ,email : false ,mobile : false})));
 
-        //IS evnet is paid .pay payment 
-        groupRegister();
+        // //IS evnet is paid .pay payment 
+        // groupRegister();
 
      
 
@@ -127,9 +163,23 @@ export default function RegistreFrom({
       }else if(singleParticipationData.mobile.toString().length <= 9){
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : true})
       }else{
-        setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
 
-        singleStudentRegister();
+
+        if(singleParticipationData.university.length == 0){
+          toast.error("Select University");
+           return;
+        }
+        if(allowStudentList[singleParticipationData.university.split(" ").join("_").toString()].includes(singleParticipationData.Enrollment)){
+          setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
+
+          singleStudentRegister();
+        }else{
+          toast.error("Invalid Enrollment number")
+          return;
+        }
+
+
+       
       }
     }
   }
@@ -200,6 +250,8 @@ export default function RegistreFrom({
   }
 
   const groupRegister = async()=>{
+
+    
     try{
     
      setRegisterLoding(true);
@@ -347,10 +399,40 @@ export default function RegistreFrom({
                     style={{ marginBottom: "10px", width: "100%" , fontSize:"10rem" }}
                     onChange={(e)=>setGroupParticipationData({...groupParticipationData, groupName : e.target.value})}
                   />
+
+<FormControl
+                          className="mb-3"
+                          fullWidth
+                        >
+                          <InputLabel id="demo-simple-select-label" required>
+                            select University
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={groupParticipationData.university}
+                            label="select university"
+                            onChange={(e) =>
+                              setGroupParticipationData({
+                                ...groupParticipationData,
+                                university: e.target.value,
+                              })
+                            }
+                          >
+                            {college.map((c)=>(
+                              <MenuItem value={c}>{c}</MenuItem>
+                            ))}
+                            {/* <MenuItem value={"Darshan University"}>Darshan University</MenuItem>
+                            <MenuItem value={"Atmiya University"}>Atmiya University</MenuItem>
+                            <MenuItem value={"Arpitt University"}>Arpitt University</MenuItem>
+                            <MenuItem value={"R.k University"}>R.k University</MenuItem> */}
+                          </Select>
+                        </FormControl>
+
               {/* {Array.from({ length: data.groupMember }).map((_, index) => ( */}
               {Array.from({ length: data.groupMember }).map((_, index) => (
                  <div key={index}>
-                 <p className="t-center" style={{fontSize:'1rem'}} >*** member {index+1} ***</p>
+                 <p className="t-center" style={{fontSize:'1rem'}} >*** {index == 0 ? "Leader" :  `member ${index+1}` } ***</p>
                  {groupParticipationDataError[index].name ? 
                     <TextField
                     id="outlined-basic"
@@ -358,7 +440,7 @@ export default function RegistreFrom({
                     helperText="enter name"
                     variant="outlined"
                     required
-                    label={`member ${index+1} name`}
+                    label={`${index == 0 ? "Leader" :  `member ${index+1}`} name`}
                     value={groupParticipationData.members[index].name}
                     style={{ marginBottom: "10px", width: "100%" , fontSize:'4rem' }}
                     onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , name : e.target.value} : member)})}
@@ -368,7 +450,8 @@ export default function RegistreFrom({
                    variant="outlined"
                    value={groupParticipationData.members[index].name}
                    required
-                   label={`member ${index+1} name`}
+                  //  label={`member ${index+1} name`}
+                   label={`${index == 0 ? "Leader" :  `member ${index+1}`} name`}
                    style={{ marginBottom: "10px", width: "100%" }}
                    onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , name : e.target.value} : member)})}
                  />}
@@ -381,9 +464,9 @@ export default function RegistreFrom({
                   variant="outlined"
                  type="number"
                  error
-                 helperText="enter Enrollment no"
+                 helperText="Invalid Enrollment no"
                  required
-                 label={`member ${index+1} Enrollment no`}
+                 label={`${index == 0 ? "Leader" :  `member ${index+1}`} Enrollment no`}
                  value={groupParticipationData.members[index].Enrollment}
                  onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , Enrollment : e.target.value} : member)})}    />
                  : <TextField
@@ -392,7 +475,7 @@ export default function RegistreFrom({
                    variant="outlined"
                    type="number"
                    required
-                   label={`member ${index+1} Enrollment no`}
+                   label={`${index == 0 ? "Leader" :  `member ${index+1}`} Enrollment no`}
                    value={groupParticipationData.members[index].Enrollment}
                    onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , Enrollment : e.target.value} : member)})}    />
                    }
@@ -405,7 +488,7 @@ export default function RegistreFrom({
                  error
                  helperText="enter email"
                  required
-                 label={`member ${index+1} Email`}
+                 label={`${index == 0 ? "Leader" :  `member ${index+1}`} Email`}
                  value={groupParticipationData.members[index].email}
                  onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , email : e.target.value} : member)})}    />
                   :
@@ -415,7 +498,7 @@ export default function RegistreFrom({
                    variant="outlined"
                    value={groupParticipationData.members[index].email}
                    required
-                   label={`member ${index+1} Email`}
+                   label={`${index == 0 ? "Leader" :  `member ${index+1}`} Email`}
                    onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , email : e.target.value} : member)})}    />
             
                 }
@@ -430,7 +513,7 @@ export default function RegistreFrom({
                   error
                  helperText="enter mobile"
                  required
-                 label={`member ${index+1} mobile No`}
+                 label={`${index == 0 ? "Leader" :  `member ${index+1}`} mobile No`}
                  onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , mobile : e.target.value} : member)})}    />
                   : <TextField
                     id="outlined-basic"
@@ -438,42 +521,12 @@ export default function RegistreFrom({
                     variant="outlined"
                     type="number"
                     required
-                    label={`member ${index+1} mobile No`}
+                    label={`${index == 0 ? "Leader" :  `member ${index+1}`} mobile No`}
                     value={groupParticipationData.members[index].mobile}
                     onChange={(e)=>setGroupParticipationData({...groupParticipationData, members : groupParticipationData.members.map((member , idx)=>idx === index ? {...member , mobile : e.target.value} : member)})}    />
                   }
                </div>
-            //    <>
-            //    <p className="t-center">*** member {index+1} ***</p>
-            //    {/* <br/> */}
-            //    <TextField
-            //      id="outlined-basic"
-            //      label={`member ${index+1} Name`}
-            //      variant="outlined"
-            //      style={{ marginBottom: "10px", width: "100%" }}
-            //    />
-            //    <br />
-            //    <TextField
-            //      style={{ marginBottom: "10px", width: "100%" }}
-            //      id="outlined-basic"
-            //      label={`member ${index+1} Enrollment`}
-            //      variant="outlined"
-            //    />
-            //    <br />
-            //    <TextField
-            //      id="outlined-basic"
-            //      style={{ marginBottom: "10px", width: "100%" }}
-            //      label={`member ${index+1} Email`}
-            //      variant="outlined"
-            //    />
-            //    <br />
-            //    <TextField
-            //      id="outlined-basic"
-            //      style={{ marginBottom: "10px", width: "100%" }}
-            //      label={`member ${index+1} mobile No.`}
-            //      variant="outlined"
-            //    />
-            //  </>
+          
               ))}
             </>
           ) : (
@@ -500,6 +553,37 @@ export default function RegistreFrom({
                 onChange={(e)=>setsingleParticipationData({...singleParticipationData , name : e.target.value})}
               />}
               <br />
+
+              <FormControl
+                          className="mb-3"
+                          fullWidth
+                        >
+                          <InputLabel id="demo-simple-select-label" required>
+                            select University
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={singleParticipationData.university}
+                            label="select university"
+                            onChange={(e) =>
+                              setsingleParticipationData({
+                                ...singleParticipationData,
+                                university: e.target.value,
+                              })
+                            }
+                          >
+                             {college.map((c)=>(
+                              <MenuItem value={c}>{c}</MenuItem>
+                            ))}
+                            {/* <MenuItem value={"Darshan University"}>Darshan University</MenuItem>
+                            <MenuItem value={"Atmiya University"}>Atmiya University</MenuItem>
+                            <MenuItem value={"Arpitt University"}>Arpitt University</MenuItem>
+                            <MenuItem value={"R.k University"}>R.k University</MenuItem> */}
+                          </Select>
+                        </FormControl>
+
+              <br/>
               {singleParticipationDataError.Enrollment ? 
               <TextField
               style={{ marginBottom: "10px", width: "100%" }}

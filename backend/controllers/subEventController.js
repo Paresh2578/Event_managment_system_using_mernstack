@@ -32,9 +32,9 @@ exports.createSubEvnet = async (req , resp)=>{
       
       
       // subEvent data
-      let {subEventname ,category , time , seats , groupMember ,isGroup , subEventPosterUrl , discription  , paid , pay} = req.body;
+      let {subEventname ,category , startTime , endTime , seats , groupMember ,isGroup , subEventPosterUrl , discription  , paid , pay} = req.body;
       let {eventId} = req.params;
-      let newSubEvent = new SubEvents({eventId ,  subEventname , category,time  , seats , groupMember , isGroup , pay,paid , subEventPosterUrl , discription , coordinatorId})
+      let newSubEvent = new SubEvents({eventId ,  subEventname , category,startTime , endTime  , seats , groupMember , isGroup , pay,paid , subEventPosterUrl , discription , coordinatorId})
       await newSubEvent.save();
 
       //add to eventId in eventDocument
@@ -55,7 +55,7 @@ exports.createSubEvnet = async (req , resp)=>{
    }catch(error){
     resp.status(500).json({
         success: false,
-        message: error,
+        message: error.message,
       });
    }
 }

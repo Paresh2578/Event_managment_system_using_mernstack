@@ -43,25 +43,52 @@ export default function Login() {
       }
 
   return (
-    <div className="LogIn-container">
-    <div className="wrapper">
-      <div className="title"><span>Login</span></div>
-      <form onSubmit={login}>
-        <div className="row">
-          <i className="fas fa-user"></i>
-          <input type="email" placeholder="Email" onChange={(e)=>setData({...data , email : e.target.value})} required/>
+    <div style={{ background: 'linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%)', height: '100vh', paddingTop: '150px' }}>
+      <div className="d-flex justify-content-center">
+        <div class="containers">
+          <form onSubmit={login}>
+            <div class="title">Login</div>
+            <div class="input-box underline">
+              <input type="text" placeholder="Enter Your Email" onChange={(e)=>setData({...data , email : e.target.value})} required  />
+              <div class="underline"></div>
+            </div>
+            <div class="input-box">
+              <input type="password" placeholder="Enter Your Password" onChange={(e)=>setData({...data , password : e.target.value})} required />
+              <div class="underline"></div>
+            </div>
+            <div class="input-box button d-flex justify-content-center">
+            <div className="row d-flex justify-content-center">
+                     <div className="col">
+                       <button className="btn" type="submit" disabled={loding ? true : false}>{loding ? <CircularProgress size="2rem" color="inherit"/> : "Login"}</button>
+                     </div>
+                     <div className="col">
+                       <button className="btn" type="click" onClick={()=>navigate('/')}>Home</button>
+                     </div>
+                   </div>
+            </div>
+          </form>
         </div>
-        <div className="row">
-          <i className="fas fa-lock"></i>
-          <input type="password" placeholder="Password" onChange={(e)=>setData({...data , password : e.target.value})} required/>
-        </div>
-        {/* <div className="pass"><a href="#">Forgot password?</a></div> */}
-        <div className="row button">
-          <button className="loginBtn col me-3" type="submit" disabled={loding ? true : false}>{loding ? <CircularProgress size="2rem" color="inherit"/> : "Login"}</button>
-          <button className="loginBtn col" onClick={()=>navigate('/')}>Home</button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
+  //   <div className="LogIn-container">
+  //   <div className="wrapper">
+  //     <div className="title"><span>Login</span></div>
+  //     <form onSubmit={login}>
+  //       <div className="row">
+  //         <i className="fas fa-user"></i>
+  //         <input type="email" placeholder="Email" onChange={(e)=>setData({...data , email : e.target.value})} required/>
+  //       </div>
+  //       <div className="row">
+  //         <i className="fas fa-lock"></i>
+  //         <input type="password" placeholder="Password" onChange={(e)=>setData({...data , password : e.target.value})} required/>
+  //       </div>
+  //       {/* <div className="pass"><a href="#">Forgot password?</a></div> */}
+  //       <div className="row button">
+  //         <button className="loginBtn col me-3" type="submit" disabled={loding ? true : false}>{loding ? <CircularProgress size="2rem" color="inherit"/> : "Login"}</button>
+  //         <button className="loginBtn col" onClick={()=>navigate('/')}>Home</button>
+  //       </div>
+  //     </form>
+  //   </div>
+  // </div>
   );
 }

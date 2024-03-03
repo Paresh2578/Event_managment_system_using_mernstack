@@ -3,6 +3,7 @@ const express = require("express");
 const connectToDB = require("./config/db");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
+const { MongoClient } = require('mongodb');
 
 // routes
 const adminRoutes = require("./routes/adminRoutes");
@@ -10,6 +11,7 @@ const eventRoutes = require("./routes/eventRoutes");
 const subEventRoutes = require("./routes/subEventRoutes")
 const participationRouter = require('./routes/ParticipationRouter');
 const payment = require('./routes/paymentRouter');
+const winner = require('./routes/winnerRouter');
 
 const app = express();
 
@@ -26,6 +28,29 @@ app.use("/api/event", eventRoutes);
 app.use("/api/subEvent", subEventRoutes);
 app.use("/api/participation", participationRouter);
 app.use("/api/payment", payment);
+app.use("/api/winner", winner);
+
+
+//get all allow student
+app.get('/api/allowStudentList', async(req , res)=>{
+    try{
+
+        const client = new MongoClient(process.env.MONGO_URL);
+        await client.connect();
+        const db = client.db('Event_managment_system');
+    const collection = db.collection('allowStudents');
+    const cursor = collection.find({});
+    const results = await cursor.toArray();
+
+    res.send({success : true , data : results});
+
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            message: error.message,
+          });
+    }
+})
 
 // app.use("/", todosRoutes);
 

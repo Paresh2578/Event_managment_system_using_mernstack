@@ -126,7 +126,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           subEventPosterUrl: false,
         });
         return false;
-      } else if (subEventData.time.length == 0) {
+      } else if (subEventData.startTime.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
@@ -295,7 +295,7 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
           id="alert-dialog-title"
           style={{ padding: "20px 50px 20px 50px" }}
         >
-          {`Add new subEvent`}
+          {`Edit  subEvent`}
         </DialogTitle>
         <DialogContent className="d-block">
           <Box sx={{ width: "100%" }}>
@@ -408,9 +408,9 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                               "StaticDatePicker",
                             ]}
                           >
-                            <DemoItem label="">
+                            <DemoItem label="startTime">
                               <TimePicker
-                                value={subEventData.time}
+                                value={subEventData.startTime}
                                 className={
                                   subEventDataError.time &&
                                   "border border-1 border-danger"
@@ -418,7 +418,34 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                                 onChange={(time) =>
                                   setSubEventData({
                                     ...subEventData,
-                                    time: time.$d,
+                                    subEventData: time.$d,
+                                  })
+                                }
+                              />
+                            </DemoItem>
+                          </DemoContainer>
+                        </LocalizationProvider>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer
+                            components={[
+                              "DatePicker",
+                              "MobileDatePicker",
+                              "DesktopDatePicker",
+                              "StaticDatePicker",
+                            ]}
+                          >
+                            <DemoItem label="endTime">
+                              <TimePicker
+                                value={subEventData.endTime}
+                                className={
+                                  subEventDataError.time &&
+                                  "border border-1 border-danger"
+                                }
+                                onChange={(time) =>
+                                  setSubEventData({
+                                    ...subEventData,
+                                    subEventData: time.$d,
                                   })
                                 }
                               />

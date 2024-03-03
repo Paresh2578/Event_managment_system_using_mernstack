@@ -39,6 +39,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 export default function Events() {
   const navigate = useNavigate();
+  let adminAuth = JSON.parse(localStorage.getItem('adminAuth'));
 
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
@@ -47,6 +48,7 @@ export default function Events() {
   const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
   const [event, setEvent] = useState([]);
   const [dupEvent, setDupEvent] = useState([]);
+  
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
@@ -59,12 +61,15 @@ export default function Events() {
     window.addEventListener("resize", handleWindowResize);
 
     getAllEvents();
+    // getAllWinners();
 
     // setEvent([{name : "florik" , date : "January 21, 2021" , posterUrl : img2} , {name : "florik" , date : "January 21, 2021" , posterUrl : img2}]);
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+ 
 
   const getAllEvents = async () => {
     let result = await fetch(`${URL}/api/event/getAllEvent`);
@@ -201,45 +206,6 @@ export default function Events() {
       </section>
     </div>
 
-
-      {/* <div id="" className="text-center container">
-        <div className="container">
-          <div className="col-md-8 col-md-offset-2 section-title">
-            <h1 class="admin-heading text-center">
-              all <span>Events</span>
-            </h1>
-          </div>
-          <div className="row">
-            <div className="col mb-3">
-              <button
-                className={
-                  activeFillter != -1 ? "filter-btn" : "filter-btn-active"
-                }
-                onClick={() => {
-                  eventFillter("All", -1);
-                }}
-              >
-                All
-              </button>
-            </div>
-            {category.map((item, index) => (
-              <div className="col mb-3 ">
-                <button
-                  className={
-                    activeFillter != index ? "filter-btn" : "filter-btn-active"
-                  }
-                  onClick={() => {
-                    eventFillter(item, index);
-                  }}
-                >
-                  {item}
-                </button>
-              </div>
-            ))}
-          </div>
-        
-        </div>
-      </div> */}
       <Fab
         aria-label="like"
         className="bg-primary text-light"

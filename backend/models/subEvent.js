@@ -13,7 +13,11 @@ const subEventSchema =new  mongoose.Schema({
         required : true,
         type : String,
     },
-    time: {
+    startTime: {
+        required : true,
+        type : String,
+    },
+    endTime: {
         required : true,
         type : String,
     },
@@ -40,6 +44,10 @@ const subEventSchema =new  mongoose.Schema({
     subEventPosterUrl : {
         required : true,
         type : String,
+    },
+    winnerId : {
+        type: String,
+        default : ""
     },
     discription : {
         type : String

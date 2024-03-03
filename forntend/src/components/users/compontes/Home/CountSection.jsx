@@ -10,7 +10,8 @@ export default function CountSection() {
 
           <div class="col-lg-4 col-md-6">
             <div class="count-box">
-              <i class="bi bi-emoji-smile"></i>
+              {/* <i class="bi bi-emoji-smile"></i> */}
+              <i class="bx bx-map"></i>
               <span class="purecounter">Location</span>
               <p>xyz University</p>
             </div>
@@ -26,8 +27,10 @@ export default function CountSection() {
 
           <div class="col-lg-4 col-md-6 mt-5 mt-lg-0">
             <div class="count-box">
-              <i class="bi bi-headset"></i>
-              <span  class="purecounter">Expected Participants</span>
+              {/* <i class="bi bi-headset"></i> */}
+              <i class="bx bx-group"></i>
+              {/* <span  class="purecounter">Expected Participants</span> */}
+              <span  class="purecounter"> Participants</span>
               <p>1500+ Students</p>
             </div>
           </div>

@@ -22,7 +22,7 @@ import { CalendarMonth, EventSeat, AccessAlarm } from "@mui/icons-material";
 
 export default function SubEvents() {
   const navigate = useNavigate();
-  const { id, eventName } = useParams();
+  const { id, eventName  , university} = useParams();
 
   // const [isHovered, setIsHovered] = useState(false);
 
@@ -116,7 +116,7 @@ export default function SubEvents() {
                   data-aos-delay="100"
                 >
               
-                  <SubEventCard data={data} eventName={eventName} getAllSubEvents={getAllSubEvents} />
+                  <SubEventCard data={data} eventName={eventName} university={university} getAllSubEvents={getAllSubEvents} />
                 </div>
               ))}
           </div>

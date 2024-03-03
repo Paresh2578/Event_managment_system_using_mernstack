@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -32,8 +32,22 @@ export default function EventCard({
 
   const [editEventOpen, setEditEventOpen] = useState(false);
   const [deleteEventLoding, setDeleteEventLoding] = useState(false);
-  const [deleteConformAlertDialogOpen, setDeleteConformAlertDialogOpen] =
-    useState(false);
+  const [deleteConformAlertDialogOpen, setDeleteConformAlertDialogOpen] =  useState(false);
+  const [completedEvent , setCompletedEvent] = useState(false);
+
+  useEffect(()=>{
+    const currentDate = new Date();
+          let eventDateArr = data.date.split("/");
+          eventDateArr[1] = parseInt(eventDateArr[1]) + 1;
+          const eventDate = new Date(
+            `${eventDateArr[0]}/${eventDateArr[1]}/${eventDateArr[2]}`
+          ); // December 31, 2023 (month is 0-based, so 11 is December)
+          if (currentDate >= eventDate) {
+            return setCompletedEvent(false);
+          } else{
+            return setCompletedEvent(true);
+          }
+  },[]);
 
   const deleteEvent = async () => {
     try {
@@ -77,50 +91,9 @@ export default function EventCard({
         deleteFunction={deleteEvent}
         deleteEventLoding={deleteEventLoding}
       />
-      {/*       
-      <div>
-        <div>
-          <div  className="card-container" onClick={() => navigate(`/admin/subEvents/${data._id}`)}>
-          <img
-            src={data.eventPosterUrl}
-            style={{ height: "200px" }}
-            alt={data.name}
-            className="overlay-image rounded-top"
-          />
-          </div>
-          <CardContent>
-            <p style={{ textAlign: "left" }}>
-              <CalendarMonth htmlColor="#6372ff" />{" "}
-              <span>{data.date}</span>
-            </p>
-            <p className="event-card" style={{ fontSize: "1.5rem" }}>
-              {data.name}
-            </p>
-            <div className="roe">
-              <Button
-                className="col"
-                color="secondary"
-                onClick={() => setEditEventOpen(true)}
-                startIcon={<Edit size="small" />}
-              ></Button>
-              <Button
-                color="error"
-                className="col"
-                startIcon={           
-                    <Delete
-                      className="ms-2"
-                      size="2 rem"
-                      onClick={() => setDeleteConformAlertDialogOpen(true)}
-                    />
-                    }
-              ></Button>
-            </div>
-          </CardContent>
-        </div>
-      </div> */}
 
       <div className="card" style={{ width: "18rem" }}>
-        <img src={data.eventPosterUrl} class="card-img-top" alt={data.name} onClick={() => navigate(`/admin/subEvents/${data._id}`)}/>
+        <img src={data.eventPosterUrl} style={{height : '35vh'}} className="card-img-top rounded-top" alt={data.name} onClick={() => navigate(`/admin/subEvents/${data._id}/${completedEvent}`)}/>
         <div class="card-body">
           <h5 class="card-title fs-4">{data.name}</h5>
           <p class="card-text">

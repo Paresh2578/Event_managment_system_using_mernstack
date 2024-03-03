@@ -58,6 +58,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   // const [group, setGroup] = useState(false);
   const [eventData, setEventData] = useState({
     name: "",
+    university : "All",
+    // university : "",
     date: null,
     eventPosterUrl: "",
   });
@@ -65,7 +67,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   const [subEventData, setSubEventData] = useState({
     subEventname: "",
     category: "",
-    time: "",
+    startTime: "",
+    endTime: "",
     seats: 10,
     grupMember: 2,
     isGroup: false,
@@ -100,7 +103,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   const [subEventDataError, setSubEventDataError] = useState({
     name: false,
     category: false,
-    time: false,
+    startTime: false,
+    endTime: false,
     seats: false,
     grupMember: false,
     posterUrl: false,
@@ -174,7 +178,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         setSubEventDataError({
           name: true,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           seats: false,
           grupMember: false,
           posterUrl: false,
@@ -184,27 +189,41 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         setSubEventDataError({
           name: false,
           category: true,
-          time: false,
+          startTime: false,
+          endTime : false,
           seats: false,
           grupMember: false,
           posterUrl: false,
         });
         return false;
-      } else if (subEventData.time.length == 0) {
+      } else if (subEventData.startTime.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
-          time: true,
+          startTime: true,
+          endTime: false,
           seats: false,
           grupMember: false,
           posterUrl: false,
         });
         return false;
-      } else if (subEventData.seats < 10) {
+      }  else if (subEventData.endTime.length == 0) {
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: true,
+          seats: false,
+          grupMember: false,
+          posterUrl: false,
+        });
+        return false;}
+      else if (subEventData.seats < 10) {
+        setSubEventDataError({
+          name: false,
+          category: false,
+          startTime: false,
+          endTime: false,
           seats: true,
           grupMember: false,
           posterUrl: false,
@@ -214,7 +233,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           grupMember: true,
           posterUrl: false,
         });
@@ -226,7 +246,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           grupMember: false,
           posterUrl: true,
         });
@@ -235,7 +256,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
         setSubEventDataError({
           name: false,
           category: false,
-          time: false,
+          startTime: false,
+          endTime: false,
           grupMember: false,
           posterUrl: false,
         });
@@ -265,7 +287,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
     setSubEventData({
       subEventname: "",
       category: "",
-      time: "",
+      startTime: "",
+      endTime: "",
       grupMember: 2,
       isGroup: false,
       posterUrl: "",
@@ -275,7 +298,8 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
     setSubEventDataError({
       name: false,
       category: false,
-      time: false,
+      startTime: false,
+      endTime: false,
       grupMember: false,
       posterUrl: false,
     });
@@ -296,11 +320,13 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       mobile: coordinatorData.mobile,
       subEventname: subEventData.subEventname,
       category: subEventData.category,
-      time: subEventData.time,
+      startTime: subEventData.startTime,
+      endTime: subEventData.endTime,
       seats: subEventData.seats,
       groupMember: subEventData.grupMember,
       isGroup: subEventData.isGroup,
       subEventPosterUrl: subEventData.posterUrl, //
+      university : eventData.university,
       name: eventData.name,
       date: eventData.date,
       eventPosterUrl: eventData.eventPosterUrl, //
@@ -491,6 +517,36 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                           />
                         )}
 
+
+<FormControl
+                          className="mb-3"
+                          fullWidth
+                        >
+                          <InputLabel id="demo-simple-select-label" required>
+                            select University
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={eventData.university}
+                            label="select university"
+                            defaultChecked="all"
+                            onChange={(e) =>
+                              setEventData({
+                                ...eventData,
+                                university: e.target.value,
+                              })
+                            }
+                          >
+                            <MenuItem value={"All"}>All</MenuItem>
+                            <MenuItem value={"Darshan University"}>Darshan University</MenuItem>
+                            <MenuItem value={"Atmiya University"}>Atmiya University</MenuItem>
+                            <MenuItem value={"Arpitt University"}>Arpitt University</MenuItem>
+                            <MenuItem value={"R.k University"}>R.k University</MenuItem>
+                          </Select>
+                        </FormControl>
+
+
                         <div>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer
@@ -666,17 +722,44 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                               "StaticDatePicker",
                             ]}
                           >
-                            <DemoItem label="">
+                            <DemoItem label="startTime">
                               <TimePicker
-                                value={subEventData.time}
+                                value={subEventData.startTime}
                                 className={
-                                  subEventDataError.time &&
+                                  subEventDataError.startTime &&
                                   "border border-1 border-danger"
                                 }
                                 onChange={(time) =>
                                   setSubEventData({
                                     ...subEventData,
-                                    time: time.$d,
+                                    startTime: time.$d,
+                                  })
+                                }
+                              />
+                            </DemoItem>
+                          </DemoContainer>
+                        </LocalizationProvider>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer
+                            components={[
+                              "DatePicker",
+                              "MobileDatePicker",
+                              "DesktopDatePicker",
+                              "StaticDatePicker",
+                            ]}
+                          >
+                            <DemoItem label="endTime">
+                              <TimePicker
+                                value={subEventData.endTime}
+                                className={
+                                  subEventDataError.endTime &&
+                                  "border border-1 border-danger"
+                                }
+                                onChange={(time) =>
+                                  setSubEventData({
+                                    ...subEventData,
+                                    endTime: time.$d,
                                   })
                                 }
                               />

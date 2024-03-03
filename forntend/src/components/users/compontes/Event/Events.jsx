@@ -32,6 +32,8 @@ export default function Events() {
 
   useEffect(() => {
     getAllEvents();
+
+    // console.log("darsh univer".split(" ").join("_").toString());
   }, []);
 
   const getAllEvents = async () => {
@@ -61,7 +63,7 @@ export default function Events() {
         <div class="row">
         {event && event.length != 0 && !loading ?
           event.map((data, index) => (
-            <div key={index} onClick={()=>navigate(`/subevent/${data.name}/${data._id}`)} class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div key={index} onClick={()=>navigate(`/subevent/${data.name}/${data.university.split(" ").join("_").toString()}/${data._id}`)} class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
               <EventCard data={data}/>
           </div>
           )) : loading ? <EventCardLoading/> : <Empty/>}

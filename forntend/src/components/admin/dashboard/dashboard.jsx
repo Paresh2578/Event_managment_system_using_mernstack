@@ -6,6 +6,9 @@ import { ToastContainer, toast } from 'react-toastify';
 //compontes
 // import ProjectTables from './ProjectTable'
 
+//mui
+import { EventSeat, AccessAlarm } from "@mui/icons-material";
+
 //utils
 import {URL} from '../../../util/URL';
 
@@ -59,8 +62,9 @@ export default function Dashboard() {
                         <div class="cardName">Total competed events</div>
                     </div>
 
-                    <div class="iconBx">
-                        <ion-icon name="eye-outline"></ion-icon>
+                    <div className="iconBx fs-1">
+                        {/* <ion-icon name="eye-outline"></ion-icon> */}
+                        <i className='bi-check-circle'></i>
                     </div>
                 </div>
 
@@ -70,8 +74,9 @@ export default function Dashboard() {
                         <div class="cardName">Upcoming events</div>
                     </div>
 
-                    <div class="iconBx">
-                        <ion-icon name="eye-outline"></ion-icon>
+                    <div className="iconBx fs-1">
+                        {/* <ion-icon name="eye-outline"></ion-icon> */}
+                        <i className='bi-calendar-event'></i>
                     </div>
                 </div>
 
@@ -81,8 +86,8 @@ export default function Dashboard() {
                         <div class="cardName">Total participation student</div>
                     </div>
 
-                    <div class="iconBx">
-                        <ion-icon name="cart-outline"></ion-icon>
+                    <div class="iconBx fs-1">
+                        <ion-icon name="people-outline"></ion-icon>
                     </div>
                 </div>
 
@@ -92,8 +97,9 @@ export default function Dashboard() {
                         <div class="cardName">Available Steats</div>
                     </div>
 
-                    <div class="iconBx">
-                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                    <div class="iconBx fs-1">
+                        {/* <ion-icon name="chatbubbles-outline"></ion-icon> */}
+                        <EventSeat fontSize={'large'}/>
                     </div>
                 </div>
             </div>

@@ -15,7 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import RegistreFrom from "./registreFrom";
 import EventDiscriptionDialog from "./eventDiscriptionDialog";
 
-export default function SubEventCard({ data, eventName , getAllSubEvents }) {
+export default function SubEventCard({ data, eventName,university , getAllSubEvents }) {
   const [registerOpen, setregisterOpen] = useState(false);
   const [eventDiscriptionOpen, setEventDiscriptionOpen] = useState(false);
 
@@ -40,6 +40,7 @@ export default function SubEventCard({ data, eventName , getAllSubEvents }) {
         setregisterOpen={setregisterOpen}
         data={data}
         eventName={eventName}
+        university={university}
         getAllSubEvents={getAllSubEvents}
       />
       <EventDiscriptionDialog
@@ -72,7 +73,7 @@ export default function SubEventCard({ data, eventName , getAllSubEvents }) {
           <div className="">{data.paid ?<span className="bg-light font-weight-bold rounded-1 p-1">₹ {data.pay}</span> :<span className="bg-success text-light font-weight-bold rounded-1 p-1">Free</span>}</div>
           </div>
           <p class="card-text">
-          <AccessAlarm color="#6372ff" /> <span >{formetTime(data.time)}</span>
+          <AccessAlarm color="#6372ff" /> <span >{`${formetTime(data.startTime)}-${formetTime(data.endTime)}`}</span>
           </p>
 
           <div className="row">

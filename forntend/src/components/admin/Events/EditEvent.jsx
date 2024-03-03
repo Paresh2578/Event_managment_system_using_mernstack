@@ -12,6 +12,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { FormControl,
+  FormLabel , InputLabel , Select , MenuItem} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
@@ -171,6 +173,37 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
                 required
               />
             )}
+
+
+            
+<FormControl
+                          className="mb-3"
+                          fullWidth
+                        >
+                          <InputLabel id="demo-simple-select-label" required>
+                            select University
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={eventData.university}
+                            label="select university"
+                            defaultChecked="All"
+                            onChange={(e) =>
+                              setEventData({
+                                ...eventData,
+                                university: e.target.value,
+                              })
+                            }
+                          >
+                            <MenuItem value={"All"}>All</MenuItem>
+                            <MenuItem value={"Darshan University"}>Darshan University</MenuItem>
+                            <MenuItem value={"Atmiya  University"}>Atmiya University</MenuItem>
+                            <MenuItem value={"Arpitt University"}>Arpitt University</MenuItem>
+                            <MenuItem value={"R.k University"}>R.k University</MenuItem>
+                          </Select>
+                        </FormControl>
+
 
             <div>
               <LocalizationProvider dateAdapter={AdapterDayjs}>

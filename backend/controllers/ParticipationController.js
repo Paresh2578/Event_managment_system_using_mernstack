@@ -84,7 +84,7 @@ exports.singleRegister = async (req, resp) => {
 
 exports.groupRegister = async (req, resp) => {
   try {
-    let { eventName, subEventName, subEventId, groupName } = req.body;
+    let { eventName, subEventName, subEventId , university, groupName } = req.body;
     let members = req.body.members;
 
     let subEvent = await SubEvent.findOne({ _id: subEventId });
@@ -122,6 +122,7 @@ exports.groupRegister = async (req, resp) => {
     let groupParticipation = new GroupParticipation({
       eventName,
       subEventName,
+      university,
       subEventId,
       groupName,
       members,
