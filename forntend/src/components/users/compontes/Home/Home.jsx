@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../../../layouts/UserLayout/css/style.css";
 
 //compontes
@@ -11,18 +11,38 @@ import Navbar from "../../../../layouts/UserLayout/Navbar";
 import Footer from "../../../../layouts/UserLayout/Footer";
 
 export default function Home() {
+  const [totalEventAndPartisitionLength , setTotalEventAndPartisitionLength] =useState({totalEvents : 0 , totalParticiption : 0});
+
+  useEffect(()=>{     
+    getTotalEventAndPartisitionLength();
+  },[])
+
+  const getTotalEventAndPartisitionLength = async()=>{
+    try{
+      let result = await fetch('http://localhost:4500/api/event/getTotalEventAndPartisitionLength');
+      result = await result.json();
+
+      if(result.success){
+        setTotalEventAndPartisitionLength(result.data);
+      }
+
+    }catch(error){
+
+    }
+  }
+
   return (
     <>
     {/* <Navbar/> */}
       {/* <!-- ======= Hero Section ======= --> */}
-      <section id="hero" class="d-flex align-items-center">
-        <div class="container" data-aos="zoom-out" data-aos-delay="100">
+      <section id="hero" className="d-flex align-items-center">
+        <div className="container" data-aos="zoom-out" data-aos-delay="100">
           <h1>
             Welcome to <span>EventX</span>
           </h1>
           <h2>Connect, Learn, Grow: Register for Our Inspiring Event</h2>
-          <div class="d-flex">
-            <a href="#event" class="btn-get-started scrollto">
+          <div className="d-flex">
+            <a href="#event" className="btn-get-started scrollto">
               {" "}
               Register Now!
             </a>
@@ -32,7 +52,7 @@ export default function Home() {
       {/* <!-- End Hero --> */}
 
       <main id="main">
-        <CountSection />
+        <CountSection totalEventAndPartisitionLength={totalEventAndPartisitionLength}/>
         <Events />
         <Testimonials />
         <FAQ />
@@ -41,9 +61,9 @@ export default function Home() {
 
       <a
         href="#"
-        class="back-to-top d-flex align-items-center justify-content-center"
+        className="back-to-top d-flex align-items-center justify-content-center"
       >
-        <i class="bi bi-arrow-up-short"></i>
+        <i className="bi bi-arrow-up-short"></i>
       </a>
 
       {/* <Footer/> */}

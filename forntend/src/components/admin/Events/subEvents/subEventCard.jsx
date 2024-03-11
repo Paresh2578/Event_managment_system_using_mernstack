@@ -27,10 +27,6 @@ export default function SubEventCard({competed , winner , data , handleEditSubEv
     const [deleteSubEventLoding , setdeleteSubEventLoding] = useState(false);
     const [deleteConformAlertDialogOpen,       setDeleteConformAlertDialogOpen] = useState(false);
 
-    // useEffect(()=>{
-    //     console.log(winner);
-    // },[]);
-
     const deleteSubEvent = async()=>{
       try{
         setdeleteSubEventLoding(true);
@@ -71,22 +67,6 @@ export default function SubEventCard({competed , winner , data , handleEditSubEv
       }else{
         winner = '<p>No selected winner</p>'
       }
-    //   if(winner.lenght != 0){
-    //      // Build the HTML to display the top 3 winners
-    //  winnersHTML = '<ol>';
-    // if(winner !== undefined && winner[0].first !== undefined){
-    // winnersHTML +=  `<li>${winner[0].first}</li>`;
-    // }
-    // if(winner !== undefined && winner[0].secound !== undefined){
-    //   winnersHTML +=  `<li>${winner[0].secound}</li>`;
-    // }
-    // if(winner !== undefined && winner[0].third !== undefined){
-    //   winnersHTML +=  `<li>${winner[0].third}</li>`;
-    // }
-    // winnersHTML += '</ol>';
-    //   }else{
-    //     winnersHTML = '<p>not select winners</p>'
-    //   }
     
    
 
@@ -105,11 +85,11 @@ export default function SubEventCard({competed , winner , data , handleEditSubEv
 
 
   return (
-    <div className="">
+    <>
        <DeleteConformAlertDialog open={deleteConformAlertDialogOpen} setOpen={setDeleteConformAlertDialogOpen} deleteFunction={deleteSubEvent} deleteEventLoding={deleteSubEventLoding}/>
       <EditSubEvent open={editEventOpen} data={data} setOpen={setEditEventOpen} index={index} handleEditSubEvent={handleEditSubEvent}/>
 
-      <div class="card" style={{ width: "18rem" }} >
+      <div className="card" style={{ width: "18rem" }} >
       <div className="card-container "  onClick={(e)=>navigate(`/admin/events/subevent/participationsList/${data._id}/${data.isGroup}/${competed}/${data.subEventname}}`)}>
        
        <div className="img-text" >
@@ -126,19 +106,19 @@ export default function SubEventCard({competed , winner , data , handleEditSubEv
        
        />
      </div>
-        <div class="card-body">
-          <h5 class="card-title">{data.subEventname}</h5>
-          <p class="card-text">
+        <div className="card-body">
+          <h5 className="card-title">{data.subEventname}</h5>
+          <p className="card-text">
           <AccessAlarm color="#6372ff" /> <span >{formetTime(data.startTime)}</span>
           </p>
 
-          <div  class="btn btn-primary rounded-lg me-3">
+          <div  className="btn btn-primary rounded-lg me-3">
           <Edit size="small"   onClick={() => setEditEventOpen(true)}/>
           </div>
-          <div  class="btn btn-danger rounded-lg">
+          <div  className="btn btn-danger rounded-lg">
           <Delete size="small" onClick={() => setDeleteConformAlertDialogOpen(true)} />
           </div>
-         {competed == "true" && <div  class="btn btn-warning rounded-lg ms-3" onClick={()=>handleShowWinner(data._id)}>
+         {competed == "true" && <div  className="btn btn-warning rounded-lg ms-3" onClick={()=>handleShowWinner(data._id)}>
           <EmojiEventsIcon size="small" color="inherit"/>
           </div> }
           
@@ -178,6 +158,6 @@ export default function SubEventCard({competed , winner , data , handleEditSubEv
                     />}>
                   </Button>
       </CardContent> */}
-    </div>
+    </>
   );
 }

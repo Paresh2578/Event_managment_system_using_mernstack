@@ -127,9 +127,6 @@ export default function RegistreFrom({
           return;
         }
         for(let i=0;i<groupMember;i++){
-        console.log(allowStudentList[groupParticipationData.university.split(" ").join("_").toString()].includes(groupParticipationData.members[i].Enrollment));
-        console.log(allowStudentList[groupParticipationData.university.split(" ").join("_").toString()]);
-        console.log("curr en : " , groupParticipationData.members[i].Enrollment);
           if(groupParticipationData.members[i].name.length == 0){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : true ,Enrollment : false ,email : false ,mobile : false}: data));
             return;
@@ -313,10 +310,6 @@ export default function RegistreFrom({
           
           
 				} catch (error) {
-          // console.log("error ")
-          // setRegisterLoding(false);
-          // deleteParticipation(participationID);
-
           toast.success("Payment successfully");
           getAllSubEvents();
           setregisterOpen(false);
@@ -364,10 +357,8 @@ export default function RegistreFrom({
   //delete particiption when failed payment
   const deleteParticipation =async (participationID)=>{
     if(isGroup){
-      console.log("call remove group");
       await fetch(`${URL}/api/participation/deleteGroupParticipations/${participationID}` , {method :'DELETE'});
     }else{
-      console.log("call remove Single particiption");
       await fetch(`${URL}/api/participation/deleteSingleParticipations/${participationID}` , {method :'DELETE'});
     }
     setRegisterLoding(false);

@@ -6,6 +6,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2'
+import { CSVLink } from 'react-csv';
 
 //mui
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
@@ -101,7 +102,6 @@ export default function ParticipateUserListing() {
           alert(result.message);
         }
 
-        console.log(result);
 
     }catch(error){
       alert("get singlePartication error");
@@ -144,7 +144,6 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
    toast.success("successfully download")
       })
       .catch((error) => {
-        console.log('Error generating PDF: ', error);
        setDownloadLoding(false);
        toast.error("Failed to  download")
       });
@@ -219,7 +218,6 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
 
         result = await result.json();
        }catch(error){
-        console.log(error);
         toast.error("fail to setWinner")
        }
   }
@@ -228,12 +226,15 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
     <div>
       <Card>
         <CardBody>
-          <div className='d-flex justify-content-between'>
+          {/* <div className='d-flex justify-content-between'> */}
           <CardTitle tag="h4">Participate user Listing</CardTitle>
-        {downloadLoding ?   <div className='btn btn-primary'>downloading...</div> :  <div className='my-btn' onClick={downloadPDF}>export pdf</div>}
-          </div>
+           <div className='d-flex'>
+           {downloadLoding ?   <div className='btn btn-primary'>downloading...</div> :  <div className='my-btn' onClick={downloadPDF}>export pdf</div>}
+            <div className='my-btn ms-3'><CSVLink style={{color:'white'}} data={isGroup ? groupParticipationsList: singleParticipationsList} filename={"partisiptionList.csv"}>export CSV</CSVLink></div>
+           </div>
 
           <div id="student-data-list">
+
 
           <Table className="no-wrap mt-3 align-middle table table-hover" responsive borderless>
             <thead>

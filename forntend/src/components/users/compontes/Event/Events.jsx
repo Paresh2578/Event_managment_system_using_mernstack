@@ -32,8 +32,6 @@ export default function Events() {
 
   useEffect(() => {
     getAllEvents();
-
-    // console.log("darsh univer".split(" ").join("_").toString());
   }, []);
 
   const getAllEvents = async () => {
@@ -52,21 +50,22 @@ export default function Events() {
   };
 
   return (
-    <section id="event" class="team section-bg">
-      <div class="container" data-aos="fade-up">
+    <section id="event" className="team section-bg">
+      <div className="container" data-aos="fade-up">
 
-        <div class="section-title">
+        <div className="section-title">
           <h2>Event</h2>
           <h3>Upcoming <span>Events</span></h3>
          </div>
 
-        <div class="row">
+        {/* <div className="row"> */}
+        <div className="row">
         {event && event.length != 0 && !loading ?
           event.map((data, index) => (
             <div key={index} onClick={()=>navigate(`/subevent/${data.name}/${data.university.split(" ").join("_").toString()}/${data._id}`)} class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
               <EventCard data={data}/>
           </div>
-          )) : loading ? <EventCardLoading/> : <Empty/>}
+          )) : loading ? <EventCardLoading/> : <Empty student={true}/>}
 
         </div>
 

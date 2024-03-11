@@ -10,6 +10,7 @@ import axios from "axios";
 //utis
 import { FromentDate } from "../../../util/FormentDate";
 import { URL } from "../../../util/URL";
+import {imgToUrl} from '../../../util/myCustomFunction';
 
 //mui
 import {
@@ -364,30 +365,36 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   };
 
   const handleEventImgToUrl = async (e) => {
-    seteventImgToUrlProsess({ loding: true, error: false, success: false });
+    try{
+      seteventImgToUrlProsess({ loding: true, error: false, success: false });
+     let url =   await imgToUrl(e);
+      setEventData({...eventData ,eventPosterUrl: url})
+      seteventImgToUrlProsess({ loding: false, error: false, success: true });
+    }catch(error){
+      seteventImgToUrlProsess({ loding: false, error: true, success: false });
+    }
 
-    console.log(eventImgToUrlProsess);
-    const image = e.target.files[0];
+    // const image = e.target.files[0];
 
-    const formData = new FormData();
-    formData.set("image", image);
+    // const formData = new FormData();
+    // formData.set("image", image);
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        formData
-      )
-      .then((res) => {
-        setEventData({
-          ...eventData,
-          eventPosterUrl: res.data.data.display_url,
-        });
-        // setImgUploadLoding(false)
-        seteventImgToUrlProsess({ loding: false, error: false, success: true });
-      })
-      .catch((error) => {
-        seteventImgToUrlProsess({ loding: false, error: true, success: false });
-      });
+    // axios
+    //   .post(
+    //     `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     setEventData({
+    //       ...eventData,
+    //       eventPosterUrl: res.data.data.display_url,
+    //     });
+    //     // setImgUploadLoding(false)
+    //     seteventImgToUrlProsess({ loding: false, error: false, success: true });
+    //   })
+    //   .catch((error) => {
+    //     seteventImgToUrlProsess({ loding: false, error: true, success: false });
+    //   });
 
     // setEventData({ ...eventData, eventPosterUrl: "emg url" });
   };
@@ -395,35 +402,48 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   const handleSubEventImgToUrl = async (e) => {
     setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
 
-    const image = e.target.files[0];
 
-    const formData = new FormData();
-    formData.set("image", image);
+    try{
+      setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+     let url =   await imgToUrl(e);
+     setSubEventData({
+      ...subEventData,
+      posterUrl: url,
+    });
+      setSubEventImgToUrlProsess({ loding: false, error: false, success: true });
+    }catch(error){
+      setSubEventImgToUrlProsess({ loding: false, error: true, success: false });
+    }
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        formData
-      )
-      .then((res) => {
-        console.log(res.data.data.display_url);
-        setSubEventData({
-          ...subEventData,
-          posterUrl: res.data.data.display_url,
-        });
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: false,
-          success: true,
-        });
-      })
-      .catch((error) => {
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: true,
-          success: false,
-        });
-      });
+    // const image = e.target.files[0];
+
+    // const formData = new FormData();
+    // formData.set("image", image);
+
+    // axios
+    //   .post(
+    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.data.display_url);
+    //     setSubEventData({
+    //       ...subEventData,
+    //       posterUrl: res.data.data.display_url,
+    //     });
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: false,
+    //       success: true,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: true,
+    //       success: false,
+    //     });
+    //   });
 
     // setSubEventData({
     //   ...subEventData,
@@ -988,15 +1008,15 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                             )}
                           </div>
                         </div>
-                        <div class="mt-3">
+                        <div className="mt-3">
                           <label
                             for="exampleFormControlTextarea1"
-                            class="form-label"
+                            className="form-label"
                           >
                             Enter event discription
                           </label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             id="exampleFormControlTextarea1"
                             placeholder="Enter event discription"
                             onChange={(e)=>setSubEventData({...subEventData , discription : e.target.value})}

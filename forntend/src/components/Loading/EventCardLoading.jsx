@@ -8,7 +8,7 @@ import {Box} from '@mui/material'
 export default function EventCardLoading() {
   return (
     <>
-    <div className='row'>
+    {/* <div className='row justify-content-center'>
         {
             Array.from({length : 4}).map((_ , index)=>(
                 <div className='col-xl-3 col-md-6 col-sm-12' key={index}>
@@ -16,8 +16,18 @@ export default function EventCardLoading() {
                 </div>
             ))
         }
-        <div className=''></div>
-    </div>
+       
+    </div> */}
+    <div className='row justify-content-center'>
+    {Array.from({length: 4}).map((_, index) => (
+        <div className='col-xl-3 col-md-6 col-sm-12 mt-3' key={index}>
+            {/* <div className="ms-5"> */}
+                <Card/>
+            {/* </div> */}
+        </div>
+    ))}
+</div>
+
     </>
   );
 
@@ -26,12 +36,12 @@ export default function EventCardLoading() {
 
 const Card = ()=>{
     return <>
-    <Stack spacing={1} >
-      <Skeleton variant="rectangular" width={210} height={118} />
-      <Box>
-              <Skeleton />
+    <Stack spacing={1}>
+      <Skeleton variant="rectangular" height={158} />
+      <div>
+              <Skeleton/>
               <Skeleton  />
-            </Box>
+      </div>
     </Stack>
     </>
 }

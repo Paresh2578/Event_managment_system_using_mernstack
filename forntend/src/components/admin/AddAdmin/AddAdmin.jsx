@@ -43,7 +43,6 @@ export default function AddAdmin() {
           
        }catch(err){
         setLoding(false);
-        console.log(err);
         toast.error("Something went wrong");
        }
 

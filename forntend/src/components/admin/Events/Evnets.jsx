@@ -9,13 +9,14 @@ import "./Events.css";
 
 //utils
 import { URL } from "../../../util/URL";
-import { compareToCurrDate } from "../../../util/compareToDate";
+
 
 //componets
 import CreateEvent from "./CreateEvent";
 import EditEvent from "./EditEvent";
 import EventCard from "./EventCard";
 import EmptyEvent from '../EmptyEvent';
+import EventCardLoading from '../../Loading/EventCardLoading'
 
 //mui
 import { styled } from "@mui/material/styles";
@@ -48,6 +49,7 @@ export default function Events() {
   const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
   const [event, setEvent] = useState([]);
   const [dupEvent, setDupEvent] = useState([]);
+  const [loading , setLoading] = useState(false);
   
 
   ////find scrren width
@@ -61,9 +63,6 @@ export default function Events() {
     window.addEventListener("resize", handleWindowResize);
 
     getAllEvents();
-    // getAllWinners();
-
-    // setEvent([{name : "florik" , date : "January 21, 2021" , posterUrl : img2} , {name : "florik" , date : "January 21, 2021" , posterUrl : img2}]);
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
@@ -72,14 +71,22 @@ export default function Events() {
  
 
   const getAllEvents = async () => {
-    let result = await fetch(`${URL}/api/event/getAllEvent`);
+    try{
+      setLoading(true);
+      let result = await fetch(`${URL}/api/event/getAllEvent`);
     result = await result.json();
+    setLoading(false);
 
     if (result.success) {
       setEvent(result.data);
       setDupEvent(result.data);
     } else {
+      // setLoading(false);
       toast.error("something worng");
+    }
+    }catch(error){
+      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -126,7 +133,6 @@ export default function Events() {
   };
 
   const handleCreateNewEvent = (data) => {
-    console.log(data);
     setEvent([...event, data]);
     getAllEvents();
   };
@@ -161,34 +167,34 @@ export default function Events() {
     <>
 
 <div className="mt-0">
-      <section id="portfolio" class="portfolio section-bg">
-        <div class="container section-bg" data-aos="fade-up">
-          <div class="section-title">
+      <section id="portfolio" className="portfolio section-bg">
+        <div className="container section-bg" data-aos="fade-up">
+          <div className="section-title">
             <h2>Events</h2>
             <h3>
               All <span>Events</span>
             </h3>
           </div>
 
-          <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-lg-12 d-flex justify-content-center">
+          <div className="row" data-aos="fade-up" data-aos-delay="100">
+            <div className="col-lg-12 d-flex justify-content-center">
               <ul id="portfolio-flters">
                 <div className="col mb-3 ">
-                <li onClick={()=>eventFillter(-1)} class={activeEventCatagary == -1 ?  "filter-active" : ""}>
+                <li onClick={()=>eventFillter(-1)} className={activeEventCatagary == -1 ?  "filter-active" : ""}>
                   All
                 </li>
               {category.map((categoryItem, index) => (
-                <li key={index} class={activeEventCatagary == index ?  "filter-active" : ""} onClick={()=>eventFillter(index)}>{categoryItem}</li>
+                <li key={index} className={activeEventCatagary == index ?  "filter-active" : ""} onClick={()=>eventFillter(index)}>{categoryItem}</li>
                 ))}
                 </div>
                
               </ul>
             </div>
           </div>
-          <div className="row ms-xl-2 ms-sm-0">
-            {event && event.length !=0 &&
+          <div className="row ms-xl-2 ms-sm-0 ">
+            {event && event.length !=0 && !loading ?
               event.map((data, index) => {
-               return (<div key={index} className="col-xl-3 col-md-4 col-sm-6   p-0 ms-3 me-3 mb-3">
+               return (<div key={index} className="col-xl-3 col-md-4 col-sm-6   p-0  ms-xl-2 ms-sm-0 me-3 mb-3 d-flex  justify-content-center">
                   <EventCard
                     data={data}
                     handleEditEvent={handleEditEvent}
@@ -197,10 +203,8 @@ export default function Events() {
                   />
                 </div>);
               }
-              )}
-              {
-                event.length == 0 && <EmptyEvent/>
-              }
+              ) :  loading ? <EventCardLoading/> : <EmptyEvent/>}
+              
           </div>
         </div>
       </section>

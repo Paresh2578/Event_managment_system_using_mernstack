@@ -3,6 +3,8 @@ const SubEvents = require("../models/subEvent");
 const Events = require("../models/event");
 const Admin = require("../models/admin");
 const SingleParticipation = require("../models/singleParticipation");
+const groupParticipation = require("../models/groupParticipation");
+const winner = require("../models/winner");
 
 exports.getAllEvent = async (req, resp) => {
   try {
@@ -11,7 +13,7 @@ exports.getAllEvent = async (req, resp) => {
   } catch (error) {
     resp.status(500).json({
       success: false,
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -41,7 +43,7 @@ exports.getUpcomingEvets = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -55,7 +57,7 @@ exports.getOneEvent = async (req, resp) => {
   } catch (error) {
     resp.status(500).json({
       success: false,
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -63,18 +65,18 @@ exports.getOneEvent = async (req, resp) => {
 exports.createEvnet = async (req, resp) => {
   try {
     //check admin auth
-    let validAdmin;
-    try {
-      validAdmin = await Admin.findOne({ email: req.adminData.email });
-    } catch (err) {
-      const error = new Error("authentication error");
-      throw error;
-    }
+    // let validAdmin;
+    // try {
+    //   validAdmin = await Admin.findOne({ email: req.adminData.email });
+    // } catch (err) {
+    //   const error = new Error("authentication error");
+    //   throw error;
+    // }
 
-    if (!validAdmin) {
-      const error = new Error("Invalid credentials, could not log you in.");
-      throw error;
-    }
+    // if (!validAdmin) {
+    //   const error = new Error("Invalid credentials, could not log you in.");
+    //   throw error;
+    // }
 
     // coordinatorName data
     let { coordinatorName, email, mobile } = req.body;
@@ -173,19 +175,19 @@ exports.editEvent = async (req, resp) => {
 
 exports.deletEvent = async (req, resp) => {
   try {
-    //check admin auth
-    let validAdmin;
-    try {
-      validAdmin = await Admin.findOne({ email: req.adminData.email });
-    } catch (err) {
-      const error = new Error("authentication error");
-      throw error;
-    }
+    // //check admin auth
+    // let validAdmin;
+    // try {
+    //   validAdmin = await Admin.findOne({ email: req.adminData.email });
+    // } catch (err) {
+    //   const error = new Error("authentication error");
+    //   throw error;
+    // }
 
-    if (!validAdmin) {
-      const error = new Error("Invalid credentials, could not log you in.");
-      throw error;
-    }
+    // if (!validAdmin) {
+    //   const error = new Error("Invalid credentials, could not log you in.");
+    //   throw error;
+    // }
 
     //delete corrdinator
     let event = await Events.findOne({ _id: req.params.id });
@@ -196,6 +198,13 @@ exports.deletEvent = async (req, resp) => {
       //coordinator delete
       // for(let j=0;j<subEvents.length;j++){
       await Coordinators.deleteOne({ _id: subEvents.coordinatorId });
+
+       //singleParticipations delete
+       await SingleParticipation.deleteMany({subEventId : subEvents._id});
+       //groupParticipations delete
+          await groupParticipation.deleteMany({subEventId : subEvents._id});
+       //winner delete
+          await winner.deleteOne({_id : subEvents.winnerId});
       // }
 
       //subEvent delete
@@ -219,26 +228,24 @@ exports.deletEvent = async (req, resp) => {
 
 
 exports.getDashbordInfomation = async (req, res) => {
+  console.log("call");
   
   try {
-    //check admin auth
-    let validAdmin;
-    try {
-      validAdmin = await Admin.findOne({ email: req.adminData.email });
-    } catch (err) {
-      const error = new Error("authentication error");
-      throw error;
-    }
+    // //check admin auth
+    // let validAdmin;
+    // try {
+    //   validAdmin = await Admin.findOne({ email: req.adminData.email });
+    // } catch (err) {
+    //   const error = new Error("authentication error");
+    //   throw error;
+    // }
 
 
 
-    if (!validAdmin) {
-      const error = new Error("Invalid credentials, could not log you in.");
-      throw error;
-    }
-
-
-
+    // if (!validAdmin) {
+    //   const error = new Error("Invalid credentials, could not log you in.");
+    //   throw error;
+    // }
 
     let dasbordInfo = {
       totalCompetedEvent: 0,
@@ -275,17 +282,16 @@ exports.getDashbordInfomation = async (req, res) => {
         //single particiption List
         let singleParticipationList = await SingleParticipation.find();
         singleParticipationList.reverse();
-
+        
+        console.log(dasbordInfo);
         if(singleParticipationList.length < 10){
           dasbordInfo = {...dasbordInfo , recentParticiptionStudentList :singleParticipationList}
         }else{
           dasbordInfo = {...dasbordInfo , recentParticiptionStudentList : singleParticipationList.slice(-10)}
         }
         
-        
-        
       }
-
+      
     res.status(200).json({
       success: true,
       data: dasbordInfo,
@@ -293,8 +299,34 @@ exports.getDashbordInfomation = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error,
+      message: error.message,
     });
   }
 };
+
+
+exports.getTotalEventAndPartisitionLength =  async(req , res)=>{
+  try {
+     let data = {
+      totalEvents : 0,
+      totalParticiption : 0
+     }
+
+     let events = await Events.find();
+     let singleParticipationList = await SingleParticipation.find();
+     let groupParticipationList = await groupParticipation.find();
+
+     data = {...data , totalEvents : events.length , totalParticiption : singleParticipationList.length + groupParticipationList.length};
+
+     res.status(200).json({
+      success : true,
+      data : data
+     })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
 

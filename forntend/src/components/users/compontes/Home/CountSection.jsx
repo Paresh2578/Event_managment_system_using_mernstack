@@ -1,6 +1,7 @@
 import React from 'react'
 
-export default function CountSection() {
+export default function CountSection({totalEventAndPartisitionLength}) {
+  console.log("total " , totalEventAndPartisitionLength)
   return (
     <div>
       <section id='counts' class="counts">
@@ -20,7 +21,7 @@ export default function CountSection() {
           <div class="col-lg-4 col-md-6 mt-5 mt-md-0">
             <div class="count-box">
               <i class="bi bi-journal-richtext"></i>
-              <span  class="purecounter">24+</span>
+              <span  class="purecounter">{totalEventAndPartisitionLength.totalEvents}+</span>
               <p>Events </p>
             </div>
           </div>
@@ -30,8 +31,8 @@ export default function CountSection() {
               {/* <i class="bi bi-headset"></i> */}
               <i class="bx bx-group"></i>
               {/* <span  class="purecounter">Expected Participants</span> */}
-              <span  class="purecounter"> Participants</span>
-              <p>1500+ Students</p>
+              <span  class="purecounter"> {totalEventAndPartisitionLength.totalParticiption}+</span>
+              <p  class=""> Participants</p>
             </div>
           </div>
 

@@ -32,9 +32,6 @@ exports.addWinner = async(req , res)=>{
 
      let {first,secound, third} = req.body;
 
-     console.log(req.body);
-     console.log("winner : " , winner);
-
      if(winner !=  null){
         
         await Winner.updateOne(
@@ -45,11 +42,7 @@ exports.addWinner = async(req , res)=>{
         let newWinner = new Winner({subEventId : req.params.id , first : first , secound : secound , third : third});
         await newWinner.save();
 
-        console.log("subEvent after : " , subEvent);
-
         subEvent = {...subEvent , winnerId : newWinner._id};
-
-        console.log("subEvent" , subEvent);
 
        
         // add winner id in subEvent
@@ -76,7 +69,6 @@ exports.addWinner = async(req , res)=>{
         let winners = await Winner.find();
 
         for(var winner of winners){
-            console.log(winner);
             let participation = {subEventId: winner.subEventId};
             let subEvent = await SubEvent.findOne({_id :winner.subEventId })
 
@@ -85,7 +77,7 @@ exports.addWinner = async(req , res)=>{
     //   "secound": "65e2fe7d73d6a43fe8e1758b",
     //   "third": "",
 
-    participation = {...participation , subEventName : subEvent.subEventname};
+    participation = {...participation , subEventName : subEvent.subEventname , eventId : subEvent.eventId};
             if(subEvent.isGroup){
 
                 let groupParticipationList = await GroupParticipations.find();

@@ -40,6 +40,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import EmptyCard from "../../EmptyEvent";
+import EventCardLoading from "../../../Loading/EventCardLoading";
 
 export default function SubEvents() {
   const navigate = useNavigate();
@@ -61,20 +63,13 @@ export default function SubEvents() {
   ]);
   const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
   const [dupSubEvent, setDupSubEvent] = useState([]);
+  const [loading , setLoading]= useState(false);
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
 
   useEffect(() => {
-    // setSubEvent([{
-    //   name: "app-thon",
-    //   category: "Computer",
-    //   time: "10:20",
-    //   seats : 10,
-    //   grupMember: 4,
-    //   isGroup: 'true',
-    //   posterUrl: img,
-    // }]);
+  
 
     const handleWindowResize = () => {
       setWindowSize([window.innerWidth]);
@@ -91,32 +86,43 @@ export default function SubEvents() {
   }, []);
 
   const getAllWinners =async ()=>{
-    let result = await fetch(`${URL}/api/winner/getAllWinner`, {
-         headers: {
-           "content-type": "application/json",
-           "Authorization": adminAuth.token
-                  },
-       });
-
-       result = await result.json();
-       if(result.success){
-        setWinners(result.data);
-       }else{
-        toast.error(result.message)
-       }
-
+      try{
+        let result = await fetch(`${URL}/api/winner/getAllWinner`, {
+             headers: {
+               "content-type": "application/json",
+               "Authorization": adminAuth.token
+                      },
+           });
+    
+           result = await result.json();
+           if(result.success){
+            setWinners(result.data);
+    
+           }else{
+            toast.error(result.message)
+           }
+      }catch(error){
+        // setLoading(false);
+      }
        }
 
   const getAllSubEvents = async () => {
-    let result = await fetch(`${URL}/api/subEvent/getSubEvent/${id}`);
-    result = await result.json();
+    setLoading(true);
+      try{
+        let result = await fetch(`${URL}/api/subEvent/getSubEvent/${id}`);
+        result = await result.json();
 
-    if (result.success) {
-      setSubEvent(result.data);
-      setDupSubEvent(result.data);
-    } else {
-      toast.error("something worng");
-    }
+        setLoading(false);
+        if (result.success) {
+          setSubEvent(result.data);
+          setDupSubEvent(result.data);
+        } else {
+          toast.error("something worng");
+        }
+      }catch(error){
+        setLoading(false);
+        console.log(error);
+      }
   };
 
   const eventFillter = (index) => {
@@ -171,29 +177,29 @@ export default function SubEvents() {
   
 
       <div className="mt-0">
-        <section id="portfolio" class="portfolio section-bg">
-          <div class="container section-bg" data-aos="fade-up">
-            <div class="section-title">
+        <section id="portfolio" className="portfolio section-bg">
+          <div className="container section-bg" data-aos="fade-up">
+            <div className="section-title">
               <h2>Subevents</h2>
               <h3>
                 All <span>subEvents</span>
               </h3>
             </div>
 
-            <div class="row" data-aos="fade-up" data-aos-delay="100">
-              <div class="col-lg-12 d-flex justify-content-center">
+            <div className="row" data-aos="fade-up" data-aos-delay="100">
+              <div className="col-lg-12 d-flex justify-content-center">
                 <ul id="portfolio-flters">
                   <div className="col mb-3 ">
                     <li
                       onClick={() => eventFillter(-1)}
-                      class={activeEventCatagary == -1 ? "filter-active" : ""}
+                      className={activeEventCatagary == -1 ? "filter-active" : ""}
                     >
                       All
                     </li>
                     {category.map((categoryItem, index) => (
                       <li
                         key={index}
-                        class={
+                        className={
                           activeEventCatagary == index ? "filter-active" : ""
                         }
                         onClick={() => eventFillter(index)}
@@ -205,12 +211,12 @@ export default function SubEvents() {
                 </ul>
               </div>
             </div>
-            <div   class="row portfolio-container"
+            <div   className="row portfolio-container"
             data-aos="fade-up"
             data-aos-delay="200">
-            {subEvent &&
+            {subEvent && subEvent.length !== 0  && !loading?
               subEvent.map((data, index) => (
-                <div className="col-lg-3 col-md-6 d-flex align-items-stretch m-sm-3 me-xl-2 ">
+                <div className="col-lg-3 col-md-6 d-flex align-items-stretch  me-xl-2 d-flex  justify-content-center ">
                   <SubEventCard
                     key={index}
                     data={data}
@@ -221,8 +227,8 @@ export default function SubEvents() {
                     handleRemoveSubEvent={handleRemoveSubEvent}
                   />
                 </div>
-              ))}
-              {SubEventCard.length == 0 && <EmptyEvent />}
+              )) :  loading ? <EventCardLoading/> : <EmptyCard/>}
+              {/* {SubEventCard.length == 0 && <EmptyEvent />} */}
             </div>
           </div>
         </section>

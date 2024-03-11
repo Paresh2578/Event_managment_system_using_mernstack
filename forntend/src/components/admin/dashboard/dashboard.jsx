@@ -37,15 +37,14 @@ export default function Dashboard() {
               },
         });
         result = await result.json();
-
-
         if(result.success){
               setDashboardData(result.data);
         }else{
-            toast.error("something worng");
+            toast.error("something worng ");
         }
 
     }catch(error){
+        // toast.error("something worng");
         toast.error("something worng");
     }
  }
@@ -55,11 +54,11 @@ export default function Dashboard() {
   return (
     <>
      {/* <!-- ======================= Cards ================== --> */}
-     <div class="cardBox">
-                <div class="card">
+     <div className="cardBox">
+                <div className="card">
                     <div>
-                        <div class="numbers">{dashboardData.totalCompetedEvent}</div>
-                        <div class="cardName">Total competed events</div>
+                        <div className="numbers">{dashboardData.totalCompetedEvent}</div>
+                        <div className="cardName">Total competed events</div>
                     </div>
 
                     <div className="iconBx fs-1">
@@ -68,10 +67,10 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                <div class="card">
+                <div className="card">
                     <div>
-                        <div class="numbers">{dashboardData.upCompingEvent}</div>
-                        <div class="cardName">Upcoming events</div>
+                        <div className="numbers">{dashboardData.upCompingEvent}</div>
+                        <div className="cardName">Upcoming events</div>
                     </div>
 
                     <div className="iconBx fs-1">
@@ -80,24 +79,24 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                <div class="card">
+                <div className="card">
                     <div>
-                        <div class="numbers">{dashboardData.totalParticiptionStudent}</div>
-                        <div class="cardName">Total participation student</div>
+                        <div className="numbers">{dashboardData.totalParticiptionStudent}</div>
+                        <div className="cardName">Total participation student</div>
                     </div>
 
-                    <div class="iconBx fs-1">
+                    <div className="iconBx fs-1">
                         <ion-icon name="people-outline"></ion-icon>
                     </div>
                 </div>
 
-                <div class="card">
+                <div className="card">
                     <div>
-                        <div class="numbers">{dashboardData.avalibleSteats}</div>
-                        <div class="cardName">Available Steats</div>
+                        <div className="numbers">{dashboardData.avalibleSteats}</div>
+                        <div className="cardName">Available Steats</div>
                     </div>
 
-                    <div class="iconBx fs-1">
+                    <div className="iconBx fs-1">
                         {/* <ion-icon name="chatbubbles-outline"></ion-icon> */}
                         <EventSeat fontSize={'large'}/>
                     </div>
@@ -105,9 +104,9 @@ export default function Dashboard() {
             </div>
 
             {/* <!-- ================ Order Details List ================= --> */}
-            <div class="details">
-                <div class="recentOrders">
-                    <div class="cardHeader">
+            <div className="details">
+                <div className="recentOrders">
+                    <div className="cardHeader">
                         <h2>Recent participation</h2>
                     </div>
 
@@ -138,54 +137,7 @@ export default function Dashboard() {
 
 }
 
-                            {/* <tr>
-                                <td>Dell Laptop</td>
-                                <td>$110</td>
-                                <td>Due</td>
-                                <td><span class="status pending">Pending</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Apple Watch</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td><span class="status return">Return</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Addidas Shoes</td>
-                                <td>$620</td>
-                                <td>Due</td>
-                                <td><span class="status inProgress">In Progress</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Star Refrigerator</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td><span class="status delivered">Delivered</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Dell Laptop</td>
-                                <td>$110</td>
-                                <td>Due</td>
-                                <td><span class="status pending">Pending</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Apple Watch</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td><span class="status return">Return</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>Addidas Shoes</td>
-                                <td>$620</td>
-                                <td>Due</td>
-                                <td><span class="status inProgress">In Progress</span></td>
-                            </tr> */}
+                         
                         </tbody>
                     </table>
                 </div>

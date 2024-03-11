@@ -59,8 +59,6 @@ export default function EventCard({
   const compareDate =async ()=>{
      let result = await compareToCurrDate(data.date);
      setCompletedEvent(result);
-    //  console.log("result is ::" , result);
-    //  console.log("result is ::" , data.date);
   }
 
   const getAllWinners =async ()=>{
@@ -104,7 +102,6 @@ export default function EventCard({
       setDeleteEventLoding(false);
       setDeleteConformAlertDialogOpen(false);
       toast.error("Faild to delete event");
-      // console.log("edit event error ");
     }
   };
 
@@ -124,24 +121,27 @@ export default function EventCard({
 
   //  winnersHTML += '</tbody>'
   //  winnersHTML += '</table>';
-  let winnersHTML = "";
-  winnersHTML += '<div style="overflow-x: scoller ,width:10wh">';
-winnersHTML += '<table class="table table-hover" >';
-winnersHTML += '<thead class="thead-dark"> <tr> <th scope="col">No.</th> <th scope="col">Subevent</th> <th>First</th> <th scope="col">secound</th><th scope="col">third</th> </tr> </thead>';
-winnersHTML += '<tbody>';
-
-winnersHTML += '</div>'; //
-
-let i=0;
-while(i < winners.length){
-  let {third , secound,first , subEventName} = winners[i];
-  winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' : secound }</td><td>${third == undefined ? 'Not selected' : third }</td></tr>`;
-  i++;
-}
-
-winnersHTML += '</tbody>';
+ 
 
   const handleShowWinner = (id)=>{
+    let currEventWinners = winners.filter((w)=>w.eventId == id);
+    let winnersHTML = "";
+    winnersHTML += '<div style="overflow-x: scoller ,width:10wh">';
+  winnersHTML += '<table class="table table-hover" >';
+  winnersHTML += '<thead class="thead-dark"> <tr> <th scope="col">No.</th> <th scope="col">Subevent</th> <th>First</th> <th scope="col">secound</th><th scope="col">third</th> </tr> </thead>';
+  winnersHTML += '<tbody>';
+  
+  winnersHTML += '</div>'; //
+  
+  let i=0;
+  // while(i < winners.length){
+  while(i < currEventWinners.length){
+    let {third , secound,first , subEventName} = currEventWinners[i];
+    winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' : secound }</td><td>${third == undefined ? 'Not selected' : third }</td></tr>`;
+    i++;
+  }
+  
+  winnersHTML += '</tbody>';
     Swal.fire({
       title: `All SubEvent Top 3 Winners list`,
       html: winnersHTML,

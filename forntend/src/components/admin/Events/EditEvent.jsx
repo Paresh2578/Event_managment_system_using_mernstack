@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 //util
 import {FromentDate} from '../../../util/FormentDate'
 import {URL} from '../../../util/URL';
+import {imgToUrl} from '../../../util/myCustomFunction'
 
 //mui
 import Dialog from "@mui/material/Dialog";
@@ -50,7 +51,6 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
   // const 
 
   const handleEditEventAndCheckValidationData = async()=>{
-    console.log(eventData);
 
     if (eventData.name.length == 0) {
       setEventDataError({ name: true, date: false, posterUrl: false });
@@ -98,27 +98,38 @@ export default function EditEvent({ open, setOpen, data , handleEditEvent, index
   }
 
   const handleEventImgToUrl = async (e) => {
-    seteventImgToUrlProsess({ loding: true, error: false, success: false });
 
-    const image = e.target.files[0];
 
-    const formData = new FormData();
-    formData.set("image", image);
+    try{
+      seteventImgToUrlProsess({ loding: true, error: false, success: false });
+     let url =   await imgToUrl(e);
+      setEventData({...eventData ,eventPosterUrl: url})
+      seteventImgToUrlProsess({ loding: false, error: false, success: true });
+    }catch(error){
+      seteventImgToUrlProsess({ loding: false, error: true, success: false });
+    } 
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-            formData
-      )
-      .then((res) => {
-        console.log(res.data.data.display_url);
-        setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
-        // setImgUploadLoding(false)
-        seteventImgToUrlProsess({ loding: false, error: false, success: true });
-      })
-      .catch((error) => {
-        seteventImgToUrlProsess({ loding: false, error: true, success: false });
-      });
+    // seteventImgToUrlProsess({ loding: true, error: false, success: false });
+
+    // const image = e.target.files[0];
+
+    // const formData = new FormData();
+    // formData.set("image", image);
+
+    // axios
+    //   .post(
+    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+    //         formData
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.data.display_url);
+    //     setEventData({ ...eventData, eventPosterUrl: res.data.data.display_url });
+    //     // setImgUploadLoding(false)
+    //     seteventImgToUrlProsess({ loding: false, error: false, success: true });
+    //   })
+    //   .catch((error) => {
+    //     seteventImgToUrlProsess({ loding: false, error: true, success: false });
+    //   });
   };
 
 

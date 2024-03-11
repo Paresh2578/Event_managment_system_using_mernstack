@@ -6,6 +6,7 @@ import axios from 'axios';
 
 // import "../style.css";
 import {URL} from '../../../../util/URL';
+import {imgToUrl} from '../../../../util/myCustomFunction';
 
 //mui
 import {CircularProgress , InputLabel , Select , MenuItem , FormControlLabel ,  FormControl , FormLabel , RadioGroup ,Radio , Typography ,StepButton , Step , Stepper , Box ,TextField , DialogTitle , DialogContent ,Button , Dialog} from "@mui/material";
@@ -209,37 +210,48 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
 
 
   const handleSubEventImgToUrl = async (e) => {
-    setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
 
-    const image = e.target.files[0];
+    try{
+      setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+     let url =   await imgToUrl(e);
+     setSubEventData({...subEventData ,subEventPosterUrl: url})
+      setSubEventImgToUrlProsess({ loding: false, error: false, success: true });
+    }catch(error){
+      setSubEventImgToUrlProsess({ loding: false, error: true, success: false });
+    }
 
-    const formData = new FormData();
-    formData.set("image", image);
 
-    axios
-      .post(
-        "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
-        formData
-      )
-      .then((res) => {
-        console.log(res.data.data.display_url);
-        setSubEventData({
-          ...subEventData,
-          subEventPosterUrl: res.data.data.display_url,
-        });
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: false,
-          success: true,
-        });
-      })
-      .catch((error) => {
-        setSubEventImgToUrlProsess({
-          loding: false,
-          error: true,
-          success: false,
-        });
-      });
+    // setSubEventImgToUrlProsess({ loding: true, error: false, success: false });
+
+    // const image = e.target.files[0];
+
+    // const formData = new FormData();
+    // formData.set("image", image);
+
+    // axios
+    //   .post(
+    //     "https://api.imgbb.com/1/upload?key=c7b336b110521c9108c9b7d88f5d1dea",
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.data.display_url);
+    //     setSubEventData({
+    //       ...subEventData,
+    //       subEventPosterUrl: res.data.data.display_url,
+    //     });
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: false,
+    //       success: true,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     setSubEventImgToUrlProsess({
+    //       loding: false,
+    //       error: true,
+    //       success: false,
+    //     });
+    //   });
 
     // setSubEventData({
     //         ...subEventData,
@@ -276,7 +288,6 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
 
     }catch(error){
       setEventSubEditLoding(false);
-      console.log("edit event error ")
     }
     //
     // handleReset();
@@ -675,15 +686,15 @@ export default function EditSubEvent({ open, setOpen , data , index , handleEdit
                             )}
                           </div>
 
-                          <div class="mt-3">
+                          <div className="mt-3">
                           <label
                             for="exampleFormControlTextarea1"
-                            class="form-label"
+                            className="form-label"
                           >
                             Enter event discription
                           </label>
                           <textarea
-                            class="form-control"
+                            className="form-control"
                             id="exampleFormControlTextarea1"
                             value={subEventData.discription}
                             placeholder="Enter event discription"

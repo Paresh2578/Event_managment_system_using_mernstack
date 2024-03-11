@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export default function Empty() {
+export default function Empty({student}) {
   return (
     <div>
       <div
@@ -31,15 +31,16 @@ export default function Empty() {
             className="empty-state__message mb-2 text-center subjectName"
             style={{ color: "#4863A0" }}
           >
-            No event has been added yet.
+            No event has been {student ? "available" : "added"}  yet.
           </div>
-          <div
+         {!student &&  <div
             className="empty-state__help subjectName"
             style={{ color: "gray" }}
           >
-            creae a new event by simpley clicking the button on Bottom right
+            create a new event by simpley clicking the button on Bottom right
             side.
           </div>
+}
         </div>
       </div>
     </div>

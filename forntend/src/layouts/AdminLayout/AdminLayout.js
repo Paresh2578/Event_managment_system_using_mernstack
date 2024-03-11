@@ -46,43 +46,43 @@ const FullLayout = () => {
 
   return (
     <>
-      <div class="admin-container">
-        <div class={mobileNaigation ? "navigation active" : "navigation"}>
+      <div className="admin-container">
+        <div className={mobileNaigation ? "navigation active" : "navigation"}>
             <ul>
                 <li  onClick={width <= 991 ? togaleSidbar :  ()=>{}}>
                     <Link to="dashboard" >
-                        <span class="icon">
+                        <span className="icon">
                             {/* <ion-icon name="logo-apple"></ion-icon> */}
                             {/* <span>EX</span> */}
                         </span>
-                        <span class="title">EventX admin</span>
+                        <span className="title">EventX admin</span>
                     </Link>
                 </li>
 
                 <li className={currActiveComponet == 1 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(1)}}>
                     <Link to="dashboard" >
-                        <span class="icon">
+                        <span className="icon">
                             <ion-icon name="home-outline"></ion-icon>
                         </span>
-                        <span class="title">Dashboard</span>
+                        <span className="title">Dashboard</span>
                     </Link>
                 </li>
 
                 <li className={currActiveComponet == 2 ? "active-naviation" : ""}   onClick={width < 991 ? togaleSidbar : ()=>{setCurrActiveComponet(2)}}>
                     <Link to="events">
-                        <span class="icon">
+                        <span className="icon">
                             <ion-icon name="people-outline"></ion-icon>
                         </span>
-                        <span class="title">Events</span>
+                        <span className="title">Events</span>
                     </Link>
                 </li>
 
                 <li className={currActiveComponet == 3 ? "active-naviation" : ""}  onClick={width < 991 ? togaleSidbar :  ()=>{setCurrActiveComponet(3)}}>
                     <Link to="addAdmin" >
-                        <span class="icon">
+                        <span className="icon">
                             <ion-icon name="people-outline"></ion-icon>
                         </span>
-                        <span class="title">Add Admin</span>
+                        <span className="title">Add Admin</span>
                     </Link>
                 </li>
 
@@ -91,22 +91,22 @@ const FullLayout = () => {
 
                 <li onClick={handleLogout}>
                     <a href="#">
-                        <span class="icon">
+                        <span className="icon">
                             <ion-icon name="log-out-outline"></ion-icon>
                         </span>
-                        <span class="title">Log Out</span>
+                        <span className="title">Log Out</span>
                     </a>
                 </li>
             </ul>
         </div>
 
         {/* <!-- ========================= Main ==================== --> */}
-        <div class={mobileNaigation ? "main active" : "main"}>
-            <div class="topbar">
-                <div class="toggle" onClick={togaleSidbar}>
+        <div className={mobileNaigation ? "main active" : "main"}>
+            <div className="topbar">
+                <div className="toggle" onClick={togaleSidbar}>
                     <ion-icon name="menu-outline"></ion-icon>
                 </div>
-                <div class="user"onClick={()=>navigate('Profile')}>
+                <div className="user"onClick={()=>navigate('Profile')}>
                     <img src={adminImg} alt=""/>
                 </div>
             </div>

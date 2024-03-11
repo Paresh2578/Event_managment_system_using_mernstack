@@ -18,6 +18,7 @@ import NotFound from './components/Not Found/Not_Found'
 import UserLayout from './layouts/UserLayout/UserLayout';
 import AddAdmin from './components/admin/AddAdmin/AddAdmin';
 import AdminProfile from './components/admin/adminProfile/adminProfile';
+import Top_scorl from './Top_scorl';
 
 
 
@@ -43,6 +44,7 @@ function App() {
         <Route path="*" element={<NotFound/>}/>
         
       </Routes>
+      <Top_scorl/>
     </BrowserRouter>
   );
 }

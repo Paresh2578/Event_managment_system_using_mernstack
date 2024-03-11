@@ -21,7 +21,6 @@ export default function Login() {
       e.preventDefault();
 
        try{
-        // fetch(`${URL}/admin/login/${data.email}/${data.password}`).then((res)=>res.json).then((data)=>console.log(data)).catch((err)=>console.log(err));
         setLoding(true);
         let result = await fetch(`${URL}/api/admin/login/${data.email}/${data.password}`);
            result = await result.json();

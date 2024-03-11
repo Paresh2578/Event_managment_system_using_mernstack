@@ -2,6 +2,9 @@ const Coordinators = require('../models/coordinator');
 const SubEvents = require('../models/subEvent');
 const Events = require('../models/event');
 const Admin = require('../models/admin');
+const SingleParticipation = require('../models/singleParticipation');
+const groupParticipation = require('../models/groupParticipation');
+const winner = require('../models/winner');
 
 
 exports.createSubEvnet = async (req , resp)=>{
@@ -91,17 +94,7 @@ exports.editSubEvent = async (req , resp)=>{
          // {$set : updateCoordinatorDitals}
          {$set :req.body.coordinator}
       )
-      // let coordinator = await Coordinators.findOne({_id : subEvent.coordinatorId});
-      
-// 
-      // console.log(req.body.coordinator);
-
-      // let updateCoordinatorDitals = {
-      //   coordinatorName : req.body.coordinator.coordinatorName ? req.body.coordinator.coordinatorName : coordinator.coordinatorName,
-      //   email : req.body.coordinator.email ? req.body.coordinator.email : coordinator.email,
-      //   mobile : req.body.coordinator.mobile ? req.body.coordinator.mobile : coordinator.mobile
-      // }
-      
+   
 
       resp.status(201).json({
          success: true,
@@ -118,23 +111,32 @@ exports.editSubEvent = async (req , resp)=>{
 exports.deletSubEvent = async (req , resp)=>{
    try{
       //check admin auth
-      let validAdmin;
-      try{
-       validAdmin = await Admin.findOne({email : req.adminData.email});
-      }catch(err){
-         const error = new Error("authentication error");
-        throw error;
-      }
+      // let validAdmin;
+      // try{
+      //  validAdmin = await Admin.findOne({email : req.adminData.email});
+      // }catch(err){
+      //    const error = new Error("authentication error");
+      //   throw error;
+      // }
 
-      if(!validAdmin){
-         const error = new Error("Invalid credentials, could not log you in.");
-        throw error;
-      }
+      // if(!validAdmin){
+      //    const error = new Error("Invalid credentials, could not log you in.");
+      //   throw error;
+      // }
 
          let subEvents = await SubEvents.findOne({_id : req.params.id});
 
          //coordinator delete
             await Coordinators.deleteOne({_id : subEvents.coordinatorId});
+         
+         //singleParticipations delete
+            await SingleParticipation.deleteMany({subEventId : subEvents._id});
+         //groupParticipations delete
+            await groupParticipation.deleteMany({subEventId : subEvents._id});
+
+              //winner delete
+          await winner.deleteOne({_id : subEvents.winnerId});
+
 
             //update subEvents arr in event
             let event = await Events.findOne({_id : subEvents.eventId});

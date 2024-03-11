@@ -18,11 +18,7 @@ export default function AdminProfile() {
     password: "123",
   });
 
-  const [adminEdit, setAdminEdit] = useState({
-    name: false,
-    email: false,
-    password: false,
-  });
+  const [adminEdit, setAdminEdit] = useState({name: false, email: false, password: false,});
   const [loding   , setLoding] = useState(false);
 
   useEffect(()=>{
@@ -95,9 +91,10 @@ export default function AdminProfile() {
                 required
               />
             )}
-            <div className="social-icons ms-1" onClick={()=>setAdminEdit({...adminEdit, name : !adminEdit.name})}>
-              <div  class="fb">
-                <i class={adminEdit.name ? "fa fa-check" : "fa fa-edit"}></i>
+            <div className="social-icons ms-1" onClick={()=>setAdminEdit({name: !adminEdit.name, email: false, password: false,})}>
+            {/* <div className="social-icons ms-1" onClick={()=>setAdminEdit({name: true, email: false, password: false,})}> */}
+              <div  className="fb">
+                <i className={adminEdit.name ? "fa fa-check" : "fa fa-edit"}></i>
               </div>
             </div>
           </div>
@@ -114,14 +111,14 @@ export default function AdminProfile() {
               required
             />
           )}
-          <div className="social-icons ms-1" onClick={()=>setAdminEdit({...adminEdit, email : !adminEdit.email})}>
-              <div  class="fb">
-                <i class={adminEdit.name ? "fa fa-check" : "fa fa-edit"}></i>
+          <div className="social-icons ms-1" onClick={()=>setAdminEdit({name: false, email: !adminEdit.email, password: false,})}>
+              <div  className="fb">
+                <i className={adminEdit.email ? "fa fa-check" : "fa fa-edit"}></i>
               </div>
             </div>
          </div>
 
-         <div className="d-flex">
+         {/* <div className="d-flex">
          {!adminEdit.password ? (
             <div className="about"> password : 123</div>
           ) : (
@@ -133,12 +130,12 @@ export default function AdminProfile() {
               required
             />
           )}
-          <div className="social-icons ms-1" onClick={()=>setAdminEdit({...adminEdit, password : !adminEdit.password})}>
-              <div  class="fb">
-                <i class={adminEdit.name ? "fa fa-check" : "fa fa-edit"}></i>
+          <div className="social-icons ms-1" onClick={()=>setAdminEdit({name: false, email: false, password: !adminEdit.password,})}>
+              <div  className="fb">
+                <i className={adminEdit.password ? "fa fa-check" : "fa fa-edit"}></i>
               </div>
             </div>
-         </div>
+         </div> */}
 
           <div className="buttons mt-4">
             <button type="submit">Save</button>
