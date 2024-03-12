@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+require('dotenv').config();
 
-const connectToDB = () => {
-  mongoose
-    .connect(process.env.MONGO_URL, {
+const connectToDB = async() => {
+ await mongoose
+    .connect(`mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@attendance.a67enty.mongodb.net/event_management_system?retryWrites=true&w=majority`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

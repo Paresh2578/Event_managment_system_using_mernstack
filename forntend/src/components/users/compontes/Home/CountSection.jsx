@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function CountSection({totalEventAndPartisitionLength}) {
-  console.log("total " , totalEventAndPartisitionLength)
   return (
     <div>
       <section id='counts' class="counts">

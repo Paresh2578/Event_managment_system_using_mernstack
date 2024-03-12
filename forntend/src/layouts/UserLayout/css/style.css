@@ -1476,6 +1476,7 @@ section {
   text-align: center;
   box-shadow: 0 0 30px rgba(214, 215, 216, 0.3);
   padding: 20px 0 30px 0;
+  background-color: #fdfdfd;
 }
 
 .contact .info-box i {

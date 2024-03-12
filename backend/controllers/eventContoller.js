@@ -228,7 +228,6 @@ exports.deletEvent = async (req, resp) => {
 
 
 exports.getDashbordInfomation = async (req, res) => {
-  console.log("call");
   
   try {
     // //check admin auth
@@ -283,7 +282,6 @@ exports.getDashbordInfomation = async (req, res) => {
         let singleParticipationList = await SingleParticipation.find();
         singleParticipationList.reverse();
         
-        console.log(dasbordInfo);
         if(singleParticipationList.length < 10){
           dasbordInfo = {...dasbordInfo , recentParticiptionStudentList :singleParticipationList}
         }else{

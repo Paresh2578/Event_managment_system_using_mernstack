@@ -81,7 +81,7 @@ export default function RegistreFrom({
   const getAllowStudentList =async(req , res)=>{
     try{
 
-      let result = await fetch('http://localhost:4500/api/allowStudentList');
+      let result = await fetch(`${URL}/api/allowStudentList`);
       result = await result.json();
 
       if(result.success){

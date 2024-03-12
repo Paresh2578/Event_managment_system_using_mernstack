@@ -43,10 +43,11 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.params;
 
-    
     let existingAdmin;
     try {
       existingAdmin = await Admin.findOne({ email: email });
+      
+
     } catch (err) {
       const error = new Error("Logging in failed, please try again later.");
       throw error;
@@ -56,6 +57,7 @@ exports.login = async (req, res) => {
       const error = new Error("Invalid email");
       throw error;
     }
+
     
     let isValidPassword = false;
     try {
@@ -67,25 +69,25 @@ exports.login = async (req, res) => {
         );
         throw error;
       }
-
+      
       if (!isValidPassword) {
         res.status(500).json({
           success: false,
           message: "Invalid password",
         });
-
+        
         return;
       }
       
-    let token;
-    try {
-      token = jwt.sign(
-        {email: existingAdmin.email },
-        process.env.JWT_SECRET_KEY
-        ,
-        // { expiresIn: "1h" }
-      );
-    } catch (err) {
+      let token;
+      try {
+        token = jwt.sign(
+          {email: existingAdmin.email },
+          process.env.JWT_SECRET_KEY
+          ,
+          // { expiresIn: "1h" }
+          );
+        } catch (err) {
       const error = new Error("Logging in failed, please try again later.");
       throw error;
     }
@@ -166,6 +168,38 @@ exports.getAdminProfile = async(req , res)=>{
   res.status(200).json({
    success : true,
       admin : admin
+  })
+  }catch(error){
+   res.status(500).json({
+     success: false,
+     message: error.message,
+   });
+  }
+}
+
+exports.addFirstAdmin = async(req , res)=>{
+  try{
+  let {name , email , password} = req.body;
+
+
+
+  let hashedPassword;
+   try {
+     hashedPassword = await bcrypt.hash(password, 12);
+   } catch (err) {
+     const error = new Error("Could not create user, please try again.");
+     throw error;
+   }
+
+   try{
+     let newAdmin = new Admin({name : name , email : email , password : hashedPassword})
+     await newAdmin.save();
+   }catch(errr){
+     throw new Error("already this email are used")
+   }
+  res.status(200).json({
+   success : true,
+   message : "Successfully add newAdmin"
   })
   }catch(error){
    res.status(500).json({

@@ -10,6 +10,9 @@ import CoutactUs from "./CoutactUs";
 import Navbar from "../../../../layouts/UserLayout/Navbar";
 import Footer from "../../../../layouts/UserLayout/Footer";
 
+//utils
+import { URL } from "../../../../util/URL";
+
 export default function Home() {
   const [totalEventAndPartisitionLength , setTotalEventAndPartisitionLength] =useState({totalEvents : 0 , totalParticiption : 0});
 
@@ -19,7 +22,7 @@ export default function Home() {
 
   const getTotalEventAndPartisitionLength = async()=>{
     try{
-      let result = await fetch('http://localhost:4500/api/event/getTotalEventAndPartisitionLength');
+      let result = await fetch(`${URL}/api/event/getTotalEventAndPartisitionLength`);
       result = await result.json();
 
       if(result.success){

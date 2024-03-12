@@ -37,7 +37,7 @@ app.get('/api/allowStudentList', async(req , res)=>{
 
         const client = new MongoClient(process.env.MONGO_URL);
         await client.connect();
-        const db = client.db('Event_managment_system');
+        const db = client.db('event_management_system');
     const collection = db.collection('allowStudents');
     const cursor = collection.find({});
     const results = await cursor.toArray();
