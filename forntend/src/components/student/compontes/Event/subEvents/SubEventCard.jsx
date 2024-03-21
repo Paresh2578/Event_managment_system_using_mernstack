@@ -73,7 +73,8 @@ export default function SubEventCard({ data, eventName,university , getAllSubEve
           <div className="">{data.paid ?<span className="bg-light font-weight-bold rounded-1 p-1">₹ {data.pay}</span> :<span className="bg-success text-light font-weight-bold rounded-1 p-1">Free</span>}</div>
           </div>
           <p className="card-text">
-          <AccessAlarm color="#6372ff" /> <span >{`${formetTime(data.startTime)}-${formetTime(data.endTime)}`}</span>
+          {/* <AccessAlarm color="#6372ff" /> <span >{`${formetTime(data.startTime)}-${formetTime(data.endTime)}`}</span> */}
+          <AccessAlarm color="#6372ff" /> <span >{`${formetTime(data.startTime)}`}</span>
           </p>
 
           <div className="row">

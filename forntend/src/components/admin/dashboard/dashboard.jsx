@@ -11,6 +11,7 @@ import { EventSeat, AccessAlarm } from "@mui/icons-material";
 
 //utils
 import {URL} from '../../../util/URL';
+import AdminDashBoadLoading from '../../Loading/AdminDashBoadLoading';
 
 export default function Dashboard() {
     let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
@@ -21,12 +22,14 @@ export default function Dashboard() {
     avalibleSteats: 0,
     recentParticiptionStudentList : []
   });
+  const [loading , setLoading] = useState(false);
 
  useEffect(()=>{
    getDashBoardData();
  },[])
 
  const getDashBoardData =async ()=>{
+    setLoading(true);
     try{
 
         let result = await fetch(`${URL}/api/event/getDashbordInfo` , {
@@ -37,6 +40,7 @@ export default function Dashboard() {
               },
         });
         result = await result.json();
+        setLoading(false);
         if(result.success){
               setDashboardData(result.data);
         }else{
@@ -46,6 +50,7 @@ export default function Dashboard() {
     }catch(error){
         // toast.error("something worng");
         toast.error("something worng");
+        setLoading(false);
     }
  }
 
@@ -54,7 +59,8 @@ export default function Dashboard() {
   return (
     <>
      {/* <!-- ======================= Cards ================== --> */}
-     <div className="cardBox">
+    {!loading ?  
+    <div className="cardBox">
                 <div className="card">
                     <div>
                         <div className="numbers">{dashboardData.totalCompetedEvent}</div>
@@ -101,7 +107,8 @@ export default function Dashboard() {
                         <EventSeat fontSize={'large'}/>
                     </div>
                 </div>
-            </div>
+            </div> : <AdminDashBoadLoading/>
+}
 
             {/* <!-- ================ Order Details List ================= --> */}
             <div className="details">
@@ -130,7 +137,6 @@ export default function Dashboard() {
                                 <td>{student.Enrollment}</td>
                                 <td>{student.eventName}</td>
                                 <td>{student.subEventName}</td>
-                                {/* <td>Delivered</td> */}
                             </tr>
                             ))    
                             

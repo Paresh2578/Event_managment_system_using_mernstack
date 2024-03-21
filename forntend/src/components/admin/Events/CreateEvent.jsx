@@ -161,21 +161,21 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
   };
 
   const checkValidtionData = (activeStep) => {
-    if (activeStep == 0) {
-      if (eventData.name.length == 0) {
+    if (activeStep === 0) {
+      if (eventData.name.length === 0) {
         setEventDataError({ name: true, date: false, posterUrl: false });
         return false;
-      } else if (eventData.date == null || eventData.date.length == 0) {
+      } else if (eventData.date === null || eventData.date.length === 0) {
         setEventDataError({ name: false, date: true, posterUrl: false });
         return false;
-      } else if (eventData.eventPosterUrl.length == 0) {
+      } else if (eventData.eventPosterUrl.length === 0) {
         setEventDataError({ name: false, date: false, posterUrl: true });
         return false;
       } else {
         setEventDataError({ name: false, date: false, posterUrl: false });
       }
-    } else if (activeStep == 1) {
-      if (subEventData.subEventname.length == 0) {
+    } else if (activeStep === 1) {
+      if (subEventData.subEventname.length === 0) {
         setSubEventDataError({
           name: true,
           category: false,
@@ -186,7 +186,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           posterUrl: false,
         });
         return false;
-      } else if (subEventData.category.length == 0) {
+      } else if (subEventData.category.length === 0) {
         setSubEventDataError({
           name: false,
           category: true,
@@ -197,7 +197,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           posterUrl: false,
         });
         return false;
-      } else if (subEventData.startTime.length == 0) {
+      } else if (subEventData.startTime.length === 0) {
         setSubEventDataError({
           name: false,
           category: false,
@@ -208,7 +208,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           posterUrl: false,
         });
         return false;
-      }  else if (subEventData.endTime.length == 0) {
+      }  else if (subEventData.endTime.length === 0) {
         setSubEventDataError({
           name: false,
           category: false,
@@ -243,7 +243,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
       } else if(subEventData.paid && subEventData.pay < 10){
         return false;
       }
-      else if (subEventData.posterUrl.length == 0) {
+      else if (subEventData.posterUrl.length === 0) {
         setSubEventDataError({
           name: false,
           category: false,
@@ -263,11 +263,11 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
           posterUrl: false,
         });
       }
-    } else if (activeStep == 2) {
-      if (coordinatorData.coordinatorName.length == 0) {
+    } else if (activeStep === 2) {
+      if (coordinatorData.coordinatorName.length === 0) {
         setCoordinatorDataError({ name: true, email: false, mobile: false });
         return false;
-      } else if (coordinatorData.email.length == 0) {
+      } else if (coordinatorData.email.length === 0) {
         setCoordinatorDataError({ name: false, email: true, mobile: false });
         return false;
       } else if (coordinatorData.mobile.length < 10) {
@@ -501,7 +501,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                 <React.Fragment>
                   <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
                     {/* Step {activeStep + 1} */}
-                    {activeStep + 1 == 1 && (
+                    {activeStep + 1 === 1 && (
                       <>
                         {!eventDataError.name ? (
                           <TextField
@@ -662,7 +662,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                         </div>
                       </>
                     )}
-                    {activeStep + 1 == 2 && (
+                    {activeStep + 1 === 2 && (
                       <>
                         {!subEventDataError.name ? (
                           <TextField
@@ -856,7 +856,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                           </RadioGroup>
                         </div>
 
-                        {subEventData.isGroup == "true" &&
+                        {subEventData.isGroup === "true" &&
                           !subEventDataError.grupMember && (
                             <TextField
                               className="mt-2"
@@ -874,7 +874,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                             />
                           )}
 
-                        {subEventData.isGroup == "true" &&
+                        {subEventData.isGroup === "true" &&
                           subEventDataError.grupMember && (
                             <TextField
                               className="mt-2"
@@ -927,7 +927,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                           </RadioGroup>
                         </div>
 
-                        {subEventData.paid == "true" &&
+                        {subEventData.paid === "true" &&
                            (
                             <TextField
                               className="mt-2"
@@ -1027,7 +1027,7 @@ export default function CreateEvent({ open, setOpen, handleCreateNewEvent }) {
                         
                       </>
                     )}
-                    {activeStep + 1 == 3 && (
+                    {activeStep + 1 === 3 && (
                       <>
                         {!coordinatorDataError.coordinatorName ? (
                           <TextField

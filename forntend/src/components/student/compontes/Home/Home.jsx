@@ -7,14 +7,13 @@ import Events from "../Event/Events";
 import FAQ from "./FAQ";
 import CountSection from "./CountSection";
 import CoutactUs from "./CoutactUs";
-import Navbar from "../../../../layouts/UserLayout/Navbar";
-import Footer from "../../../../layouts/UserLayout/Footer";
 
 //utils
 import { URL } from "../../../../util/URL";
 
 export default function Home() {
   const [totalEventAndPartisitionLength , setTotalEventAndPartisitionLength] =useState({totalEvents : 0 , totalParticiption : 0});
+  const [loading , setLoading] = useState(false);
 
   useEffect(()=>{     
     getTotalEventAndPartisitionLength();
@@ -22,8 +21,10 @@ export default function Home() {
 
   const getTotalEventAndPartisitionLength = async()=>{
     try{
+      setLoading(true);
       let result = await fetch(`${URL}/api/event/getTotalEventAndPartisitionLength`);
       result = await result.json();
+      setLoading(false);
 
       if(result.success){
         setTotalEventAndPartisitionLength(result.data);
@@ -55,7 +56,7 @@ export default function Home() {
       {/* <!-- End Hero --> */}
 
       <main id="main">
-        <CountSection totalEventAndPartisitionLength={totalEventAndPartisitionLength}/>
+        <CountSection loading={loading} totalEventAndPartisitionLength={totalEventAndPartisitionLength}/>
         <Events />
         <Testimonials />
         <FAQ />

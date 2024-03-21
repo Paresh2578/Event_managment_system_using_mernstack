@@ -22,8 +22,8 @@ import './App.css'
 
 const  AdminLayout = lazy(()=> import( './layouts/AdminLayout/AdminLayout'));
 const  UserLayout = lazy(()=> import( './layouts/UserLayout/UserLayout'));
-const  Home = lazy(()=> import('./components/users/compontes/Home/Home'));
-const  SubEvents= lazy(()=> import( './components/users/compontes/Event/subEvents/subEvents'))
+const  Home = lazy(()=> import('./components/student/compontes/Home/Home'));
+const  SubEvents= lazy(()=> import( './components/student/compontes/Event/subEvents/subEvents'))
 const  Login = lazy(()=> import('./auth/login'));
 const  Dashboard= lazy(()=> import( './components/admin/dashboard/dashboard'));
 const  Events= lazy( ()=> import('./components/admin/Events/Evnets'));

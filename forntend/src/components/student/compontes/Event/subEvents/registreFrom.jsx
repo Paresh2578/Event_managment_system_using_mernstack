@@ -130,7 +130,8 @@ export default function RegistreFrom({
           if(groupParticipationData.members[i].name.length == 0){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : true ,Enrollment : false ,email : false ,mobile : false}: data));
             return;
-          }else if(groupParticipationData.members[i].Enrollment.toString().length == 0 || !allowStudentList[groupParticipationData.university.split(" ").join("_").toString()].includes(groupParticipationData.members[i].Enrollment)){
+          // }else if(groupParticipationData.members[i].Enrollment.toString().length == 0 || !allowStudentList[groupParticipationData.university.split(" ").join("_").toString()].includes(groupParticipationData.members[i].Enrollment)){
+          }else if(groupParticipationData.members[i].Enrollment.toString().length == 0){
             setGroupParticipationDataError(groupParticipationDataError.map((data, idx)=> idx == i ? {name : false ,Enrollment : true ,email : false ,mobile : false}: data));
             return;
           }else if(groupParticipationData.members[i].email.length == 0){
@@ -151,29 +152,29 @@ export default function RegistreFrom({
 
       }else{
         //validate singleParticipationsData
-      if(singleParticipationData.name.length == 0){
+      if(singleParticipationData.name.length == 0 ){
         setsingleParticipationDataError({name : true ,Enrollment : false ,email : false ,mobile : false})
       }else if(singleParticipationData.Enrollment.toString().length == 0){
         setsingleParticipationDataError({name : false ,Enrollment : true ,email : false ,mobile : false})
-      }else if(singleParticipationData.email.length == 0){
+      }else if(singleParticipationData.email.length == 0 ||   !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(singleParticipationData.email)){
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : true ,mobile : false})
       }else if(singleParticipationData.mobile.toString().length <= 9){
         setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : true})
       }else{
 
 
-        if(singleParticipationData.university.length == 0){
+        if(singleParticipationData.university.length <= 2){
           toast.error("Select University");
            return;
         }
-        if(allowStudentList[singleParticipationData.university.split(" ").join("_").toString()].includes(singleParticipationData.Enrollment)){
-          setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
+        // if(allowStudentList[singleParticipationData.university.split(" ").join("_").toString()].includes(singleParticipationData.Enrollment)){
+        //   setsingleParticipationDataError({name : false ,Enrollment : false ,email : false ,mobile : false});
 
           singleStudentRegister();
-        }else{
-          toast.error("Invalid Enrollment number")
-          return;
-        }
+        // }else{
+        //   toast.error("Invalid Enrollment number")
+        //   return;
+        // }
 
 
        
@@ -477,7 +478,7 @@ export default function RegistreFrom({
                  style={{ marginBottom: "10px", width: "100%" }}
                  variant="outlined"
                  error
-                 helperText="enter email"
+                 helperText="enter valid email"
                  required
                  label={`${index == 0 ? "Leader" :  `member ${index+1}`} Email`}
                  value={groupParticipationData.members[index].email}
@@ -606,7 +607,7 @@ export default function RegistreFrom({
               label="Email"
               variant="outlined"
               error
-              helperText="enter email"
+              helperText="enter valid email"
               required
               value={singleParticipationData.email}
               onChange={(e)=>setsingleParticipationData({...singleParticipationData , email : e.target.value})}

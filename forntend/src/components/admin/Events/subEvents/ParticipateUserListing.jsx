@@ -8,14 +8,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2'
 import { CSVLink } from 'react-csv';
 
+import '../../Events/Evnets';
+
+
+
 //mui
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
+import Skeleton from '@mui/material/Skeleton';
 
 
 // import ProjectTables from '../../dashboard/ProjectTable'
 
 //utils
 import {URL} from '../../../../util/URL';
+import ParticiptionListLoading from '../../../Loading/ParticiptionListLoading';
 
 export default function ParticipateUserListing() {
 
@@ -24,8 +30,9 @@ export default function ParticipateUserListing() {
   let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
    const [singleParticipationsList , setSingleParticipationsList] = useState([]);
    const [groupParticipationsList , setGroupParticipationsList] = useState([]);
-
    const [winner  , setWinner] = useState({first : "" ,secound: ""   , third : ""});
+   const [getParticipationLoading , setGetParticipationLoading] = useState(false);
+   const [getWinnerLoading , setGetWinnerLoading] = useState(false);
 
 
    useEffect(()=>{
@@ -36,10 +43,10 @@ export default function ParticipateUserListing() {
    },[])
 
 
-   //addwinner -- http://localhost:4500/api/winner/addWinner/65e2f367d1dd94aeb45b1949
 
    const getWinner = async()=>{
      try{
+      setGetWinnerLoading(true);
       let result = await fetch(`${URL}/api/winner/getWinner/${subEventID}` , {
         headers: {
           "Authorization":
@@ -47,7 +54,7 @@ export default function ParticipateUserListing() {
         },
       });
       result = await result.json();
-
+      setGetWinnerLoading(false);
       if(result.success){
         if(result.data != null){
            setWinner({first : result.data.first ,secound: result.data.secound  , third : result.data.third})
@@ -56,6 +63,7 @@ export default function ParticipateUserListing() {
         toast.error(result.message);
       }
      }catch(error){
+      setGetWinnerLoading(false);
         toast.error("get Winner something wrong");
      }
    }
@@ -63,6 +71,7 @@ export default function ParticipateUserListing() {
 
    const getSingleParticipationsList =  async ()=>{
       try{
+        setGetParticipationLoading(true);
           let result = await fetch(`${URL}/api/participation/getsingleParticipationsList/${subEventID}` , {
             headers: {
               "content-type": "application/json",
@@ -72,20 +81,23 @@ export default function ParticipateUserListing() {
           })
 
           result = await result.json();
+          setGetParticipationLoading(false);
 
           if(result.success){
              setSingleParticipationsList(result.data);
           }else{
-            alert(result.message);
+            toast.error(result.message);
           }
 
       }catch(error){
-        // tost.error("get singlePartication error");
+        setGetParticipationLoading(false);
+        toast.error("Opps.. Sorry, something went wrong");
       }
    }
 
    const getGroupParticipationsList =  async ()=>{
     try{
+      setGetParticipationLoading(true);
         let result = await fetch(`${URL}/api/participation/getGroupParticipationsList/${subEventID}` , {
           headers: {
             "content-type": "application/json",
@@ -95,30 +107,30 @@ export default function ParticipateUserListing() {
         })
 
         result = await result.json();
-
+  setGetParticipationLoading(false);
         if(result.success){
            setGroupParticipationsList(result.data);
         }else{
-          alert(result.message);
+          toast.error(result.message);
         }
 
 
     }catch(error){
-      alert("get singlePartication error");
-      console.log(error);
+      setGetParticipationLoading(false);
+        toast.error("Opps.. Sorry, something went wrong");
     }
  }
 
 
   return (
     <div className='container mt-4'>
-      <ParticipateListTable subEventname={subEventname} competed={competed} subEventID={subEventID}  winner={winner} setWinner={setWinner} singleParticipationsList={singleParticipationsList} groupParticipationsList={groupParticipationsList} isGroup={isGroup}/>
+      <ParticipateListTable subEventname={subEventname} getWinnerLoading={getWinnerLoading} getParticipationLoading={getParticipationLoading} competed={competed} subEventID={subEventID}  winner={winner} setWinner={setWinner} singleParticipationsList={singleParticipationsList} groupParticipationsList={groupParticipationsList} isGroup={isGroup}/>
     </div>
   )
 }
 
 
-const ParticipateListTable = ({ subEventname , competed , subEventID , winner , setWinner , singleParticipationsList , groupParticipationsList  , isGroup}) => {
+const ParticipateListTable = ({ subEventname ,getWinnerLoading , getParticipationLoading, competed , subEventID , winner , setWinner , singleParticipationsList , groupParticipationsList  , isGroup}) => {
   const [downloadLoding , setDownloadLoding] =useState(false);
 
   let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));  
@@ -163,9 +175,13 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
 
       Swal.fire({
         title: 'Choose  winner positon',
-        input: 'radio',
-        // inputValue : 'first',
+        input:getWinnerLoading ? null : 'radio',
+        // html:getWinnerLoading ?null :  "<p>Plz wait for loading data ...</p>",
+        html:null,
+        // input: 'radio',
+        inputValue : 'first',
         inputValue :currWinnerPositon,
+        inputOptions:null,
         inputOptions: {
             'first': 'first',
             'secound': 'secound',
@@ -222,6 +238,8 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
        }
   }
 
+  
+
   return (
     <div>
       <Card>
@@ -230,89 +248,97 @@ const ParticipateListTable = ({ subEventname , competed , subEventID , winner , 
           <CardTitle tag="h4">Participate user Listing</CardTitle>
            <div className='d-flex'>
            {downloadLoding ?   <div className='btn btn-primary'>downloading...</div> :  <div className='my-btn' onClick={downloadPDF}>export pdf</div>}
-            <div className='my-btn ms-3'><CSVLink style={{color:'white'}} data={isGroup ? groupParticipationsList: singleParticipationsList} filename={"partisiptionList.csv"}>export CSV</CSVLink></div>
+            <div className='my-btn ms-3'><CSVLink style={{color:'white'}} data={isGroup == "true" ? groupParticipationsList: singleParticipationsList} filename={"partisiptionList.csv"}>export CSV</CSVLink></div>
            </div>
 
           <div id="student-data-list">
 
 
+          {/* {!getParticipationLoading? <ParticiptionListLoading/>:  */}
           <Table className="no-wrap mt-3 align-middle table table-hover" responsive borderless>
-            <thead>
-              <tr>
-                <th>Participate user</th>
-                <th>Enrollment No.</th>
-                <th>Mobile No.</th>
-                <th>Event Name</th>
-                <th>Subevent Name</th>
-               {competed == "true" &&  <th>winner</th> }
-              </tr>
-            </thead>
-            <tbody>
-            {groupParticipationsList && isGroup &&   groupParticipationsList.map((tdata, index) => (
-              <>
-              <tr key={index}>
-                <td colspan="5" className='text-center bg-info ' style={{color : 'white'}}>{`Group name : ${tdata.groupName}`}</td>
-               {competed == "true" &&  <td  className='text-center bg-info '><span onClick={()=>handleWinner(tdata._id)}>
-                    <LinearScaleIcon/>
-                    </span></td> }
-              </tr>
-              <tr>
-             
-              </tr>
-                {tdata.members.map((member , memberIndex)=>(
-                  <tr key={index} className="border-top">
-                    <td>
-                    <div className="d-flex align-items-center p-2">
-                      <img
-                        src={user5}
-                        className="rounded-circle"
-                        alt="avatar"
-                        width="45"
-                        height="45"
-                      />
-                      <div className="ms-3">
-                        <h4 className="mb-0">{tdata.members[memberIndex].name}</h4>
-                        <span className="text-muted">{tdata.members[memberIndex].email}</span>
-                      </div>
-                    </div>
-                      </td>
-                    
-                   <td>{tdata.members[memberIndex].Enrollment}</td>
-                   <td>{tdata.members[memberIndex].mobile}</td>
-                  <td>{tdata.eventName}</td>
-                   <td>{tdata.subEventName}</td> 
-                 </tr>
-                ))}
-              </>
-              ))}
-              {singleParticipationsList  &&   singleParticipationsList.map((tdata, index) => (
+          <thead>
+            <tr>
+              <th>Participate user</th>
+              <th>Enrollment No.</th>
+              <th>Mobile No.</th>
+              <th>Event Name</th>
+              <th>Subevent Name</th>
+             {competed == "true" &&  <th>winner</th> }
+            </tr>
+          </thead>
+          <tbody>
+          {getParticipationLoading ?<tr> <td colSpan={competed == "true" ? 6 : 5}> <ParticiptionListLoading/></td></tr>: 
+          singleParticipationsList.length == 0 && groupParticipationsList.length == 0 ?<tr> <td  colSpan={competed == "true" ? 6 : 5} >No any student participation</td></tr> :
+         <>
+          {groupParticipationsList && isGroup == "true" &&   groupParticipationsList.map((tdata, index) => (
+             <>
+            <tr key={index}>
+              <td colspan="5" className='text-center bg-info ' style={{color : 'white'}}>{`Group name : ${tdata.groupName}`}</td>
+             {competed == "true" &&  <td  className='text-center bg-info '><span onClick={()=>handleWinner(tdata._id)}>
+                  <LinearScaleIcon/>
+                  </span></td> }
+            </tr>
+            <tr>
+           
+            </tr>
+              {tdata.members.map((member , memberIndex)=>(
                 <tr key={index} className="border-top">
                   <td>
-                    <div className="d-flex align-items-center p-2">
-                      <img
-                        src={user5}
-                        className="rounded-circle"
-                        alt="avatar"
-                        width="45"
-                        height="45"
-                      />
-                      <div className="ms-3">
-                        <h4 className="mb-0">{tdata.name}</h4>
-                        <span className="text-muted">{tdata.email}</span>
-                      </div>
+                  <div className="d-flex align-items-center p-2">
+                    <img
+                      src={user5}
+                      className="rounded-circle"
+                      alt="avatar"
+                      width="45"
+                      height="45"
+                    />
+                    <div className="ms-3">
+                      <h4 className="mb-0">{tdata.members[memberIndex].name}</h4>
+                      <span className="text-muted">{tdata.members[memberIndex].email}</span>
                     </div>
-                  </td>
-                  <td>{tdata.Enrollment}</td>
-                  <td>{tdata.mobile}</td>
-                  <td>{tdata.eventName}</td>
-                  <td>{tdata.subEventName}</td>
-                { competed == "true" &&   <td><span onClick={()=>handleWinner(tdata._id)}>
-                    <LinearScaleIcon/>
-                    </span></td> }
-                </tr>
+                  </div>
+                    </td>
+                  
+                 <td>{tdata.members[memberIndex].Enrollment}</td>
+                 <td>{tdata.members[memberIndex].mobile}</td>
+                <td>{tdata.eventName}</td>
+                 <td>{tdata.subEventName}</td> 
+               </tr>
               ))}
-            </tbody>
-          </Table>
+            </>
+            
+          
+))}
+            {singleParticipationsList && isGroup == "false"  &&   singleParticipationsList.map((tdata, index) => (
+              <tr key={index} className="border-top">
+                <td>
+                  <div className="d-flex align-items-center p-2">
+                    <img
+                      src={user5}
+                      className="rounded-circle"
+                      alt="avatar"
+                      width="45"
+                      height="45"
+                    />
+                    <div className="ms-3">
+                      <h4 className="mb-0">{tdata.name}</h4>
+                      <span className="text-muted">{tdata.email}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{tdata.Enrollment}</td>
+                <td>{tdata.mobile}</td>
+                <td>{tdata.eventName}</td>
+                <td>{tdata.subEventName}</td>
+              { competed == "true" &&   <td><span onClick={()=>handleWinner(tdata._id)}>
+                  <LinearScaleIcon/>
+                  </span></td> }
+              </tr>
+            ))}
+         </>
+}
+          </tbody>
+        </Table>
           </div>
            
         </CardBody>

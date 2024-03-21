@@ -42,7 +42,7 @@ export default function CoutactUs() {
         <div class="row" data-aos="fade-up" data-aos-delay="100">
 
           <div class="col-lg-12 ">
-          <iframe class="mb-4 mb-lg-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.956748571248!2d70.78213937519365!3d22.43065367959313!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c7a3ba783351%3A0x28dc6eea8324e9d2!2sDarshan%20University!5e0!3m2!1sen!2sin!4v1708543736414!5m2!1sen!2sin" frameborder="0" style={{border:'0'  , width: '100%', height: '384px'}} allowfullscreen></iframe>
+          <iframe class="mb-4 mb-lg-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.956748571248!2d70.78213937519365!3d22.43065367959313!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c7a3ba783351%3A0x28dc6eea8324e9d2!2sDarshan%20University!5e0!3m2!1sen!2sin!4v1708543736414!5m2!1sen!2sin" style={{border:'0'  , width: '100%', height: '384px'}} ></iframe>
           </div>
 
         </div>

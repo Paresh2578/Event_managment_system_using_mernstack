@@ -38,6 +38,7 @@ export default function EventCard({
   const [deleteConformAlertDialogOpen, setDeleteConformAlertDialogOpen] =  useState(false);
   const [completedEvent , setCompletedEvent] = useState(false);
   const [winners, setWinners] = useState([]);
+  const [loading , setLoading] = useState(false);
   
 
   useEffect(()=>{
@@ -62,19 +63,27 @@ export default function EventCard({
   }
 
   const getAllWinners =async ()=>{
-    let result = await fetch(`${URL}/api/winner/getAllWinner`, {
-         headers: {
-           "content-type": "application/json",
-           "Authorization": adminAuth.token
-                  },
-       });
 
-       result = await result.json();
-       if(result.success){
-        setWinners(result.data);
-       }else{
-        toast.error(result.message)
-       }
+     setLoading(true);
+   try{
+    let result = await fetch(`${URL}/api/winner/getAllWinner`, {
+      headers: {
+        "content-type": "application/json",
+        "Authorization": adminAuth.token
+               },
+    });
+
+    result = await result.json();
+   setLoading(false);
+    if(result.success){
+     setWinners(result.data);
+    }else{
+     toast.error(result.message)
+    }
+   }catch(error){
+    setLoading(false);
+    toast.error("oops sorry something went wrong")
+   }
 
        }
 
@@ -105,22 +114,7 @@ export default function EventCard({
     }
   };
 
-  // let winnersHTML = "";
-  // winnersHTML += '<table class="table">';
-  // winnersHTML += '<thead class="thead-dark"> <tr> <th scope="col">No.</th> <th scope="col">Subevent</th> <th>First</th> <th scope="col">secound</th><th scope="col">third</th> </tr> </thead>';
 
-
-
-  //  let i=0;
-  //  while(i < winners.length){
-  //   let {third , secound,first , subEventName} = winners[i];
-  //   // winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' :secound }</td>${third == undefined ? 'Not selected' : third }</td></tr>`
-  //   winnersHTML += `<tr><td scope="row">${i+1}</td><td>${subEventName}</td><td>${first == undefined ? 'Not selected' : first}</td> <td> ${secound == undefined ? 'Not selected' :secound }</td><td>${third == undefined ? 'Not selected' : third }</td></tr>`
-  //    i++;
-  //  }
-
-  //  winnersHTML += '</tbody>'
-  //  winnersHTML += '</table>';
  
 
   const handleShowWinner = (id)=>{
@@ -143,8 +137,8 @@ export default function EventCard({
   
   winnersHTML += '</tbody>';
     Swal.fire({
-      title: `All SubEvent Top 3 Winners list`,
-      html: winnersHTML,
+      title:  `All SubEvent Top 3 Winners list`,
+      html:loading ? '<p>Please wait for loading data..</p>' : winnersHTML,
       confirmButtonText: 'Close',
       confirmButtonColor: '#3085d6',
       showCancelButton: false,

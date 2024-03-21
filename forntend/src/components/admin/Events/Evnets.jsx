@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
 
-import "../../users/compontes/Event/Events.css";
+import "../../student/compontes/Event/Events.css";
 import "./Events.css";
+import '../../../layouts/UserLayout/css/style.css'
 
 //utils
 import { URL } from "../../../util/URL";

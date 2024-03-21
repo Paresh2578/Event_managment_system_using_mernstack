@@ -1,6 +1,9 @@
 import React , {useState} from 'react'
 import { Link } from 'react-router-dom'
 
+//css
+import '../UserLayout/css/style.css'
+
 //mui
 import CloseIcon from '@mui/icons-material/Close';
 

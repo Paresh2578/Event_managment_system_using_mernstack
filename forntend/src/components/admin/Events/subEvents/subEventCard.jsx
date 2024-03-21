@@ -6,6 +6,9 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 import Swal from 'sweetalert2'
 
+//css
+import '../../../student/compontes/Event/subEvents/subEvents.css'
+
 
 //utils
 import {formetTime} from '../../../../util/FormentTime';
@@ -20,7 +23,7 @@ import {Button , CardContent , CardMedia , CircularProgress} from "@mui/material
 import {CalendarMonth  , EventSeat, Edit , Delete , AccessAlarm} from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
 
-export default function SubEventCard({competed , winner , data , handleEditSubEvent , index , handleRemoveSubEvent}) {
+export default function SubEventCard({competed  , winnerLoading, winner , data , handleEditSubEvent , index , handleRemoveSubEvent}) {
   let adminAuth = JSON.parse(localStorage.getItem("adminAuth"));
   const navigate =useNavigate();
     const [editEventOpen , setEditEventOpen] = useState(false);
@@ -73,7 +76,7 @@ export default function SubEventCard({competed , winner , data , handleEditSubEv
     const handleShowWinner = (id)=>{
       Swal.fire({
         title: `Top 3 Winners`,
-        html: winnersHTML,
+        html:winnerLoading ? 'plz wait. loading data...' : winner.length == 0 ? 'not select any winner' : winnersHTML,
         confirmButtonText: 'Close',
         confirmButtonColor: '#3085d6',
         showCancelButton: false,

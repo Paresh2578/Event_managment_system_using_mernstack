@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import "../../../users/compontes/Event/Events.css";
+import "../../../student/compontes/Event/Events.css";
+import '../../../../layouts/UserLayout/css/style.css';
 
 //utils
 import { URL } from "../../../../util/URL";
@@ -64,6 +65,7 @@ export default function SubEvents() {
   const [activeEventCatagary, setActiveEventCatagary] = useState(-1);
   const [dupSubEvent, setDupSubEvent] = useState([]);
   const [loading , setLoading]= useState(false);
+  const [winnerLoading , setWinnerLoading] =useState(false);
 
   ////find scrren width
   const [windowSize, setWindowSize] = useState([window.innerWidth]);
@@ -87,6 +89,7 @@ export default function SubEvents() {
 
   const getAllWinners =async ()=>{
       try{
+        setWinnerLoading(true);
         let result = await fetch(`${URL}/api/winner/getAllWinner`, {
              headers: {
                "content-type": "application/json",
@@ -95,14 +98,16 @@ export default function SubEvents() {
            });
     
            result = await result.json();
+           setWinnerLoading(false);
            if(result.success){
             setWinners(result.data);
     
            }else{
+           
             toast.error(result.message)
            }
       }catch(error){
-        // setLoading(false);
+        setWinnerLoading(false);
       }
        }
 
@@ -222,6 +227,7 @@ export default function SubEvents() {
                     data={data}
                     competed={competed}
                     winner = {winners}
+                    winnerLoading={winnerLoading}
                     handleEditSubEvent={handleEditSubEvent}
                     index={index}
                     handleRemoveSubEvent={handleRemoveSubEvent}
